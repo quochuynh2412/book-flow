@@ -8,3 +8,5 @@ GitHub repository: [link](https://github.com/rcl1/book-flow)
 Jira Scrum Board: [link](https://rmit-s3925997.atlassian.net/browse/BC-4)
 
 Google Drive: [link](https://drive.google.com/drive/folders/1hIlpJ6_Myzv7xrbr0IggircRQ9FKxLrK?usp=sharing)
+
+Firebase: [link](https://console.firebase.google.com/u/0/project/bookflow-e7dbd/overview)
