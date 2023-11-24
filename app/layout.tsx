@@ -5,7 +5,7 @@ import './globals.css'
 const inter = Inter({ subsets: ['latin'] })
 const poppins = Poppins({
   subsets: ['latin'],
-  weight: ['400', '600']
+  weight: ['200', '400', '600']
 });
 
 export const metadata: Metadata = {
