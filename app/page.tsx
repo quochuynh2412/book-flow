@@ -6,6 +6,8 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 
+import Footer from "@/components/ui/Footer";
+
 import vnBooksStore from "@/public/vnbooksstore.jpeg";
 
 
@@ -119,8 +121,7 @@ export default function Home() {
           <h2 className="text-4xl">The Fourth Title</h2>
         </div>
         </div>
-      <footer>
-      </footer>
+      <Footer />
     </div>
   );
 }
