@@ -167,14 +167,6 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
                 )}{" "}
                 Sign in with Google
             </Button>
-            <Button variant="outline" type="button" disabled={isLoading} onClick={signOutUser}>
-                {isLoading ? (
-                    <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
-                ) : (
-                    <Icons.google className="mr-2 h-4 w-4" />
-                )}{" "}
-                Sign Out
-            </Button>
         </div>
     )
 }
