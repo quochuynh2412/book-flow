@@ -7,8 +7,9 @@ import { Icons } from "@/components/Icons"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { useToast } from "@/components/ui/use-toast"
 
-import { getRedirectResult, signInWithRedirect } from "firebase/auth";
+import { getRedirectResult, signInWithRedirect, signInWithEmailAndPassword } from "firebase/auth";
 import { auth, provider } from "@/lib/firebase";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
@@ -20,6 +21,43 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
     const [isLoading, setIsLoading] = React.useState<boolean>(false)
 
     const router = useRouter();
+    const { toast } = useToast();
+
+    async function submitLogInForm(event: React.SyntheticEvent) {
+        event.preventDefault();
+        setIsLoading(true);
+
+        const target = event.target as typeof event.target & {
+            email: { value: string };
+            password: { value: string };
+        };
+        const email = target.email.value;
+        const password = target.password.value;
+
+        console.log(email, password);
+
+        signInWithEmailAndPassword(auth, email, password).then(async (userCred) => {
+            if (!userCred) {
+                return;
+            }
+            await fetch(`/api/authentication/login`, {
+                method: "POST",
+                headers: {
+                    Authorization: `Bearer ${await userCred.user.getIdToken()}`,
+                },
+            }).then((response) => {
+                if (response.status === 200) {
+                    router.push("/");
+                }
+            });
+        }).catch((error) => {
+            toast({
+                description: "Incorrect email or password",
+            });
+        }).then(() => {
+            setIsLoading(false);
+        });
+    }
 
     async function signOutUser() {
         //Sign out with the Firebase client
@@ -51,10 +89,15 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
                     router.push("/protected");
                 }
             });
+        }).catch((error) => {
+            toast({
+                title: "Error",
+                description: error.message,
+            });
         });
     }, []);
 
-    async function signIn() {
+    async function signInWithGoogle() {
         setIsLoading(true);
         await signInWithRedirect(auth, provider);
         setIsLoading(false);
@@ -62,7 +105,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
 
     return (
         <div className={cn("grid gap-6", className)} {...props}>
-            {/* <form onSubmit={onSubmit}>
+            <form onSubmit={submitLogInForm}>
                 <div className="grid gap-2">
                     <div className="grid gap-1">
                         <Label className="sr-only" htmlFor="email">
@@ -78,15 +121,29 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
                             disabled={isLoading}
                         />
                     </div>
-                    <Button disabled={isLoading}>
+                    <div className="grid gap-1">
+                        <Label className="sr-only" htmlFor="password">
+                            Password
+                        </Label>
+                        <Input
+                            id="password"
+                            placeholder="Password"
+                            type="password"
+                            autoCapitalize="none"
+                            autoComplete="password"
+                            autoCorrect="off"
+                            disabled={isLoading}
+                        />
+                    </div>
+                    <Button disabled={isLoading} type="submit">
                         {isLoading && (
                             <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
                         )}
                         Sign In with Email
                     </Button>
                 </div>
-            </form> */}
-            {/* <div className="relative">
+            </form>
+            <div className="relative">
                 <div className="absolute inset-0 flex items-center">
                     <span className="w-full border-t" />
                 </div>
@@ -95,14 +152,22 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
                         Or continue with
                     </span>
                 </div>
-            </div> */}
-            <Button variant="outline" type="button" disabled={isLoading} onClick={signIn}>
+            </div>
+            <Button variant="outline" type="button" disabled={isLoading} onClick={signInWithGoogle}>
                 {isLoading ? (
                     <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
                 ) : (
                     <Icons.google className="mr-2 h-4 w-4" />
                 )}{" "}
                 Sign in with Google
+            </Button>
+            <Button variant="outline" type="button" disabled={isLoading} onClick={signOutUser}>
+                {isLoading ? (
+                    <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+                ) : (
+                    <Icons.google className="mr-2 h-4 w-4" />
+                )}{" "}
+                Sign Out
             </Button>
         </div>
     )

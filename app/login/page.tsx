@@ -6,9 +6,8 @@ import Link from "next/link"
 import { cn } from "@/lib/utils"
 import { buttonVariants } from "@/components/ui/button"
 import { UserAuthForm } from "./user-auth-form"
-import logo from "@/public/svg/logo.svg"
 export const metadata: Metadata = {
-    title: "Authentication",
+    title: "Sign In",
     description: "Sign in to your account",
 }
 
@@ -17,22 +16,24 @@ export default function LogInPage() {
     return (
         <>
             <div className="container relative h-screen flex-col items-center justify-center grid lg:max-w-none lg:grid-cols-2 lg:px-0">
-                {/* <Link
-                    href="/examples/authentication"
+                <Link
+                    href="/register"
                     className={cn(
                         buttonVariants({ variant: "ghost" }),
                         "absolute right-4 top-4 md:right-8 md:top-8"
                     )}
                 >
                     Create Account
-                </Link> */}
+                </Link>
                 <div className="relative hidden h-full flex-col bg-muted p-10 text-black dark:border-r lg:flex">
                     <div className="absolute inset-0">
                         <Image
                             src="/img/AdobeStock_111453960.jpeg"
                             alt="Authentication"
                             fill
-                            objectFit="cover"
+                            style={{
+                                objectFit: 'cover',
+                            }}
                             quality={100}
                         />
                     </div>
