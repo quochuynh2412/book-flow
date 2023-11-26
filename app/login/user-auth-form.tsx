@@ -48,6 +48,9 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
             }).then((response) => {
                 if (response.status === 200) {
                     router.push("/");
+                    toast({
+                        description: "Logged in successfully",
+                    });
                 }
             });
         }).catch((error) => {
@@ -86,7 +89,10 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
                 },
             }).then((response) => {
                 if (response.status === 200) {
-                    router.push("/protected");
+                    router.push("/");
+                    toast({
+                        description: "Logged in successfully",
+                    });
                 }
             });
         }).catch((error) => {

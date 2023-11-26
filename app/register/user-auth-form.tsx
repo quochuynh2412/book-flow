@@ -52,11 +52,13 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
             }).then((response) => {
                 if (response.status === 200) {
                     router.push("/");
+                    toast({
+                        description: "Account created successfully",
+                    });
                 }
             });
         }).catch((error) => {
             toast({
-                title: "Error",
                 description: error.message,
             });
         }).then(() => {
