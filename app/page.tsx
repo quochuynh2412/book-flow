@@ -5,7 +5,8 @@ import Footer from "@/components/ui/Footer";
 import Header from "@/components/ui/Header";
 import SubHeader from "@/components/ui/SubHeader";
 
-import readingGuy from "@/public/manReading.jpeg"
+import readingGuy from "@/public/manReading.jpeg";
+import book1 from "@/public/book1.webp";
 
 
 const stats = [
@@ -41,6 +42,52 @@ export default function Home() {
 
 
       <div className="bg-white py-24 sm:py-32"></div>
+
+
+      <div className="mx-auto gap-6 md:gap-9 lg:gap-12 py-24 px-12 lg:max-w-7xl lg:px-8 grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+        <div style={{backgroundImage: `url(${book1.src})`}} className="bg-contain aspect-[6/9] rounded-lg bg-white border border-gray-200 shadow relative group" >
+          <div className="rounded-lg absolute inset-0 opacity-0 group-hover:opacity-100 bg-black bg-opacity-60 text-white p-4 transition duration-300 ease-in-out">
+            <span className="mb-3 text-sm md:text-md lg:text-lg font-semibold line-clamp-3">Ngày xưa có một chuyện tình</span>
+            <span className="text-xs md:text-sm lg:text-md italic line-clamp-3">- Nguyễn Nhật Ánh</span>
+          </div>
+        </div>
+        <div style={{backgroundImage: `url(${book1.src})`}} className="bg-contain aspect-[6/9] rounded-lg bg-white border border-gray-200 shadow relative group" >
+          <div className="rounded-lg absolute inset-0 opacity-0 group-hover:opacity-100 bg-black bg-opacity-60 text-white p-4 transition duration-300 ease-in-out">
+            <span className="mb-3 text-sm md:text-md lg:text-lg font-semibold line-clamp-3">Ngày xưa có một chuyện tình</span>
+            <span className="text-xs md:text-sm lg:text-md italic line-clamp-3">- Nguyễn Nhật Ánh</span>
+          </div>
+        </div>
+        <div style={{backgroundImage: `url(${book1.src})`}} className="bg-contain aspect-[6/9] rounded-lg bg-white border border-gray-200 shadow relative group" >
+          <div className="rounded-lg absolute inset-0 opacity-0 group-hover:opacity-100 bg-black bg-opacity-60 text-white p-4 transition duration-300 ease-in-out">
+            <span className="mb-3 text-sm md:text-md lg:text-lg font-semibold line-clamp-3">Ngày xưa có một chuyện tình</span>
+            <span className="text-xs md:text-sm lg:text-md italic line-clamp-3">- Nguyễn Nhật Ánh</span>
+          </div>
+        </div>
+        <div style={{backgroundImage: `url(${book1.src})`}} className="bg-contain aspect-[6/9] rounded-lg bg-white border border-gray-200 shadow relative group" >
+          <div className="rounded-lg absolute inset-0 opacity-0 group-hover:opacity-100 bg-black bg-opacity-60 text-white p-4 transition duration-300 ease-in-out">
+            <span className="mb-3 text-sm md:text-md lg:text-lg font-semibold line-clamp-3">Ngày xưa có một chuyện tình</span>
+            <span className="text-xs md:text-sm lg:text-md italic line-clamp-3">- Nguyễn Nhật Ánh</span>
+          </div>
+        </div>
+        <div style={{backgroundImage: `url(${book1.src})`}} className="bg-contain aspect-[6/9] rounded-lg bg-white border border-gray-200 shadow relative group" >
+          <div className="rounded-lg absolute inset-0 opacity-0 group-hover:opacity-100 bg-black bg-opacity-60 text-white p-4 transition duration-300 ease-in-out">
+            <span className="mb-3 text-sm md:text-md lg:text-lg font-semibold line-clamp-3">Ngày xưa có một chuyện tình</span>
+            <span className="text-xs md:text-sm lg:text-md italic line-clamp-3">- Nguyễn Nhật Ánh</span>
+          </div>
+        </div>
+        <div style={{backgroundImage: `url(${book1.src})`}} className="bg-contain aspect-[6/9] rounded-lg bg-white border border-gray-200 shadow relative group" >
+          <div className="rounded-lg absolute inset-0 opacity-0 group-hover:opacity-100 bg-black bg-opacity-60 text-white p-4 transition duration-300 ease-in-out">
+            <span className="mb-3 text-sm md:text-md lg:text-lg font-semibold line-clamp-3">Ngày xưa có một chuyện tình</span>
+            <span className="text-xs md:text-sm lg:text-md italic line-clamp-3">- Nguyễn Nhật Ánh</span>
+          </div>
+        </div>
+        <div style={{backgroundImage: `url(${book1.src})`}} className="bg-contain aspect-[6/9] rounded-lg bg-white border border-gray-200 shadow relative group" >
+          <div className="rounded-lg absolute inset-0 opacity-0 group-hover:opacity-100 bg-black bg-opacity-60 text-white p-4 transition duration-300 ease-in-out">
+            <span className="mb-3 text-sm md:text-md lg:text-lg font-semibold line-clamp-3">Ngày xưa có một chuyện tình</span>
+            <span className="text-xs md:text-sm lg:text-md italic line-clamp-3">- Nguyễn Nhật Ánh</span>
+          </div>
+        </div>
+      </div>
 
       <div className="h-96"></div>
 
@@ -78,7 +125,7 @@ export default function Home() {
         </dl>
       </div>
 
-      <div className="mx-auto lg:flex gap-12 px-4 py-24 sm:px-6 lg:max-w-7xl lg:px-8">
+      <div className="mx-auto lg:flex gap-12 py-24 px-12 lg:max-w-7xl lg:px-8">
         <div className="lg:my-0 basis-7/12">
           <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">Technical Specifications</h2>
           <p className="mt-4 text-gray-500">
@@ -91,7 +138,7 @@ export default function Home() {
           <dl className="mt-16 grid grid-cols-1 gap-x-6 gap-y-10 lg:grid-cols-2 sm:gap-y-16 lg:gap-x-8">
             {features.map((feature) => (
               <div key={feature.name} className="border-t border-gray-200 pt-4">
-                <dt className="font-medium text-gray-900">{feature.name}</dt>
+                <dt className="text-gray-900 font-bold">{feature.name}</dt>
                 <dd className="mt-2 text-sm text-gray-500">{feature.description}</dd>
               </div>
             ))}
@@ -110,7 +157,7 @@ export default function Home() {
 
 
       <Footer />
-      {/* <div className="fixed h-30 w-30 bottom-10 right-10">
+      <div className="fixed h-30 w-30 bottom-10 right-10">
         <a href="#top" className="scroll-smooth">
           <div className='button w-12 h-12 bg-neutral-500 rounded-full cursor-pointer select-none
             active:translate-y-2 active:[box-shadow:0_0px_0_0_#303030,0_0px_0_0_#1b70f841]
@@ -120,7 +167,7 @@ export default function Home() {
             <span className='flex flex-col justify-center items-center h-full text-white font-bold text-lg '>UP</span>
           </div>
         </a>
-      </div> */}
+      </div>
     </div>
   );
 }

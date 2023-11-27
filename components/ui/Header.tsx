@@ -45,16 +45,16 @@ export default function Header() {
                   </svg>
                 </div>
               </SheetTrigger>
-              <SheetContent className="w-48 lg:w-80 bg-white">
-                <div className="h-full flex text-xl lg:text-2xl font-light">
+              <SheetContent className="w-36 lg:w-80 bg-white">
+                <div className="h-full flex text-md lg:text-2xl font-light">
                   <div className="w-full my-auto flex flex-col gap-24 text-center">
                     <div className="mx-auto">
                       <Sheet2>
                         <SheetTrigger2>
                           <TextUnderline content="Genres" />
                         </SheetTrigger2>
-                        <SheetContent2 className="w-48 lg:w-80 bg-white">
-                          <div className="h-full flex text-xl lg:text-2xl font-light">
+                        <SheetContent2 className="w-36 lg:w-80 bg-white">
+                          <div className="h-full flex text-md lg:text-2xl font-light">
                             <div className="h-full w-full flex flex-col gap-24 text-center overflow-y-auto scrollbar py-48">
                               {genres.map((genre) => (
                                 <div className="mx-auto" key={genre}>
