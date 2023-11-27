@@ -71,7 +71,7 @@ export default function Home() {
         <h1 className="text-center text-6xl lg:text-8xl mb-12 font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-white to-black">DISCOVER</h1>
         
         <div className="mx-auto py-16 px-12 lg:max-w-7xl lg:px-8">
-          <h2 className="text-3xl md:text-4xl text-center mb-8 md:mb-12">BEST OF ALL TIME</h2>
+          <h2 className="text-3xl md:text-4xl text-center mb-8 md:mb-12 font-extrabold text-yellow-400">BEST OF ALL TIME</h2>
           <div className="gap-4 lg:gap-12 grid grid-cols-3 md:grid-cols-6">
             {books.map((book) => (
               <div key={book["name"]} style={{backgroundImage: `url(${book1.src})`}} className="bg-contain aspect-[6/9] rounded-lg bg-white shadow-md relative group" >
@@ -83,12 +83,12 @@ export default function Home() {
             ))}
           </div>
           <div className="flex mt-8">
-          <button className="mx-auto bg-neutral-100 p-3 text-md rounded-xl border-2 hover:bg-neutral-200 active:bg-neutral-300 shadow-md active:shadow-none font-semibold">Explore More</button>
+          <button className="mx-auto text-neutral-600 bg-neutral-100 p-3 text-md rounded-xl border-2 hover:bg-neutral-200 active:bg-neutral-300 shadow-md active:shadow-none font-semibold">Explore More</button>
           </div>
         </div>
 
         <div className="mx-auto py-16 px-12 lg:max-w-7xl lg:px-8">
-          <h2 className="text-3xl md:text-4xl text-center mb-8 md:mb-12">BOOKS OF THE MONTH</h2>
+          <h2 className="text-3xl md:text-4xl text-center mb-8 md:mb-12 font-extrabold text-yellow-400">BOOKS OF THE MONTH</h2>
           <div className="gap-4 lg:gap-12 grid grid-cols-3 md:grid-cols-6 ">
             {books.map((book) => (
               <div key={book["name"]} style={{backgroundImage: `url(${book1.src})`}} className="bg-contain aspect-[6/9] rounded-lg bg-white relative group shadow-md" >
@@ -100,12 +100,12 @@ export default function Home() {
             ))}
           </div>
           <div className="flex mt-8">
-            <button className="mx-auto bg-neutral-100 p-3 text-md rounded-xl border-2 hover:bg-neutral-200 active:bg-neutral-300 shadow-md active:shadow-none font-semibold">Explore More</button>
+            <button className="mx-auto text-neutral-600 bg-neutral-100 p-3 text-md rounded-xl border-2 hover:bg-neutral-200 active:bg-neutral-300 shadow-md active:shadow-none font-semibold">Explore More</button>
           </div>
         </div>
 
         <div className="mx-auto py-16 px-12 lg:max-w-7xl lg:px-8">
-          <h2 className="text-3xl md:text-4xl text-center mb-8 md:mb-12">RISING STARS</h2>
+          <h2 className="text-3xl md:text-4xl text-center mb-8 md:mb-12 font-extrabold text-yellow-400">RISING STARS</h2>
           <div className="gap-4 lg:gap-12 grid grid-cols-3 md:grid-cols-6 ">
             {books.map((book) => (
               <div key={book["name"]} style={{backgroundImage: `url(${book1.src})`}} className="bg-contain aspect-[6/9] rounded-lg bg-white shadow-md relative group" >
@@ -117,7 +117,7 @@ export default function Home() {
             ))}
           </div>
           <div className="flex mt-8">
-          <button className="mx-auto bg-neutral-100 p-3 text-md rounded-xl border-2 hover:bg-neutral-200 active:bg-neutral-300 shadow-md active:shadow-none font-semibold">Explore More</button>
+          <button className="mx-auto text-neutral-600 bg-neutral-100 p-3 text-md rounded-xl border-2 hover:bg-neutral-200 active:bg-neutral-300 shadow-md active:shadow-none font-semibold">Explore More</button>
           </div>
         </div>
       </div>
