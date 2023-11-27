@@ -6,14 +6,14 @@ export default function SubHeader() {
   return (
     <div className="bg-white h-14 flex border-b border-neutral-200 top-0 shadow">
       <div className="m-auto h-full flex gap-8 md:gap-24 lg:gap-48">
-        <Link href="#discover" className="flex p-3">
+        <Link href="#statistic" className="flex p-3">
           <div className="text-md md:text-lg my-auto">
-            <TextUnderline content="Discover"/>
+            <TextUnderline content="Statistic"/>
           </div>
         </Link>
-        <Link href="#trending" className="flex p-3">
+        <Link href="#discover" className="flex p-3">
           <div className="text-md md:text-lg my-auto ">
-            <TextUnderline content="Trending"/>
+            <TextUnderline content="Discover"/>
           </div>
         </Link>
         <Link href="#about" className="flex p-3">
