@@ -1,10 +1,24 @@
-import Image from 'next/image';
-import { Button } from '@/components/ui/button';
+import Hero from "@/components/ui/Hero";
+import Footer from "@/components/ui/Footer";
+import Header from "@/components/ui/Header";
+import SubHeader from "@/components/ui/SubHeader";
+import GoUp from "@/components/ui/GoUp";
+import About from "@/components/ui/About";
+import Discover from "@/components/ui/Discover";
+import Intro from "@/components/ui/Intro";
+
 
 export default function Home() {
   return (
-    <Button className='bg-r'>
-      Hello
-    </Button>
-  )
+    <div>
+      <Header />
+      <SubHeader />
+      <Hero />
+      <Intro />
+      <Discover />
+      <About />
+      <GoUp />
+      <Footer />
+    </div>
+  );
 }
