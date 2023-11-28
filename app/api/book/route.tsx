@@ -6,6 +6,9 @@ export async function GET(request: NextRequest, response: NextResponse) {
     const author = searchParams.get('author');
     const genre = searchParams.get('genre');
     const id = searchParams.get('id');
+    const itemsPerPage: any = Number.parseInt(searchParams.get('itemsPerPage') || "0");
+    const page: any = Number.parseInt(searchParams.get('page') || "0");
+
     const booksCollection = collection(db, 'book');
     let queryConditions: any[] = [];
     let authorDoc: any;
@@ -57,6 +60,11 @@ export async function GET(request: NextRequest, response: NextResponse) {
                 };
             }));
 
+            if (itemsPerPage != 0 && page != 0) {
+                const startIndex = (page - 1) * itemsPerPage;
+                const endIndex = page * itemsPerPage;
+                return NextResponse.json({ books: books.slice(startIndex, endIndex), total: books.length }, { status: 200 });
+            }
             return NextResponse.json({ books }, { status: 200 });
         } catch (error) {
             console.error('Error retrieving books:', error);
