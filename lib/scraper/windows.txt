@@ -1,0 +1,12 @@
+py -m venv .venv
+venv\Scripts\activate.bat
+
+python --version
+where python
+pip list
+
+py -m pip install --upgrade pip
+py -m pip --version
+pip install -r requirements.txt
+
+deactivate
