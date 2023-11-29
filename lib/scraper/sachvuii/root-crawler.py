@@ -89,7 +89,7 @@ def get_next_page(soup, categoryURL):
 
 # export categoriesCountDict content to txt file
 def export_to_txt(total):
-    print(colored("EXPORTING: to txt file: ongoing...", 'red'), end="")
+    print("EXPORTING: to txt file: " + colored("ongoing...", 'red'), end="")
     with open("categoriesCountDict.txt", "w") as f:
         for key in categoriesCountDict.keys():
             f.write("%s: %s\n" % (key, categoriesCountDict[key]))
@@ -101,10 +101,10 @@ def main():
     ## 1. get the url
     get_categories(rootUrl)
     count_books_in_categories()
-    print("STATISTICS: Books in " + colored(str(len(categoriesURL)), 'red') + " categories: " + colored(str(countInCategories), 'red'))
+    print("STATISTICS: " + colored(str(len(categoriesURL)), 'red') + " categories, " + colored(str(countInCategories), 'red') + " books.")
     export_to_txt(countInCategories)
     end = time.time()
-    print("STATISTICS: Time from category[0] to category[-1]: " + str(round(end-start, 2)) + "s")
+    print("STATISTICS: Total time " + colored(str(round(end-start, 2)) + "s", 'red') + ". Average time per book: " + colored(str(round((end-start)/countInCategories, 2)) + "s", 'red'))
 
 # if KeyboardInterrupt then do something
 try:
