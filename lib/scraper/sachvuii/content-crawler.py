@@ -35,8 +35,48 @@ categoriesURL = [
     "https://sachvuii.com/y-hoc-suc-khoe/"
 ]
 
+# read all json files and count the number of books
+def countBooksInJson():
+    count = 0
+    for categoryURL in categoriesURLDone:
+        with open("./json/" + categoryURL.split("/")[3] + ".json", "r", encoding="utf-8") as json_file:
+            data = json.load(json_file)
+            count = count + len(data)
+    return count
+
+def react_to_status_code(URL):
+    page = requests.get(URL, timeout=10, allow_redirects=True)
+    if page.status_code == 200:
+        print(colored("OK 200: " + URL, 'green'))
+        return page
+    # if status code starts with 4 or 5, then do something
+    elif int(str(page.status_code)[:1]) == 4:
+        if int(str(page.status_code)[:3]) == 429:
+            print(colored("ERROR 429: Too many requests", 'red'))
+            # stop the program
+            exit()
+    elif int(str(page.status_code)[:1]) == 5:
+        if int(str(page.status_code)[:3]) == 500:
+            print(colored("ERROR 500: Internal Server Error", 'red'))
+            # stop the program
+            exit()
+        elif int(str(page.status_code)[:3]) == 502:
+            print(colored("ERROR 502: Bad Gateway", 'red'))
+            # stop the program
+            exit()
+        elif int(str(page.status_code)[:3]) == 503:
+            print(colored("ERROR 503: Service Unavailable", 'red'))
+            # stop the program
+            exit()
+    else:
+        print(colored("CODE " + str(page.status_code) + ": " + URL, 'light_yellow'))
+        # stop the program
+        exit()
+
 def get_page(categoryURL):
-    page = requests.get(categoryURL)
+
+    page = react_to_status_code(categoryURL)
+
     soup = BeautifulSoup(page.content, 'html.parser')
 
     # create folder for the covers
@@ -66,6 +106,7 @@ def get_page(categoryURL):
 
         # measure time taken for EACH book
         start = time.time()
+        print("\n\n", end="")
         get_book_content(parsed[i])
         end = time.time()
 
@@ -90,7 +131,7 @@ def get_page(categoryURL):
 def get_book_content(bookURL):
 
     # establish connection
-    page = requests.get(bookURL)
+    page = react_to_status_code(bookURL)
     soup = BeautifulSoup(page.content, 'html.parser')
 
     title = soup.find("h1", {"class": "ebook_title"}).getText()
@@ -100,7 +141,7 @@ def get_book_content(bookURL):
     # cover processing
     cover = soup.find("div", {"class": "cover"}).find("img").get("src")
     # download the cover
-    r = requests.get(cover, allow_redirects=True)
+    r = react_to_status_code(cover)
 
     # new method
     coverName = cover.split("/")[-1]
@@ -132,9 +173,15 @@ def writeToJson(parsed, category):
 def main():
     os.system('cls' if os.name == 'nt' else 'clear')
 
+    global countBooksSiteWide
+    countBooksSiteWide = countBooksInJson()
+
     start = time.time()
     for categoryURL in categoriesURL:
         get_page(categoryURL)
+        for i in range(0, 60):
+            print("Sleep between category: " + colored("" + str(60-i) + "s", 'yellow'), end="\n")
+            time.sleep(1) # sleep for 60 second
     end = time.time()
 
     # convert seconds to HH:MM:SS but round to 2 decimal places
