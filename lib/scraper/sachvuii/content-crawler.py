@@ -5,9 +5,16 @@ import os
 import time
 from termcolor import colored
 import datetime
+import uuid
 
 countBooksSiteWide = 0 # site-wide
-jsonOfBooks = []
+jsonOfBooks = {
+    "__collections__": {
+        "book": {
+
+        }
+    }
+}
 writeToFolder = ""
 hostURL = "https://sachvuii.com/"
 categoriesURL = [
@@ -36,13 +43,13 @@ categoriesURL = [
 ]
 
 # read all json files and count the number of books
-def countBooksInJson():
-    count = 0
-    for categoryURL in categoriesURLDone:
-        with open("./json/" + categoryURL.split("/")[3] + ".json", "r", encoding="utf-8") as json_file:
-            data = json.load(json_file)
-            count = count + len(data)
-    return count
+# def countBooksInJson():
+#     count = 0
+#     for categoryURL in categoriesURLDone:
+#         with open("./json/" + categoryURL.split("/")[3] + ".json", "r", encoding="utf-8") as json_file:
+#             data = json.load(json_file)
+#             count = count + len(data)
+#     return count
 
 def react_to_status_code(URL):
     page = requests.get(URL, timeout=10, allow_redirects=True)
@@ -154,27 +161,33 @@ def get_book_content(bookURL):
     description = soup.find("div", {"class": "gioi_thieu_sach"}).getText().strip()
 
     # store to json
-    jsonOfBooks.append({
+    jsonOfBooks["__collections__"]["book"][str(uuid.uuid4())] = {
         "title": title,
         "authorID": author,
         "genresID": genre,
         "imageID": coverName,
         "description": description
-    })
+    }
 
 # 4. handle what you want with the content
 # writes to json file format
 def writeToJson(parsed, category):
     with open("./json/" + category + ".json", "w", encoding="utf-8") as outfile:
-        json.dump(parsed, outfile, ensure_ascii=False, indent=4)
-        outfile.write("\n")
-    jsonOfBooks.clear()
+           json.dump(parsed, outfile, ensure_ascii=False, indent=4)
+           outfile.write("\n")
+    jsonOfBooks = {
+    "__collections__": {
+        "book": {
+            
+            }
+        }
+    }
 
 def main():
     os.system('cls' if os.name == 'nt' else 'clear')
 
-    global countBooksSiteWide
-    countBooksSiteWide = countBooksInJson()
+    # global countBooksSiteWide
+    # countBooksSiteWide = countBooksInJson()
 
     start = time.time()
     for categoryURL in categoriesURL:
