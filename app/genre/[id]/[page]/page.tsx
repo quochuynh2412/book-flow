@@ -1,7 +1,15 @@
 import Header from "@/components/ui/Header";
 import Footer from "@/components/ui/Footer";
 import BookCard from "@/components/BookCard";
-import TextUnderline from "@/components/ui/TextUnderline";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 
 import genreBackground from "@/public/img/romanceGenre.jpg"
 
@@ -46,15 +54,27 @@ export default function Genre({ params } : {params: {id: string, page: string}})
             <h1 className="text-3xl mb-4">Description</h1>
             <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Fugit veritatis eum excepturi repellendus, explicabo et iure mollitia id at hic, porro vero fuga omnis! Quis molestiae neque impedit minima quae. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Praesentium nostrum illo error, recusandae libero blanditiis animi quam at totam dolore illum, expedita consectetur atque quidem quasi tempore, soluta obcaecati officiis. Lorem ipsum dolor sit amet consectetur adipisicing elit. Facilis voluptatum sapiente maxime dolorem nulla. Neque quod temporibus, tempore accusamus architecto ullam dolorum rerum deleniti sit vero nisi impedit alias reprehenderit!</p>
           </div>
-          <div className="lg:flex gap-5">
-            <div className="lg:w-72 py-4">
+          <div className="md:flex gap-5">
+            <div className="md:w-64 lg:w-72 py-4">
               <div className="border border-neutral-300 sticky top-10">
-                <div className="w-full p-4 bg-neutral-200 text-xl border border-neutral-300 ">
+                <div className="w-full p-4 bg-neutral-100 text-xl border-b border-neutral-300 ">
                   <h2>Filter your result</h2>
                 </div>
                 <div className="p-4">
-                  <input type="text" placeholder="Search books by name" className="mb-4 h-12 w-full px-5 border border-neutral-200 outline-gray-300"/>
-                  <input type="text" placeholder="Search books by author" className="h-12 w-full px-5 border border-neutral-200 outline-gray-300"/>
+                  <input type="text" placeholder="Search books by name" className="mb-4 h-12 w-full px-3 border border-neutral-200 outline-gray-300"/>
+                  <input type="text" placeholder="Search books by author" className="mb-4 h-12 w-full px-3 border border-neutral-200 outline-gray-300"/>
+                  <Select>
+                    <SelectTrigger className="rounded-none h-12 border-neutral-200">
+                      <SelectValue placeholder="Rating" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="4">Rating ≥ 4</SelectItem>
+                      <SelectItem value="3">Rating ≥ 3</SelectItem>
+                      <SelectItem value="2">Rating ≥ 2</SelectItem>
+                      <SelectItem value="1">Rating ≥ 1</SelectItem>
+                      <SelectItem value="0">Rating ≥ 0</SelectItem>
+                    </SelectContent>
+                  </Select>
                 </div>
               </div>
             </div>
