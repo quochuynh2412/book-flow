@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # Windows
-# cd "C:\Users\quinn\Desktop\book-flow\lib"
-# Unix
+cd "C:\Users\quinn\Desktop\book-flow\lib"
+# WSL2
 cd "/mnt/c/Users/quinn/Desktop/sepm/book-flow/lib"
 
 npx -p node-firestore-import-export firestore-import -a bookflow-e7dbd-firebase-adminsdk-vhk4z-87018ee525.json -b "C:\Users\quinn\Desktop\sepm\json-v3\am-thuc-nau-an.json" --yes
@@ -29,5 +29,5 @@ npx -p node-firestore-import-export firestore-import -a bookflow-e7dbd-firebase-
 npx -p node-firestore-import-export firestore-import -a bookflow-e7dbd-firebase-adminsdk-vhk4z-87018ee525.json -b "C:\Users\quinn\Desktop\sepm\json-v3\y-hoc-suc-khoe.json" --yes
 
 # Backup
-# npx -p node-firestore-import-export firestore-import -a bookflow-e7dbd-firebase-adminsdk-vhk4z-87018ee525.json -b ""C:\Users\quinn\Desktop\sepm\json-v2\BACKUP-2023-11-30.json"" --yes
+npx -p node-firestore-import-export firestore-import -a bookflow-e7dbd-firebase-adminsdk-vhk4z-87018ee525.json -b "C:\Users\quinn\Desktop\sepm\json-v2\BACKUP-2023-11-30.json" --yes
 
