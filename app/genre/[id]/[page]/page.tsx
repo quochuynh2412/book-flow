@@ -16,32 +16,39 @@ import genreBackground from "@/public/img/romanceGenre.jpg";
 
 import book1 from "@/public/book1.webp";
 
-export default function Genre({ params } : {params: {id: string, page: string}}) {
 
-  const { id, page } = params;  
+export default async function Genre({ params }: { params: { id: string; page: string } }) {
+  const { id, page } = params;
+  const genre = await getGenre(id);
+  const books = await getBooks(id, page);
 
-  const books = [
-    { name: 'Thám tử lừng danh Conan', author: 'Đặng Thái Hoàng'},
-    { name: 'Thám tử lừng danh Conan', author: 'Đặng Thái Hoàng'},
-    { name: 'Thám tử lừng danh Conan', author: 'Đặng Thái Hoàng'},
-    { name: 'Thám tử lừng danh Conan', author: 'Đặng Thái Hoàng'},
-    { name: 'Thám tử lừng danh Conan', author: 'Đặng Thái Hoàng'},
-    { name: 'Thám tử lừng danh Conan', author: 'Đặng Thái Hoàng'},
-    { name: 'Thám tử lừng danh Conan', author: 'Đặng Thái Hoàng'},
-    { name: 'Thám tử lừng danh Conan', author: 'Đặng Thái Hoàng'},
-    { name: 'Thám tử lừng danh Conan', author: 'Đặng Thái Hoàng'},
-    { name: 'Thám tử lừng danh Conan', author: 'Đặng Thái Hoàng'},
-    { name: 'Thám tử lừng danh Conan', author: 'Đặng Thái Hoàng'},
-    { name: 'Thám tử lừng danh Conan', author: 'Đặng Thái Hoàng'},
-    { name: 'Thám tử lừng danh Conan', author: 'Đặng Thái Hoàng'},
-    { name: 'Thám tử lừng danh Conan', author: 'Đặng Thái Hoàng'},
-    { name: 'Thám tử lừng danh Conan', author: 'Đặng Thái Hoàng'},
-    { name: 'Thám tử lừng danh Conan', author: 'Đặng Thái Hoàng'},
-    { name: 'Thám tử lừng danh Conan', author: 'Đặng Thái Hoàng'},
-    { name: 'Thám tử lừng danh Conan', author: 'Đặng Thái Hoàng'},
-    { name: 'Thám tử lừng danh Conan', author: 'Đặng Thái Hoàng'},
-    { name: 'Thám tử lừng danh Conan', author: 'Đặng Thái Hoàng'},
-  ]  
+  async function getGenre(id: string) {
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_VERCEL_URL}/api/genre?id=${id}`, {
+        method: "GET",
+      });
+      const data = await response.json();
+      return data;
+
+    } catch (error) {
+      console.error("Failed to fetch genre description:", error);
+      return [];
+    }
+  }
+
+  async function getBooks(id: string, page: string) {
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_VERCEL_URL}/api/book?genre=${id}&itemsPerPage=1&page=${page}`, {
+        method: "GET",
+      });
+      const data = await response.json();
+      return data;
+
+    } catch (error) {
+      console.error("Failed to fetch books:", error);
+      return [];
+    }
+  }
 
   return (
     <div>
@@ -53,14 +60,16 @@ export default function Genre({ params } : {params: {id: string, page: string}})
         <div className="mx-auto px-12 py-24 lg:max-w-7xl lg:px-8">
           <div className="mb-12">
             <h1 className="text-3xl mb-4 border-b border-neutral-200 py-2">Description</h1>
-            <div className="md:flex gap-8"> 
+            <div className="md:flex gap-8">
+              <p>{genre["description"]}</p>
+
               <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Fugit veritatis eum excepturi repellendus, explicabo et iure mollitia id at hic, porro vero fuga omnis! Quis molestiae neque impedit minima quae. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Praesentium nostrum illo error, recusandae libero blanditiis animi quam at totam dolore illum, expedita consectetur atque quidem quasi tempore, soluta obcaecati officiis. Lorem ipsum dolor sit amet consectetur adipisicing elit. Facilis voluptatum sapiente maxime dolorem nulla. Neque quod temporibus, tempore accusamus architecto ullam dolorum rerum deleniti sit vero nisi impedit alias reprehenderit!</p>
             </div>
           </div>
           <div className="mb-12">
             <h1 className="text-3xl mb-4 border-b border-neutral-200 py-2">Popular books</h1>
             <div className="gap-4 lg:gap-12 grid grid-cols-3 md:grid-cols-6">
-              {books.slice(0, 6).map((book) => (
+              {books.slice(0, 6).map((book: any) => (
                 <div key={book["name"]} style={{backgroundImage: `url(${book1.src})`}} className="bg-contain aspect-[6/9] rounded-lg bg-white shadow-md relative group" >
                   <div className="rounded-lg absolute inset-0 opacity-0 group-hover:opacity-100 bg-black bg-opacity-60 text-white p-4 transition duration-300 ease-in-out">
                     <span className="mb-3 text-sm md:text-md lg:text-lg font-semibold line-clamp-3">{book["name"]}</span>
@@ -104,10 +113,24 @@ export default function Genre({ params } : {params: {id: string, page: string}})
                   </div>
                 </div>
               </div>
-              <div className="py-4 flex-1 grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-x-5 gap-y-12">
-                {books.map((book) => (
-                  <BookCard key={book.name} name={book.name} author={book.author} image={book1.src} />
-                ))}
+              <div className="flex-1">
+                <div className="py-4 grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-x-5 gap-y-12">
+                  {books.map((book: any) => (
+                    <BookCard key={book.name} name={book.name} author={book.author} image={book1.src} />
+                  ))}
+                </div>
+                <div>
+                  <div className="flex mt-8">
+                    <div className="mx-auto shadow rounded-xl">
+                      <button className="text-neutral-600 bg-neutral-100 p-3 text-md rounded-l-xl border hover:bg-neutral-200 active:bg-neutral-300 font-semibold">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="16" width="14" viewBox="0 0 448 512"><path d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.2 288 416 288c17.7 0 32-14.3 32-32s-14.3-32-32-32l-306.7 0L214.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg>
+                      </button>
+                      <button className="text-neutral-600 bg-neutral-100 p-3 text-md rounded-r-xl border border-l-0 hover:bg-neutral-200 active:bg-neutral-300 font-semibold">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="16" width="14" viewBox="0 0 448 512"><path d="M438.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L338.8 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l306.7 0L233.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z"/></svg>
+                      </button>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
