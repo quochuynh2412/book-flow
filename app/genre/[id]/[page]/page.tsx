@@ -1,23 +1,20 @@
 "use client"
-import Image from "next/image";
 import Header from "@/components/ui/Header";
+import SubHeader from "@/components/ui/SubHeader";
 import Footer from "@/components/ui/Footer";
 import BookCard from "@/components/BookCard";
 import {
   Select,
   SelectContent,
-  SelectGroup,
   SelectItem,
-  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
 
-import genreBackground from "@/public/img/romanceGenre.jpg";
-
-import book1 from "@/public/book1.webp";
 import { useEffect, useState } from "react";
 import { Book, Author, Genre } from "@/types/interfaces";
+
+const itemsPerPage : number = 20;
 
 export default function Page({ params }: { params: { id: string; page: string } }) {
   const { id, page } = params;
@@ -36,7 +33,7 @@ export default function Page({ params }: { params: { id: string; page: string } 
       });
     }
     async function getBooks(id: string, page: string) {
-      const response = await fetch(`/api/book?genre=${id}&itemsPerPage=2&page=${page}`, {
+      const response = await fetch(`/api/book?genre=${id}&itemsPerPage=${itemsPerPage}&page=${page}`, {
         method: "GET",
       }).then(async (response) => {
         const data = await response.json();
@@ -47,14 +44,28 @@ export default function Page({ params }: { params: { id: string; page: string } 
     }
     getGenre(id);
     getBooks(id, page);
+
+    if (books.length === 0 && parseInt(page) > 1) {
+      window.location.href = `/genre/${id}/${parseInt(page) - 1}`;
+    }
   }, []);
 
+  function forwardPage() {
+    const nextPage = parseInt(page) + 1;
+    window.location.href = `/genre/${id}/${nextPage}`;
+  }
+
+  function backwardPage() {
+    const previousPage = parseInt(page) - 1;
+    if (previousPage > 0) window.location.href = `/genre/${id}/${previousPage}`;
+  }
 
   return (
     <div>
       <Header />
-      <div className="h-72 flex shadow-inner border bg-cover bg-no-repeat bg-center bg-blend-multiply bg-neutral-400" style={{ backgroundImage: `url(${genreBackground.src})` }}>
-        <h1 className="text-4xl md:text-6xl m-auto font-semibold text-white">Romance</h1>
+      <SubHeader />
+      <div className="h-72 flex shadow-inner border bg-cover bg-no-repeat bg-center bg-blend-multiply bg-neutral-400" style={{ backgroundImage: `url(/img/${genre?.name}Genre.jpg)` }}>
+        <h1 className="text-4xl md:text-6xl m-auto font-semibold text-white">{genre?.name}</h1>
       </div>
       <div>
         <div className="mx-auto px-12 py-24 lg:max-w-7xl lg:px-8">
@@ -120,10 +131,10 @@ export default function Page({ params }: { params: { id: string; page: string } 
                 <div>
                   <div className="flex mt-8">
                     <div className="mx-auto shadow rounded-xl">
-                      <button className="text-neutral-600 bg-neutral-100 p-3 text-md rounded-l-xl border hover:bg-neutral-200 active:bg-neutral-300 font-semibold">
+                      <button onClick={backwardPage} className="text-neutral-600 bg-neutral-100 p-3 text-md rounded-l-xl border hover:bg-neutral-200 active:bg-neutral-300 font-semibold">
                         <svg xmlns="http://www.w3.org/2000/svg" height="16" width="14" viewBox="0 0 448 512"><path d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.2 288 416 288c17.7 0 32-14.3 32-32s-14.3-32-32-32l-306.7 0L214.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z" /></svg>
                       </button>
-                      <button className="text-neutral-600 bg-neutral-100 p-3 text-md rounded-r-xl border border-l-0 hover:bg-neutral-200 active:bg-neutral-300 font-semibold">
+                      <button onClick={forwardPage} className="text-neutral-600 bg-neutral-100 p-3 text-md rounded-r-xl border border-l-0 hover:bg-neutral-200 active:bg-neutral-300 font-semibold">
                         <svg xmlns="http://www.w3.org/2000/svg" height="16" width="14" viewBox="0 0 448 512"><path d="M438.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L338.8 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l306.7 0L233.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z" /></svg>
                       </button>
                     </div>
