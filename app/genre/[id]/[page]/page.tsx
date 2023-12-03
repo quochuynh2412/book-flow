@@ -13,13 +13,17 @@ import {
 
 import { useEffect, useState } from "react";
 import { Book, Author, Genre } from "@/types/interfaces";
+import React from "react";
 
 const itemsPerPage : number = 20;
+const numPopularItems : number = 6;
 
 export default function Page({ params }: { params: { id: string; page: string } }) {
   const { id, page } = params;
   const [genre, setGenre] = useState<Genre | null>(null);
   const [books, setBooks] = useState<Book[]>([]);
+  const [popularBooks, setPopularBooks] = useState<Book[]>([]);
+  const MemoizedBookCard = React.memo(BookCard);
 
   useEffect(() => {
     async function getGenre(id: string) {
@@ -42,8 +46,19 @@ export default function Page({ params }: { params: { id: string; page: string } 
         console.error("Failed to fetch books:", error)
       });
     }
+    async function getPopularBooks(id: string) {
+      const response = await fetch(`/api/book?genre=${id}&itemsPerPage=${numPopularItems}&page=1}`, {
+        method: "GET",
+      }).then(async (response) => {
+        const data = await response.json();
+        setPopularBooks(data.books);
+      }).catch(error => {
+        console.error("Failed to fetch popular books", error);
+      })
+    }
     getGenre(id);
     getBooks(id, page);
+    getPopularBooks(id);
 
     if (books.length === 0 && parseInt(page) > 1) {
       window.location.href = `/genre/${id}/${parseInt(page) - 1}`;
@@ -78,7 +93,7 @@ export default function Page({ params }: { params: { id: string; page: string } 
           <div className="mb-12">
             <h1 className="text-3xl mb-4 border-b border-neutral-200 py-2">Popular books</h1>
             <div className="gap-4 lg:gap-12 grid grid-cols-3 md:grid-cols-6">
-              {books.length > 0 && books.slice(0, 6).map((book: Book, index) => (
+              {popularBooks.length > 0 && popularBooks.map((book: Book, index) => (
                 <div key={index} style={{ backgroundImage: `url(${book.imageUrl})` }} className="bg-contain aspect-[6/9] rounded-lg bg-white shadow-md relative group" >
                   <div className="rounded-lg absolute inset-0 opacity-0 group-hover:opacity-100 bg-black bg-opacity-60 text-white p-4 transition duration-300 ease-in-out">
                     <span className="mb-3 text-sm md:text-md lg:text-lg font-semibold line-clamp-3">{book.title}</span>
@@ -125,7 +140,7 @@ export default function Page({ params }: { params: { id: string; page: string } 
               <div className="flex-1">
                 <div className="py-4 grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-x-5 gap-y-12">
                   {books.length > 0 && books.map((book: Book, index) => (
-                    <BookCard key={index} name={book.title} author={book.author.name} image={book.imageUrl} />
+                    <MemoizedBookCard key={index} name={book.title} author={book.author.name} image={book.imageUrl} />
                   ))}
                 </div>
                 <div>
