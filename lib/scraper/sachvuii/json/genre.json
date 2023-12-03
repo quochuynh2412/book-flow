@@ -1,0 +1,14 @@
+{
+    "__collections__": {
+        "genre": {
+            "caebac83-a49c-41e8-ba5f-5a97e9bc96e6": {
+                "name": "Ẩm thực - Nấu ăn",
+                "description": "description of Ẩm thực - Nấu ăn"
+            },
+            "caebac81-a49c-41e8-ba5f-5a97e9bc96e6": {
+                "name": "Fantasy Fiction",
+                "description": "description of genre"
+            }
+        }
+    }
+}
