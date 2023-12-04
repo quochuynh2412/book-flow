@@ -24,8 +24,8 @@ genres = {"__collections__": {"genre": {}}}
 # Changes made to the jsons:
 #   renamed genresID to genreID
 #   genreID and authorID are now lists instead strings
-#   book.json "genreID" is linked with with "name" genre.json
-#   book.json "authorID" is linked with with "name" author.json
+#   book.json "genreID" is linked with "name" genre.json
+#   book.json "authorID" is linked with "name" author.json
 #   if author is foreign, we will look them up on Wikipedia, and get their profile (if exists)
 # Known effects:
 #   since you cannot rename JSON key, and only del old key & add new key, genreID now is at the bottom of each book
@@ -295,7 +295,9 @@ def findAuthorWikipedia(name, lang):
     response = requests.get("https://" + lang + ".wikipedia.org/w/index.php?search=" + safe_string, headers=headers, timeout=20, allow_redirects=True)
     # print(response.request.headers["User-Agent"])
 
-    print("\n\t{0:<18}: {1}".format("Checking", "https://" + colored(lang, "cyan") + ".wikipedia.org/w/index.php?search=" + safe_string))
+    print("\n\t{0:<18}: {1}".format(
+        colored("Checking", "dark_grey"),
+        "https://" + colored(lang, "cyan") + ".wikipedia.org/w/index.php?search=" + safe_string))
 
     react_to_status_code(response)
 
@@ -309,7 +311,9 @@ def findAuthorWikipedia(name, lang):
     # get url of redirected page
     redirectedURL = response.url
     if "&ns0=1" in redirectedURL:
-        print("\t{0:<18}: {1}".format("Redirected to", colored(redirectedURL, "red")))
+        print("\t{0:<18}{1}".format(
+            colored("Redirected to: ", "dark_grey"),
+            colored(redirectedURL, "red")))
         return "-1"
 
     # case 1
@@ -342,7 +346,10 @@ def findAuthorWikipedia(name, lang):
 
             keywords = re.compile(r"" + vietnameseKeywords + "|" + englishKeywords + "|" + frenchKeywords + "|" + germanKeywords + "", re.IGNORECASE)
             if "may refer to" in personMayReferTo.getText():
-                print("\tCase 3, " + personMayReferTo.getText())
+                print("\t{0}{1}".format(
+                    colored("Case 3, ", "yellow"),
+                    colored(personMayReferTo.getText(), "yellow")
+                ))
 
                 # changed root to search
                 personMayReferTo = soup.find("div", {"class": "mw-content-ltr mw-parser-output"})
@@ -364,7 +371,13 @@ def findAuthorWikipedia(name, lang):
                             bestMatchCase[0] = person
                             bestMatchCase[1] = len(result)
 
-                print("\tCase 5, regex found: " + colored(bestMatchCase[0], "green") + " with " + str(bestMatchCase[1]) + " matches", end="\n")
+                print("\t{0}{1}{2}{3}{4}".format(
+                    colored("Case 5, regex found: ", "yellow"),
+                    colored(str(bestMatchCase[0]), "yellow"),
+                    " with ",
+                    colored(str(bestMatchCase[1]), "yellow"),
+                    " matches"
+                ), end="\n")
 
                 # if case 3 still can't find any match, return -1
                 if bestMatchCase[0] == "":
@@ -376,7 +389,7 @@ def findAuthorWikipedia(name, lang):
 
             # case 1
             else:
-                print("\tCase 5, direct hit", end="")
+                print("\t{0}".format(colored("Case 5, direct hit", "green")), end="")
                 # print("\tCase 5, direct hit: " + colored("https://" + lang + ".wikipedia.org/w/index.php?search=" + safe_string, "green"), end="")
                 return soup
 
