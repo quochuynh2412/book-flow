@@ -17,7 +17,7 @@ export async function GET(request: NextRequest, response: NextResponse) {
         queryConditions.push(where('authorID', 'array-contains', author));
     }
     if (genre) {
-        queryConditions.push(where('genresID', "array-contains", genre));
+        queryConditions.push(where('genreID', "array-contains", genre));
     }
 
     if (!id) {
