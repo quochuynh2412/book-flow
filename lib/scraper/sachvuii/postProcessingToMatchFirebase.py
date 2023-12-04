@@ -9,6 +9,7 @@ import requests # make HTTP requests and feed it to BeautifulSoup
 import urllib.parse # parse the string to url safe
 import langid # language identification
 import re # regex
+import logging # log error
 
 
 path = "./json/"
@@ -42,7 +43,7 @@ def main():
     updateAuthorDescription()
     flush()
     finalize()
-    print("Time elapsed: {0}".format(datetime.datetime.now() - start_time))
+    print("Time elapsed: {0} or {1} per book".format(colored(datetime.datetime.now() - start_time, "magenta"), colored((datetime.datetime.now() - start_time)/len(books["__collections__"]["book"]), 'magenta')))
 
 
 def readAuthorJson():
@@ -94,7 +95,7 @@ def readGenreJson():
 
 
 def processBookAndAuthor():
-    print("processBookAndAuthor() running...")
+    print("\n\n\nprocessBookAndAuthor() running...")
     print("Total books: {0}".format(len(books["__collections__"]["book"])))
     for key, bookAttr in books["__collections__"]["book"].items():
         # print("Processing book: {0}".format(bookAttr))
@@ -108,8 +109,8 @@ def processBookAndAuthor():
             print(colored("\tNot a list ", "red"), end="")
             bookAttr["authorID"] = [bookAttr["authorID"]]
         else:
-            print(colored("\tIs list ", "green"), end="")
-        print(colored("bookAttr[authorID]: {0}".format(bookAttr["authorID"]), "cyan"))
+            print("\t{:<20}".format(colored("Is list", "green")), end="")
+        print("bookAttr[authorID]: " + colored(bookAttr["authorID"], 'cyan'), end="")
 
         # STEP 2: FOR EVERY BOOK: AUTHORID IN BOOK.JSON, FIND MATCHING AUTHOR: NAME IN AUTHOR.JSON
         # range is (0, 0) or (0, 1)
@@ -134,9 +135,11 @@ def processBookAndAuthor():
                 # update in book.json
                 books["__collections__"]["book"][key]["authorID"][i] = found
 
+        print() # to signify that this is the end of the book
+
 
 def processBookAndGenre():
-    print("processBookAndGenre() running...")
+    print("\n\n\nprocessBookAndGenre() running...")
     print("Total books: {0}".format(len(books["__collections__"]["book"])))
     for key, bookAttr in books["__collections__"]["book"].items():
         # print("Processing book: {0}".format(bookAttr))
@@ -147,8 +150,9 @@ def processBookAndGenre():
             bookAttr["genreID"] = [bookAttr["genresID"]]
             del bookAttr["genresID"]
         else:
-            print(colored("\tIs list ", "green"), end="")
-        print(colored("bookAttr[genreID]: {0}".format(bookAttr["genreID"]), "cyan"))
+            print("\t{:<20}".format(colored("Is list", "green")), end="")
+        print("bookAttr[genreID]: " + colored(bookAttr["genreID"], "cyan"), end="")
+
 
         # STEP 2: FOR EVERY BOOK: GENREID IN BOOK.JSON, FIND MATCHING GENRE: NAME IN GENRE.JSON
         # range is (0, 0) or (0, 1)
@@ -173,13 +177,15 @@ def processBookAndGenre():
                 # update in book.json
                 books["__collections__"]["book"][key]["genreID"][i] = found
 
+        print() # to signify that this is the end of the book
+
 
 def findGenre(genreId):
     # search for genreID in genres dict
     for key, value in genres["__collections__"]["genre"].items():
         if value["name"] == genreId:
             print(
-                colored("\tFound genre: {0}\n".format(value["name"]), "yellow"), end=""
+                "\tFound genre: {0}".format(colored(value["name"], "yellow")), end=""
             )
 
             # return key
@@ -193,7 +199,7 @@ def findAuthor(authorId):
     for key, value in authors["__collections__"]["author"].items():
         if value["name"] == authorId:
             print(
-                colored("\tFound author: {0}\n".format(value["name"]), "yellow"), end=""
+                colored("\tFound author: {0}".format(value["name"]), "yellow"), end=""
             )
 
             # return key
@@ -203,6 +209,8 @@ def findAuthor(authorId):
 
 
 def updateAuthorDescription():
+    print("\n\n\nupdateAuthorDescription() running...")
+
     # search for authorID in authors dict
     for key, value in authors["__collections__"]["author"].items():
 
@@ -210,20 +218,41 @@ def updateAuthorDescription():
         tempName = value["name"]
         classificationResult = langid.classify(value["name"]) # ('en', -54.41310358047485)
 
-        if classificationResult[1] >= 0.01 and classificationResult[0] != "vi":
-            print("{0:25s} is {1}".format(tempName, colored(classificationResult, 'green') ))
-            result = findAuthorWikipedia(tempName)
+        if True:
+        # if classificationResult[1] >= 0.01 and classificationResult[0] != "vi":
+            print("{0}/{1}, {2} is {3}".format(colored(list(authors["__collections__"]["author"].keys()).index(key), "dark_grey"), len(books["__collections__"]["book"]), tempName, colored(classificationResult, 'green') ))
+
+            # try to get the language based on the classfied language
+            result = "-1"
+            # result = findAuthorWikipedia(tempName, classificationResult[0])
+
+            # if fails, try brute force
+            wikipediaLanguages = ["vi", "en", classificationResult[0], "de", "fr"]
+
+            # if it's foreign language but not in our list, add it after english
+            if classificationResult[0] not in wikipediaLanguages:
+                midpoint = len(classificationResult) / 2  # for 7 items, after the 3th
+                wikipediaLanguages = wikipediaLanguages[0:midpoint] + [classificationResult[0]] + wikipediaLanguages[midpoint:]  
+
+            if result == "-1":
+                for lang in wikipediaLanguages:
+                    # if lang == classificationResult[0]: # we searched this already
+                    #     continue
+                    result = findAuthorWikipedia(tempName, lang)
+                    if result != "-1": # we found the page
+                        break
+
             if result != "-1":
                 print()
                 value["description"] = extractAuthorDescription(result)
             else:
-                # not found any matching wikipedia page
+                # we tried at least four to five wikipedia languages, and still failed
                 continue
         else:
             print("{0:25s} is {1}".format(tempName, colored(classificationResult, 'red') ))
 
 
-def findAuthorWikipedia(name):
+def findAuthorWikipedia(name, lang):
 
     # sleep for 1 second
     time.sleep(1)
@@ -234,23 +263,52 @@ def findAuthorWikipedia(name):
 
     # set `request` headers
     headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'}
-    response = requests.get("https://en.wikipedia.org/w/index.php?search=" + safe_string, headers=headers, timeout=10, allow_redirects=True)
+    response = requests.get("https://" + lang + ".wikipedia.org/w/index.php?search=" + safe_string, headers=headers, timeout=20, allow_redirects=True)
     # print(response.request.headers["User-Agent"])
+    print("\tChecking: " + colored("https://" + lang + ".wikipedia.org/w/index.php?search=" + safe_string, "cyan"))
 
-    # case 1: found or (case 2: no matching query || case 3: found some but not close enough)
+    # case 1: wikipedia page not found
+    # case 2: no matching query
+    # case 3: found some but not close enough
+    # case 4: you can create a draft and submit it for review
+    # case 5: found
     soup = BeautifulSoup(response.content, 'html.parser')
-    result1 = soup.find("p", {"class": "mw-search-nonefound"}) # case 2
-    result2 = soup.find("div", {"class": "searchdidyoumean"}) # case 3
 
-    if result1 is None and result2 is None:
+    # get url of redirected page
+    redirectedURL = response.url
+    if "&ns0=1" in redirectedURL:
+        print("\tRedirected to: " + colored(redirectedURL, "red"))
+        return "-1"
+
+    # case 1
+    vietnameseNotFound = "Bạn có thể tạo trang .*?" # You can create a page
+    englishNotFound = "The page .*? does not exist. You can create a draft"
+    frenchNotFound = "Aucun résultat trouvé pour .*?" # No results found for
+    germanNotFound = "Keine Ergebnisse für .*? gefunden" # No results for
+    regexNotFound = re.compile(r"(" + vietnameseNotFound + ")|(" + englishNotFound + ")|(" + frenchNotFound + ")|(" + germanNotFound + ")")
+    resultOfRegexNotFound = re.findall(regexNotFound, soup.text)
+    if len(resultOfRegexNotFound) > 0:
+        print("\tCase 1, regex found page not exist: " + colored(str(resultOfRegexNotFound), 'red'))
+        return "-1"
+
+    case2 = soup.find("p", {"class": "mw-search-nonefound"}) # case 2
+    case3 = soup.find("div", {"class": "searchdidyoumean"}) # case 3
+    case4 = soup.find("p", {"class": "mw-search-createlink"}) # case 4
+
+    if case2 is None and case3 is None and case4 is None:
         # case 1: found or case 4: too many people with the same name
         personMayReferTo = soup.find("div", {"class": "mw-content-ltr mw-parser-output"}).find("p")
 
-        # case 4
+        # case 3 and case 5
         if personMayReferTo is not None:
             possibleCases = []
             # keywords related to an author
-            keywords = "(author|novel|liter|book|journal)(es|s|ist|ary|ature)?"
+            vietnameseKeywords = "(tác (giả|phẩm)|nhà (văn|thơ)|văn sĩ|viết (sách|thơ|văn)|sáng (tác|tạo)|đầu sách|vở (diễn|kịch))"
+            englishKeywords = "(author|novel|liter|book|journal)(es|s|ist|ary|ature)?"
+            frenchKeywords = "(auteur|écrivain|romancier|poète|littéraire|livre|journal|journaliste)"
+            germanKeywords = "(autor|schriftsteller|dichter|literarisch|buch|journal|journalist)"
+
+            keywords = re.compile(r"" + vietnameseKeywords + "|" + englishKeywords + "|" + frenchKeywords + "|" + germanKeywords + "", re.IGNORECASE)
             if "may refer to" in personMayReferTo.getText():
                 print("\tCase 3, " + personMayReferTo.getText())
 
@@ -274,33 +332,41 @@ def findAuthorWikipedia(name):
                             bestMatchCase[0] = person
                             bestMatchCase[1] = len(result)
 
-                print("\tCase 4, found: " + colored(bestMatchCase[0], "green") + " with " + str(bestMatchCase[1]) + " matches")
+                print("\tCase 5, regex found: " + colored(bestMatchCase[0], "green") + " with " + str(bestMatchCase[1]) + " matches", end="")
+
+                # if case 3 still can't find any match, return -1
+                if bestMatchCase[0] == "":
+                    return "-1"
 
                 # get link href
-                return "https://en.wikipedia.org" + bestMatchCase[0].find("a")["href"]
+                return "https://" + lang + ".wikipedia.org" + bestMatchCase[0].find("a")["href"]
 
             # case 1
             else:
-                print("\tCase 4, found: " + colored("https://en.wikipedia.org/w/index.php?search=" + safe_string, "green"))
-                return "https://en.wikipedia.org/w/index.php?search=" + safe_string 
+                print("\tCase 5, first hit found: " + colored("https://" + lang + ".wikipedia.org/w/index.php?search=" + safe_string, "green"), end="")
+                return "https://" + lang + ".wikipedia.org/w/index.php?search=" + safe_string 
 
-    elif result1 is None:
-        print("\tCase 2: " + result2.getText())
+    elif case2 is not None:
+        print("\tCase 2: query not found")
         return "-1"
-    elif result2 is None:
-        print("\tCase 1: " + result1.getText())
+    elif case3 is not None:
+        print("\tCase 3: too many with similar names")
+        return "-1"
+    elif case4 is not None:
+        print("\tCase 4: you can try to create a new link")
         return "-1"
     else:
         print("\tWHAT YOU DO MEAN, THIS CASE WILL NEVER BE REACHED")
         return "-1"
 
+
 def extractAuthorDescription(link):
 
-    print(colored("\tFetching: " + link, 'cyan'))
+    print("\tFetching: " + colored(link, 'cyan'))
 
     # set `request` headers
     headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'}
-    response = requests.get(link, headers=headers, timeout=10, allow_redirects=True)
+    response = requests.get(link, headers=headers, timeout=20, allow_redirects=True)
 
     soup = BeautifulSoup(response.content, 'html.parser')
     body = soup.find("div", {"class": "mw-content-ltr mw-parser-output"}) # the body of the page
@@ -314,15 +380,16 @@ def extractAuthorDescription(link):
     description = ""
     for element in body.find_all("p"):
         # if element.find("meta") is None:
-        if description.count(" ") < 1000:
+        if description.count(" ") < 500:
             description += element.getText()
         else:
             break
 
     regexCitation = re.compile(r"\[\d+\]|\bcitation\b \bneeded\b")
     description = re.sub(regexCitation, "", description)
-    print("\t\t" + colored(description, 'cyan'))
+    print("\t\t" + colored(description[:100] + "...", 'cyan'))
     return description
+
 
 def flush():
     with open(path + "author.json", "w", encoding="utf-8") as json_file:
@@ -336,9 +403,9 @@ def flush():
 
 
 def finalize():
-    print(("Len author: {}").format(len(authors["__collections__"]["author"])))
-    print(("Len book: {}").format(len(books["__collections__"]["book"])))
-    print(("Len genre: {}").format(len(genres["__collections__"]["genre"])))
+    print(("Author length : {0}").format(colored(str(len(authors["__collections__"]["author"])))))
+    print(("Book length : {0}").format(colored(str(len(books["__collections__"]["book"])))))
+    print(("Genre length : {0}").format(colored(str(len(genres["__collections__"]["genre"])))))
     # Seed full run
     # Len author: 1545
     # Len book: 1912
@@ -349,8 +416,20 @@ def finalize():
     # Len book: 67
     # Len genre: 3
 
+
 try:
     main()
+# request read timeout
+except requests.exceptions.Timeout:
+    logging.exception("error")
+    print("Timeout has been caught.")
+    exit()
+# user cancel
 except KeyboardInterrupt:
     print("KeyboardInterrupt has been caught.")
+    exit()
+# except everything else
+except:
+    logging.exception("error")
+    print("An error has been caught.")
     exit()
