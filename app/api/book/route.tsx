@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/firebase";
 import { where, getDocs, getDoc, collection, query, doc, limit, startAt, orderBy } from "firebase/firestore";
-import { Book, Author, Genre } from "@/types/interfaces";
 export async function GET(request: NextRequest, response: NextResponse) {
     const searchParams = request.nextUrl.searchParams;
     const author = searchParams.get('author');
