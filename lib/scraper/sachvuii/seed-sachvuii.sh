@@ -28,6 +28,11 @@ npx -p node-firestore-import-export firestore-import -a bookflow-e7dbd-firebase-
 npx -p node-firestore-import-export firestore-import -a bookflow-e7dbd-firebase-adminsdk-vhk4z-87018ee525.json -b "C:\Users\quinn\Desktop\sepm\json-v3\van-hoc-viet-nam.json" --yes
 npx -p node-firestore-import-export firestore-import -a bookflow-e7dbd-firebase-adminsdk-vhk4z-87018ee525.json -b "C:\Users\quinn\Desktop\sepm\json-v3\y-hoc-suc-khoe.json" --yes
 
+# One line
+npx -p node-firestore-import-export firestore-import -a bookflow-e7dbd-firebase-adminsdk-vhk4z-87018ee525.json -b "C:\Users\quinn\Desktop\sepm\book-flow\lib\scraper\sachvuii\json\author.json" --yes && npx -p node-firestore-import-export firestore-import -a bookflow-e7dbd-firebase-adminsdk-vhk4z-87018ee525.json -b "C:\Users\quinn\Desktop\sepm\book-flow\lib\scraper\sachvuii\json\book.json" --yes && npx -p node-firestore-import-export firestore-import -a bookflow-e7dbd-firebase-adminsdk-vhk4z-87018ee525.json -b "C:\Users\quinn\Desktop\sepm\book-flow\lib\scraper\sachvuii\json\genre.json" --yes
+
+
+
 # Export backup
 npx -p node-firestore-import-export firestore-export -a bookflow-e7dbd-firebase-adminsdk-vhk4z-87018ee525.json -b "C:\Users\quinn\Desktop\sepm\json-v2\BACKUP-2023-12-03.json" --yes
 

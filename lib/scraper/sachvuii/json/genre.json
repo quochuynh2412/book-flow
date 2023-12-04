@@ -1,13 +1,93 @@
 {
     "__collections__": {
         "genre": {
-            "caebac83-a49c-41e8-ba5f-5a97e9bc96e6": {
+            "f3977e6c-6474-4c50-90c9-921fec4f6c49": {
                 "name": "Ẩm thực - Nấu ăn",
-                "description": "description of Ẩm thực - Nấu ăn"
+                "description": "Genre Ẩm thực - Nấu ăn description"
             },
-            "caebac81-a49c-41e8-ba5f-5a97e9bc96e6": {
-                "name": "Fantasy Fiction",
-                "description": "description of genre"
+            "bb2e8c77-61fd-4e36-9ff1-f9774c780cd4": {
+                "name": "Cổ Tích - Thần Thoại",
+                "description": "Genre Cổ Tích - Thần Thoại description"
+            },
+            "d3b701b0-1142-4c71-b94e-5f2daa7e1eaf": {
+                "name": "Công Nghệ Thông Tin",
+                "description": "Genre Công Nghệ Thông Tin description"
+            },
+            "83f24e38-cb1e-468a-835b-34d3b2106100": {
+                "name": "Học Ngoại Ngữ",
+                "description": "Genre Học Ngoại Ngữ description"
+            },
+            "db9d12a5-af3d-48e3-b80a-d15ec74b1715": {
+                "name": "Hồi Ký - Tuỳ Bút",
+                "description": "Genre Hồi Ký - Tuỳ Bút description"
+            },
+            "2fc49e51-9d25-4d5a-916d-c206892c3d65": {
+                "name": "Khác",
+                "description": "Genre Khác description"
+            },
+            "5fea3fc8-984a-4768-96c6-2ee58bb87b0c": {
+                "name": "Khoa Học - Kỹ Thuật",
+                "description": "Genre Khoa Học - Kỹ Thuật description"
+            },
+            "c1073c64-62cc-4ee8-9e96-670082bc30ec": {
+                "name": "Kiến Trúc - Xây Dựng",
+                "description": "Genre Kiến Trúc - Xây Dựng description"
+            },
+            "f3d79ec5-722e-45a4-80fb-877caec22d99": {
+                "name": "Kinh Tế - Quản Lý",
+                "description": "Genre Kinh Tế - Quản Lý description"
+            },
+            "d0ffcb90-6d15-4675-9e86-b6818b4849ca": {
+                "name": "Lịch Sử - Chính Trị",
+                "description": "Genre Lịch Sử - Chính Trị description"
+            },
+            "621d26c3-5590-46b7-a027-14d4555d3194": {
+                "name": "Marketing - Bán hàng",
+                "description": "Genre Marketing - Bán hàng description"
+            },
+            "9236d1da-0d5e-498b-9508-1f432da41a3e": {
+                "name": "Nông - Lâm - Ngư",
+                "description": "Genre Nông - Lâm - Ngư description"
+            },
+            "dd146d86-ab04-48fd-830a-d6520ed6f69f": {
+                "name": "Phiêu Lưu - Mạo Hiểm",
+                "description": "Genre Phiêu Lưu - Mạo Hiểm description"
+            },
+            "940b6965-6a0b-4cfa-9cdf-32d9cd300787": {
+                "name": "Tài Liệu Học Tập",
+                "description": "Genre Tài Liệu Học Tập description"
+            },
+            "d2354b1d-c91a-4bc8-938c-7080f31be006": {
+                "name": "Tâm Lý - Kỹ Năng Sống",
+                "description": "Genre Tâm Lý - Kỹ Năng Sống description"
+            },
+            "ecbc941c-1ba3-4e09-9aa5-6d337062cadc": {
+                "name": "Thể Thao - Nghệ Thuật",
+                "description": "Genre Thể Thao - Nghệ Thuật description"
+            },
+            "f29f072b-c130-4744-95ea-2612689a461c": {
+                "name": "Tiểu Thuyết Trung Quốc",
+                "description": "Genre Tiểu Thuyết Trung Quốc description"
+            },
+            "bff3d4dc-d2ea-47fc-9eaa-d8780796770f": {
+                "name": "Triết Học",
+                "description": "Genre Triết Học description"
+            },
+            "db2455ff-2e4a-4ccc-9b50-ffa668dd41f9": {
+                "name": "Truyện Cười - Tiếu Lâm",
+                "description": "Genre Truyện Cười - Tiếu Lâm description"
+            },
+            "e5456ed6-fded-4b44-af67-928e7c393b53": {
+                "name": "Văn Hóa",
+                "description": "Genre Văn Hóa description"
+            },
+            "82337af1-c45a-44bb-9e67-083deef339b2": {
+                "name": "Văn Học Việt Nam",
+                "description": "Genre Văn Học Việt Nam description"
+            },
+            "05dd9fa5-3cf1-4ed2-8059-ff663e39ad36": {
+                "name": "Y Học - Sức Khỏe",
+                "description": "Genre Y Học - Sức Khỏe description"
             }
         }
     }
