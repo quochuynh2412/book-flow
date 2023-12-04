@@ -19,6 +19,7 @@ books = {"__collections__": {"book": {}}}
 genres = {"__collections__": {"genre": {}}}
 
 # Designed to be run ONCE on /json-v3/ files
+# processBookAndAuthor() and processBookAndGenre() needs to be disabled if run on /json-v3/ files
 # This post processing script handles the relationship between AUTHOR-BOOK and GENRE-BOOK
 # Changes made to the jsons:
 #   renamed genresID to genreID
@@ -28,20 +29,30 @@ genres = {"__collections__": {"genre": {}}}
 #   if author is foreign, we will look them up on Wikipedia, and get their profile (if exists)
 # Known effects:
 #   since you cannot rename JSON key, and only del old key & add new key, genreID now is at the bottom of each book
+#   Wikpedia and Google will block if we don't have the UserAgent
 
 
 def main():
     # os.system("cls" if os.name == "nt" else "clear")
     # time
     start_time = datetime.datetime.now()
-    global authors
+
+    # load the files to memory
     readAuthorJson()  # load author data
     readBookJson()
     readGenreJson()
-    processBookAndAuthor()
-    processBookAndGenre()
+
+    # creates relationship between two collections
+    processBookAndAuthor() # if input is v3
+    processBookAndGenre() # if input is v3
+
+    # update author description
     updateAuthorDescription()
+
+    # save to json
     flush()
+
+    # print stats and time elapsed
     finalize()
     print("Time elapsed: {0} or {1} per book".format(colored(datetime.datetime.now() - start_time, "magenta"), colored((datetime.datetime.now() - start_time)/len(books["__collections__"]["book"]), 'magenta')))
 
@@ -125,7 +136,7 @@ def processBookAndAuthor():
                 # update in author.json
                 authors["__collections__"]["author"][TEMPAUTHORID] = {
                     "name": TEMPAUTHORNAME,
-                    "description": "Author " + TEMPAUTHORNAME + " description",
+                    "description": "",
                 }
 
                 # update in book.json
@@ -167,7 +178,7 @@ def processBookAndGenre():
                 # update in genre.json
                 genres["__collections__"]["genre"][TEMPGENREID] = {
                     "name": TEMPGENRENAME,
-                    "description": "Genre " + TEMPGENRENAME + " description",
+                    "description": ""
                 }
 
                 # update in book.json
@@ -208,6 +219,7 @@ def findAuthor(authorId):
     return "-1"
 
 
+# part 1/3 of author description
 def updateAuthorDescription():
     print("\n\n\nupdateAuthorDescription() running...")
 
@@ -220,19 +232,36 @@ def updateAuthorDescription():
 
         if True:
         # if classificationResult[1] >= 0.01 and classificationResult[0] != "vi":
-            print("{0}/{1}, {2} is {3}".format(colored(list(authors["__collections__"]["author"].keys()).index(key), "dark_grey"), len(books["__collections__"]["book"]), tempName, colored(classificationResult, 'green') ))
+            print("{0}{1} {2} {3} {4}".format(
+                colored(list(authors["__collections__"]["author"].keys()).index(key), "dark_grey"),
+                colored("/" + str(len(books["__collections__"]["book"])) + ",", "dark_grey"),
+                tempName,
+                colored("is", 'dark_grey'),
+                colored(classificationResult, 'green')
+            ))
 
             # try to get the language based on the classfied language
             result = "-1"
             # result = findAuthorWikipedia(tempName, classificationResult[0])
 
             # if fails, try brute force
-            wikipediaLanguages = ["vi", "en", classificationResult[0], "de", "fr"]
+            wikipediaLanguages = ["vi", "en", "de", "fr"]
 
-            # if it's foreign language but not in our list, add it after english
+            # if it's foreign language but not in our list
             if classificationResult[0] not in wikipediaLanguages:
-                midpoint = len(classificationResult) / 2  # for 7 items, after the 3th
-                wikipediaLanguages = wikipediaLanguages[0:midpoint] + [classificationResult[0]] + wikipediaLanguages[midpoint:]  
+                wikipediaLanguages = ("vi", "en", classificationResult[0])
+            else:
+                # if its Vietnamese, no need to try the rest
+                if classificationResult[0] == "vi":
+                    wikipediaLanguages = ["vi", "en"]
+                elif classificationResult[0] == "en":
+                    wikipediaLanguages = ["vi", "en"]
+                elif classificationResult[0] == "de":
+                    wikipediaLanguages = ["vi", "en", "de"]
+                elif classificationResult[0] == "fr":
+                    wikipediaLanguages = ["vi", "en", "fr"]
+
+            print("\t{0}".format(colored("Searching in " + str(wikipediaLanguages), "dark_grey")))
 
             if result == "-1":
                 for lang in wikipediaLanguages:
@@ -246,16 +275,16 @@ def updateAuthorDescription():
                 print()
                 value["description"] = extractAuthorDescription(result)
             else:
-                # we tried at least four to five wikipedia languages, and still failed
                 continue
         else:
             print("{0:25s} is {1}".format(tempName, colored(classificationResult, 'red') ))
 
 
+# part 2/3 of author description
 def findAuthorWikipedia(name, lang):
 
-    # sleep for 1 second
-    time.sleep(1)
+    # sleep for 0.5 second
+    time.sleep(0.5)
 
     # process input param to URL
     safe_string = urllib.parse.quote_plus(name)
@@ -265,7 +294,10 @@ def findAuthorWikipedia(name, lang):
     headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'}
     response = requests.get("https://" + lang + ".wikipedia.org/w/index.php?search=" + safe_string, headers=headers, timeout=20, allow_redirects=True)
     # print(response.request.headers["User-Agent"])
-    print("\tChecking: " + colored("https://" + lang + ".wikipedia.org/w/index.php?search=" + safe_string, "cyan"))
+
+    print("\n\t{0:<18}: {1}".format("Checking", colored("https://" + lang + ".wikipedia.org/w/index.php?search=" + safe_string, "cyan")))
+
+    react_to_status_code(response)
 
     # case 1: wikipedia page not found
     # case 2: no matching query
@@ -277,7 +309,7 @@ def findAuthorWikipedia(name, lang):
     # get url of redirected page
     redirectedURL = response.url
     if "&ns0=1" in redirectedURL:
-        print("\tRedirected to: " + colored(redirectedURL, "red"))
+        print("\t{0:<18}: {1}".format("Redirected to", colored(redirectedURL, "red")))
         return "-1"
 
     # case 1
@@ -343,7 +375,8 @@ def findAuthorWikipedia(name, lang):
 
             # case 1
             else:
-                print("\tCase 5, first hit found: " + colored("https://" + lang + ".wikipedia.org/w/index.php?search=" + safe_string, "green"), end="")
+                print("\tCase 5, direct hit", end="")
+                # print("\tCase 5, direct hit: " + colored("https://" + lang + ".wikipedia.org/w/index.php?search=" + safe_string, "green"), end="")
                 return "https://" + lang + ".wikipedia.org/w/index.php?search=" + safe_string 
 
     elif case2 is not None:
@@ -360,13 +393,16 @@ def findAuthorWikipedia(name, lang):
         return "-1"
 
 
+# part 3/3 of author description
 def extractAuthorDescription(link):
 
-    print("\tFetching: " + colored(link, 'cyan'))
+    print("\t{0:<18}: {1}".format("Fetching", colored(link, 'cyan')))
 
     # set `request` headers
     headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'}
     response = requests.get(link, headers=headers, timeout=20, allow_redirects=True)
+
+    react_to_status_code(response)
 
     soup = BeautifulSoup(response.content, 'html.parser')
     body = soup.find("div", {"class": "mw-content-ltr mw-parser-output"}) # the body of the page
@@ -387,8 +423,37 @@ def extractAuthorDescription(link):
 
     regexCitation = re.compile(r"\[\d+\]|\bcitation\b \bneeded\b")
     description = re.sub(regexCitation, "", description)
-    print("\t\t" + colored(description[:100] + "...", 'cyan'))
+    print("\t" + colored(description[:100] + "...", 'dark_grey'))
     return description
+
+
+def react_to_status_code(page):
+    if page.status_code == 200:
+        print(colored("\tOK 200", 'green'))
+        return page
+    # if status code starts with 4 or 5, then do something
+    elif int(str(page.status_code)[:1]) == 4:
+        if int(str(page.status_code)[:3]) == 429:
+            print(colored("\tERROR 429: Too many requests", 'red'))
+            # stop the program
+            exit()
+    elif int(str(page.status_code)[:1]) == 5:
+        if int(str(page.status_code)[:3]) == 500:
+            print(colored("\tERROR 500: Internal Server Error", 'red'))
+            # stop the program
+            exit()
+        elif int(str(page.status_code)[:3]) == 502:
+            print(colored("\tERROR 502: Bad Gateway", 'red'))
+            # stop the program
+            exit()
+        elif int(str(page.status_code)[:3]) == 503:
+            print(colored("\tERROR 503: Service Unavailable", 'red'))
+            # stop the program
+            exit()
+    else:
+        print(colored("CODE " + str(page.status_code) + ": ", 'light_yellow'))
+        # stop the program
+        exit()
 
 
 def flush():
@@ -423,13 +488,16 @@ try:
 except requests.exceptions.Timeout:
     logging.exception("error")
     print("Timeout has been caught.")
+    flush() # force write
     exit()
 # user cancel
 except KeyboardInterrupt:
     print("KeyboardInterrupt has been caught.")
+    flush() # force write
     exit()
 # except everything else
 except:
     logging.exception("error")
     print("An error has been caught.")
+    flush() # force write
     exit()
