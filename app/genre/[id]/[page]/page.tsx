@@ -15,7 +15,7 @@ import { useEffect, useState } from "react";
 import { Book, Author, Genre } from "@/types/interfaces";
 import React from "react";
 
-const itemsPerPage : number = 10;
+const itemsPerPage : number = 25;
 const numPopularItems : number = 6;
 
 export default function Page({ params }: { params: { id: string; page: string } }) {
@@ -41,7 +41,7 @@ export default function Page({ params }: { params: { id: string; page: string } 
         method: "GET",
       }).then(async (response) => {
         const data = await response.json();
-        setBooks(data.books);
+        await setBooks(data.books);
       }).catch(error => {
         console.error("Failed to fetch books:", error)
       });
@@ -59,15 +59,13 @@ export default function Page({ params }: { params: { id: string; page: string } 
     getGenre(id);
     getBooks(id, page);
     getPopularBooks(id);
-
-    if (books.length === 0 && parseInt(page) > 1) {
-      window.location.href = `/genre/${id}/${parseInt(page) - 1}`;
-    }
   }, []);
 
   function forwardPage() {
     const nextPage = parseInt(page) + 1;
-    window.location.href = `/genre/${id}/${nextPage}`;
+
+    // not go forward if current page is not fully filled (haven't handled cases where current page is filled but next page has 0 book :D )
+    if (books.length === itemsPerPage) window.location.href = `/genre/${id}/${nextPage}`;
   }
 
   function backwardPage() {
@@ -79,7 +77,7 @@ export default function Page({ params }: { params: { id: string; page: string } 
     <div>
       <Header />
       <SubHeader />
-      <div className="h-72 flex shadow-inner border bg-cover bg-no-repeat bg-center bg-blend-multiply bg-neutral-400" style={{ backgroundImage: `url(/img/${genre?.name}Genre.jpg)` }}>
+      <div className="h-72 flex shadow-inner border bg-cover bg-no-repeat bg-center bg-blend-multiply bg-neutral-500" style={{ backgroundImage: `url(/img/${genre?.id}.jpeg)` }}>
         <h1 className="text-4xl md:text-6xl m-auto font-semibold text-white">{genre?.name}</h1>
       </div>
       <div>
