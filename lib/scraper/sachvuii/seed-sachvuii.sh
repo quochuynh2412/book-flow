@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Windows
-cd "C:\Users\quinn\Desktop\book-flow\lib"
+cd "C:\Users\quinn\Desktop\sepm\book-flow\lib"
 # WSL2
 cd "/mnt/c/Users/quinn/Desktop/sepm/book-flow/lib"
 
