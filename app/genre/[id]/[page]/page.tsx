@@ -15,7 +15,7 @@ import { useEffect, useState } from "react";
 import { Book, Author, Genre } from "@/types/interfaces";
 import React from "react";
 
-const itemsPerPage : number = 20;
+const itemsPerPage : number = 10;
 const numPopularItems : number = 6;
 
 export default function Page({ params }: { params: { id: string; page: string } }) {
@@ -93,13 +93,8 @@ export default function Page({ params }: { params: { id: string; page: string } 
           <div className="mb-12">
             <h1 className="text-3xl mb-4 border-b border-neutral-200 py-2">Popular books</h1>
             <div className="gap-4 lg:gap-12 grid grid-cols-3 md:grid-cols-6">
-              {popularBooks.length > 0 && popularBooks.map((book: Book, index) => (
-                <div key={index} style={{ backgroundImage: `url(${book.imageUrl})` }} className="bg-contain aspect-[6/9] rounded-lg bg-white shadow-md relative group" >
-                  <div className="rounded-lg absolute inset-0 opacity-0 group-hover:opacity-100 bg-black bg-opacity-60 text-white p-4 transition duration-300 ease-in-out">
-                    <span className="mb-3 text-sm md:text-md lg:text-lg font-semibold line-clamp-3">{book.title}</span>
-                    <span className="text-xs md:text-sm lg:text-md italic line-clamp-3">- {book.author.name}</span>
-                  </div>
-                </div>
+              {popularBooks.length > 0 && popularBooks.map((book: Book) => (
+                <MemoizedBookCard key={book.id} book={book}/>
               ))}
             </div>
           </div>
@@ -140,7 +135,7 @@ export default function Page({ params }: { params: { id: string; page: string } 
               <div className="flex-1">
                 <div className="py-4 grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-x-5 gap-y-12">
                   {books.length > 0 && books.map((book: Book, index) => (
-                    <MemoizedBookCard key={index} name={book.title} author={book.author.name} image={book.imageUrl} />
+                    <MemoizedBookCard key={book.id} book={book} />
                   ))}
                 </div>
                 <div>
