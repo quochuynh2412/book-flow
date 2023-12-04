@@ -295,7 +295,7 @@ def findAuthorWikipedia(name, lang):
     response = requests.get("https://" + lang + ".wikipedia.org/w/index.php?search=" + safe_string, headers=headers, timeout=20, allow_redirects=True)
     # print(response.request.headers["User-Agent"])
 
-    print("\n\t{0:<18}: {1}".format("Checking", colored("https://" + lang + ".wikipedia.org/w/index.php?search=" + safe_string, "cyan")))
+    print("\n\t{0:<18}: {1}".format("Checking", "https://" + colored(lang, "cyan") + ".wikipedia.org/w/index.php?search=" + safe_string))
 
     react_to_status_code(response)
 
@@ -364,20 +364,21 @@ def findAuthorWikipedia(name, lang):
                             bestMatchCase[0] = person
                             bestMatchCase[1] = len(result)
 
-                print("\tCase 5, regex found: " + colored(bestMatchCase[0], "green") + " with " + str(bestMatchCase[1]) + " matches", end="")
+                print("\tCase 5, regex found: " + colored(bestMatchCase[0], "green") + " with " + str(bestMatchCase[1]) + " matches", end="\n")
 
                 # if case 3 still can't find any match, return -1
                 if bestMatchCase[0] == "":
                     return "-1"
 
                 # get link href
-                return "https://" + lang + ".wikipedia.org" + bestMatchCase[0].find("a")["href"]
+                tempLink = re.sub(re.compile(r"\/wiki\/"), "", bestMatchCase[0].find("a")["href"])
+                return findAuthorWikipedia(tempLink, lang)
 
             # case 1
             else:
                 print("\tCase 5, direct hit", end="")
                 # print("\tCase 5, direct hit: " + colored("https://" + lang + ".wikipedia.org/w/index.php?search=" + safe_string, "green"), end="")
-                return "https://" + lang + ".wikipedia.org/w/index.php?search=" + safe_string 
+                return soup
 
     elif case2 is not None:
         print("\tCase 2: query not found")
@@ -394,17 +395,8 @@ def findAuthorWikipedia(name, lang):
 
 
 # part 3/3 of author description
-def extractAuthorDescription(link):
+def extractAuthorDescription(soup):
 
-    print("\t{0:<18}: {1}".format("Fetching", colored(link, 'cyan')))
-
-    # set `request` headers
-    headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'}
-    response = requests.get(link, headers=headers, timeout=20, allow_redirects=True)
-
-    react_to_status_code(response)
-
-    soup = BeautifulSoup(response.content, 'html.parser')
     body = soup.find("div", {"class": "mw-content-ltr mw-parser-output"}) # the body of the page
 
     # if body is None:
