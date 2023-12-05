@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/firebase";
+import { getStorage, ref, getDownloadURL } from "firebase/storage";
 import { where, getDocs, getDoc, collection, query, doc, limit, startAt, orderBy } from "firebase/firestore";
 export async function GET(request: NextRequest, response: NextResponse) {
     const searchParams = request.nextUrl.searchParams;
@@ -10,6 +11,8 @@ export async function GET(request: NextRequest, response: NextResponse) {
     const page: any = Number.parseInt(searchParams.get('page') || "0");
 
     const booksCollection = collection(db, 'book');
+    const storage = getStorage();
+
     let queryConditions: any[] = [];
     queryConditions.push(orderBy("title"));
     let authorDoc: any;
@@ -54,13 +57,24 @@ export async function GET(request: NextRequest, response: NextResponse) {
                         }
                     })
                 );
+                let imageUrl = book.data().imageID;
+                await getDownloadURL(ref(storage, imageUrl))
+                    .then((url) => {
+                        imageUrl = url;
+                        // console.log('Image URL:', imageURL);
+                    })
+                    .catch((error) => {
+                        console.error('Error getting download URL:', error);
+                    });
 
                 const data = book.data() as Record<string, unknown>;
                 delete data.genreID;
                 delete data.authorID;
+                delete data.imageID;
                 return {
                     id: book.id,
                     ...data,
+                    imageUrl,
                     genres,
                     authors,
                 };
