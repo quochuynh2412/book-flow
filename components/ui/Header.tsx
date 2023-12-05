@@ -8,6 +8,7 @@ import TextUnderline from "./TextUnderline";
 import { useAuth } from "@/hooks/useAuth";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import { useToast } from "./use-toast";
 
 const genres: string[] = [
   "Novel",
@@ -26,6 +27,7 @@ const genres: string[] = [
 export default function Header() {
   const { loggedIn, logout } = useAuth();
   const router = useRouter();
+  const { toast } = useToast();
   return (
     <header className="bg-white h-20 flex gap-2 border-b border-neutral-200">
       <div className="basis-2/12 text-2xl font-bold flex text-neutral-700 min-w-fit">
@@ -113,6 +115,9 @@ export default function Header() {
                               .then((response) => {
                                 logout();
                                 router.push("/");
+                                toast({
+                                  description: "Logged out successfully",
+                                });
                               });
                           }}
                         >
