@@ -24,11 +24,8 @@ const genres: string[] = [
 ];
 
 export default function Header() {
-<<<<<<< HEAD:components/Header.tsx
-=======
   const { loggedIn, logout } = useAuth();
   const router = useRouter();
->>>>>>> 82492d85ea36c3cffa9f8a01d835b7b58e413492:components/ui/Header.tsx
   return (
     <header className="bg-white h-20 flex gap-2 border-b border-neutral-200">
       <div className="basis-2/12 text-2xl font-bold flex text-neutral-700 min-w-fit">
@@ -107,11 +104,6 @@ export default function Header() {
                       </Link>
                     </div>
                     <div className="mx-auto">
-<<<<<<< HEAD:components/Header.tsx
-                      <Link href="#">
-                        <TextUnderline content="Logout" />
-                      </Link>
-=======
                       {loggedIn && (
                         <div
                           className="cursor-pointer"
@@ -132,7 +124,6 @@ export default function Header() {
                           <TextUnderline content="Login" />
                         </Link>
                       )}
->>>>>>> 82492d85ea36c3cffa9f8a01d835b7b58e413492:components/ui/Header.tsx
                     </div>
                   </div>
                 </div>
