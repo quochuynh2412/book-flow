@@ -23,10 +23,10 @@ export default function Header() {
   return (
     <header className="bg-white h-20 flex gap-2 border-b border-neutral-200">
       <div className="basis-2/12 text-2xl font-bold flex text-neutral-700 min-w-fit">
-        <Link href="" className="lg:hidden my-auto mx-8 hover:text-neutral-900">
+        <Link href="/" className="lg:hidden my-auto mx-8 hover:text-neutral-900">
           BF
         </Link>
-        <Link href="" className="hidden lg:block my-auto mx-8">
+        <Link href="/" className="hidden lg:block my-auto mx-8">
           Book Flow
         </Link>
       </div>
