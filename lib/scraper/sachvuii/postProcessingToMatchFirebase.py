@@ -1,15 +1,15 @@
-import json # for read and write json file
-import os # clear terminal command
+import json  # for read and write json file
+import os  # clear terminal command
 import time
-from uuid import uuid4 # for generating random uuid
-from termcolor import colored # for printing colors in the terminal
+from uuid import uuid4  # for generating random uuid
+from termcolor import colored  # for printing colors in the terminal
 import datetime
-from bs4 import BeautifulSoup # parse HTML
-import requests # make HTTP requests and feed it to BeautifulSoup
-import urllib.parse # parse the string to url safe
-import langid # language identification
-import re # regex
-import logging # log error
+from bs4 import BeautifulSoup  # parse HTML
+import requests  # make HTTP requests and feed it to BeautifulSoup
+import urllib.parse  # parse the string to url safe
+import langid  # language identification
+import re  # regex
+import logging  # log error
 
 
 path = "./json/"
@@ -18,18 +18,27 @@ authors = {"__collections__": {"author": {}}}
 books = {"__collections__": {"book": {}}}
 genres = {"__collections__": {"genre": {}}}
 
-# Designed to be run ONCE on /json-v3/ files
-# processBookAndAuthor() and processBookAndGenre() needs to be disabled if run on /json-v3/ files
-# This post processing script handles the relationship between AUTHOR-BOOK and GENRE-BOOK
-# Changes made to the jsons:
-#   renamed genresID to genreID
-#   genreID and authorID are now lists instead strings
-#   book.json "genreID" is linked with "name" genre.json
-#   book.json "authorID" is linked with "name" author.json
-#   if author is foreign, we will look them up on Wikipedia, and get their profile (if exists)
+# Usage:
+#   designed to be run ONCE on /json-v3/ files
+#   disable processBookAndAuthor() and processBookAndGenre() if run on /json-v3.5/ file (just author.json)
+
+# Description:
+#   this post processing script handles the relationship between AUTHOR-BOOK and GENRE-BOOK after crawling data from the web
+
+# Changes made from /json-v3/ to /json-4/:
+#   renamed `genresID` to `genreID`
+#   `genreID` and `authorID` are now lists instead strings
+#   book.json `genreID` is linked with `name` genre.json
+#   book.json `authorID` is linked with `name` author.json
+#   if author is foreign, we will look them up on Wikipedia (Vietnamese, English, and the author country if it's not in this list), and get their profile (if it exists)
+
 # Known effects:
-#   since you cannot rename JSON key, and only del old key & add new key, genreID now is at the bottom of each book
-#   Wikpedia and Google will block if we don't have the UserAgent
+#   since you cannot rename JSON key, and only del old key & add new key, `genreID` now is at the bottom of each book
+#   Wikpedia and Google will block us if we don't provide the UserAgent
+#   Wikipedia edge cases:
+#       person not found (handled)
+#       too many people with the same name (handled)
+#       recursion pages (you may know this person -> you may know this person -> ...) (handled)
 
 
 def main():
@@ -121,7 +130,7 @@ def processBookAndAuthor():
             bookAttr["authorID"] = [bookAttr["authorID"]]
         else:
             print("\t{:<20}".format(colored("Is list", "green")), end="")
-        print("bookAttr[authorID]: " + colored(bookAttr["authorID"], 'cyan'), end="")
+        print("bookAttr[authorID]: " + colored(bookAttr["authorID"], "cyan"), end="")
 
         # STEP 2: FOR EVERY BOOK: AUTHORID IN BOOK.JSON, FIND MATCHING AUTHOR: NAME IN AUTHOR.JSON
         # range is (0, 0) or (0, 1)
@@ -146,7 +155,7 @@ def processBookAndAuthor():
                 # update in book.json
                 books["__collections__"]["book"][key]["authorID"][i] = found
 
-        print() # to signify that this is the end of the book
+        print()  # to signify that this is the end of the book
 
 
 def processBookAndGenre():
@@ -164,7 +173,6 @@ def processBookAndGenre():
             print("\t{:<20}".format(colored("Is list", "green")), end="")
         print("bookAttr[genreID]: " + colored(bookAttr["genreID"], "cyan"), end="")
 
-
         # STEP 2: FOR EVERY BOOK: GENREID IN BOOK.JSON, FIND MATCHING GENRE: NAME IN GENRE.JSON
         # range is (0, 0) or (0, 1)
         for i in range(0, len(bookAttr["genreID"])):
@@ -178,7 +186,7 @@ def processBookAndGenre():
                 # update in genre.json
                 genres["__collections__"]["genre"][TEMPGENREID] = {
                     "name": TEMPGENRENAME,
-                    "description": ""
+                    "description": "",
                 }
 
                 # update in book.json
@@ -188,7 +196,7 @@ def processBookAndGenre():
                 # update in book.json
                 books["__collections__"]["book"][key]["genreID"][i] = found
 
-        print() # to signify that this is the end of the book
+        print()  # to signify that this is the end of the book
 
 
 def findGenre(genreId):
@@ -254,7 +262,7 @@ def updateAuthorDescription():
             else:
                 # if its Vietnamese, no need to try the rest
                 if classificationResult[0] == "vi":
-                    wikipediaLanguages = ["vi", "en"]
+                    wikipediaLanguages = ["vi"]
                 elif classificationResult[0] == "en":
                     wikipediaLanguages = ["vi", "en"]
                 elif classificationResult[0] == "de":
@@ -269,7 +277,7 @@ def updateAuthorDescription():
                     # if lang == classificationResult[0]: # we searched this already
                     #     continue
                     result = findAuthorWikipedia(tempName, lang)
-                    if result != "-1": # we found the page
+                    if result != "-1":  # we found the page
                         break
 
             if result != "-1":
@@ -285,7 +293,7 @@ def updateAuthorDescription():
 def findAuthorWikipedia(name, lang):
 
     # sleep for 0.5 second
-    time.sleep(0.5)
+    # time.sleep(0.5)
 
     # process input param to URL
     safe_string = urllib.parse.quote_plus(name)
@@ -307,7 +315,7 @@ def findAuthorWikipedia(name, lang):
     # case 3: found some but not close enough
     # case 4: you can create a draft and submit it for review
     # case 5: found
-    soup = BeautifulSoup(response.content, 'html.parser')
+    soup = BeautifulSoup(response.content, "html.parser")
 
     # get url of redirected page
     redirectedURL = response.url
@@ -318,7 +326,7 @@ def findAuthorWikipedia(name, lang):
         return "-1"
 
     # case 1
-    vietnameseNotFound = "Bạn có thể tạo trang .*?" # You can create a page
+    vietnameseNotFound = "Bạn có thể tạo trang .*?"  # You can create a page
     englishNotFound = "The page .*? does not exist. You can create a draft"
     frenchNotFound = "Aucun résultat trouvé pour .*?" # No results found for
     germanNotFound = "Keine Ergebnisse für .*? gefunden" # No results for
@@ -358,7 +366,7 @@ def findAuthorWikipedia(name, lang):
                 # search for list of people
                 for element in personMayReferTo.find_all("ul"):
                     for subelement in element.find_all("li"):
-                        possibleCases.append(subelement) # subelement.getText()
+                        possibleCases.append(subelement)  # subelement.getText()
 
                 # if any of the people contained keywords, print them
                 bestMatchCase = ["", 0]
@@ -434,35 +442,35 @@ def extractAuthorDescription(soup):
 
     regexCitation = re.compile(r"\[\d+\]|\bcitation\b \bneeded\b")
     description = re.sub(regexCitation, "", description)
-    print("\t" + colored(description[:100] + "...", 'dark_grey'))
+    print("\t" + colored(description[:100] + "...", "dark_grey"))
     return description
 
 
 def react_to_status_code(page):
     if page.status_code == 200:
-        print(colored("\tOK 200", 'green'))
+        print(colored("\tOK 200", "green"))
         return page
     # if status code starts with 4 or 5, then do something
     elif int(str(page.status_code)[:1]) == 4:
         if int(str(page.status_code)[:3]) == 429:
-            print(colored("\tERROR 429: Too many requests", 'red'))
+            print(colored("\tERROR 429: Too many requests", "red"))
             # stop the program
             exit()
     elif int(str(page.status_code)[:1]) == 5:
         if int(str(page.status_code)[:3]) == 500:
-            print(colored("\tERROR 500: Internal Server Error", 'red'))
+            print(colored("\tERROR 500: Internal Server Error", "red"))
             # stop the program
             exit()
         elif int(str(page.status_code)[:3]) == 502:
-            print(colored("\tERROR 502: Bad Gateway", 'red'))
+            print(colored("\tERROR 502: Bad Gateway", "red"))
             # stop the program
             exit()
         elif int(str(page.status_code)[:3]) == 503:
-            print(colored("\tERROR 503: Service Unavailable", 'red'))
+            print(colored("\tERROR 503: Service Unavailable", "red"))
             # stop the program
             exit()
     else:
-        print(colored("CODE " + str(page.status_code) + ": ", 'light_yellow'))
+        print(colored("CODE " + str(page.status_code) + ": ", "light_yellow"))
         # stop the program
         exit()
 
@@ -497,16 +505,16 @@ try:
 except requests.exceptions.Timeout:
     logging.exception("error")
     print("Timeout has been caught.")
-    flush() # force write
+    flush()  # force write
     exit()
 # user cancel
 except KeyboardInterrupt:
     print("KeyboardInterrupt has been caught.")
-    flush() # force write
+    flush()  # force write
     exit()
 # except everything else
 except:
     logging.exception("error")
     print("An error has been caught.")
-    flush() # force write
+    flush()  # force write
     exit()
