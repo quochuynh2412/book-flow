@@ -39,12 +39,12 @@ def main():
 
     # load the files to memory
     readAuthorJson()  # load author data
-    readBookJson()
-    readGenreJson()
+    # readBookJson()
+    # readGenreJson()
 
     # creates relationship between two collections
-    processBookAndAuthor() # if input is v3
-    processBookAndGenre() # if input is v3
+    # processBookAndAuthor() # if input is v3
+    # processBookAndGenre() # if input is v3
 
     # update author description
     updateAuthorDescription()
@@ -53,8 +53,8 @@ def main():
     flush()
 
     # print stats and time elapsed
-    finalize()
-    print("Time elapsed: {0} or {1} per book".format(colored(datetime.datetime.now() - start_time, "magenta"), colored((datetime.datetime.now() - start_time)/len(books["__collections__"]["book"]), 'magenta')))
+    # print("Time elapsed: {0} or {1} per book".format(colored(datetime.datetime.now() - start_time, "magenta"), colored((datetime.datetime.now() - start_time)/len(books["__collections__"]["book"]), 'magenta')))
+    print("Time elapsed: {0} or {1} per author".format(colored(datetime.datetime.now() - start_time, "magenta"), colored((datetime.datetime.now() - start_time)/len(authors["__collections__"]["author"]), 'magenta')))
 
 
 def readAuthorJson():
@@ -222,6 +222,7 @@ def findAuthor(authorId):
 # part 1/3 of author description
 def updateAuthorDescription():
     print("\n\n\nupdateAuthorDescription() running...")
+    print("Total authors: {0}".format(len(authors["__collections__"]["author"])))
 
     # search for authorID in authors dict
     for key, value in authors["__collections__"]["author"].items():
@@ -234,7 +235,7 @@ def updateAuthorDescription():
         # if classificationResult[1] >= 0.01 and classificationResult[0] != "vi":
             print("{0}{1} {2} {3} {4}".format(
                 colored(list(authors["__collections__"]["author"].keys()).index(key), "dark_grey"),
-                colored("/" + str(len(books["__collections__"]["book"])) + ",", "dark_grey"),
+                colored("/" + str(len(authors["__collections__"]["author"])) + ",", "dark_grey"),
                 tempName,
                 colored("is", 'dark_grey'),
                 colored(classificationResult, 'green')
@@ -383,6 +384,11 @@ def findAuthorWikipedia(name, lang):
                 if bestMatchCase[0] == "":
                     return "-1"
 
+                # combat recursion
+                if bestMatchCase[1] == 0:
+                    print("\t{0}".format(colored("Case 5, recursion", "red")))
+                    return "-1"
+
                 # get link href
                 tempLink = re.sub(re.compile(r"\/wiki\/"), "", bestMatchCase[0].find("a")["href"])
                 return findAuthorWikipedia(tempLink, lang)
@@ -464,18 +470,16 @@ def react_to_status_code(page):
 def flush():
     with open(path + "author.json", "w", encoding="utf-8") as json_file:
         json.dump(authors, json_file, ensure_ascii=False, indent=4)
-
-    with open(path + "book.json", "w", encoding="utf-8") as json_file:
-        json.dump(books, json_file, ensure_ascii=False, indent=4)
-
-    with open(path + "genre.json", "w", encoding="utf-8") as json_file:
-        json.dump(genres, json_file, ensure_ascii=False, indent=4)
-
-
-def finalize():
     print(("Author length : {0}").format(colored(str(len(authors["__collections__"]["author"])))))
-    print(("Book length : {0}").format(colored(str(len(books["__collections__"]["book"])))))
-    print(("Genre length : {0}").format(colored(str(len(genres["__collections__"]["genre"])))))
+
+    # with open(path + "book.json", "w", encoding="utf-8") as json_file:
+    #     json.dump(books, json_file, ensure_ascii=False, indent=4)
+    # print(("Book length : {0}").format(colored(str(len(books["__collections__"]["book"])))))
+
+    # with open(path + "genre.json", "w", encoding="utf-8") as json_file:
+    #     json.dump(genres, json_file, ensure_ascii=False, indent=4)
+    # print(("Genre length : {0}").format(colored(str(len(genres["__collections__"]["genre"])))))
+
     # Seed full run
     # Len author: 1545
     # Len book: 1912
