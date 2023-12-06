@@ -1,4 +1,4 @@
-export default function group() {
+export default function GoUp() {
   return (
     <div className="fixed h-30 w-30 bottom-10 right-10">
       <a href="#top">

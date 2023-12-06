@@ -10,6 +10,7 @@ export async function GET(request: NextRequest, response: NextResponse) {
     const itemsPerPage: any = Number.parseInt(searchParams.get('itemsPerPage') || "0");
     const page: any = Number.parseInt(searchParams.get('page') || "1");
     const booksCollection = collection(db, 'book');
+
     let queryConditions: any[] = [];
     queryConditions.push(orderBy("title"));
     let authorDoc: any;
@@ -63,9 +64,9 @@ export async function GET(request: NextRequest, response: NextResponse) {
                 return {
                     id: book.id,
                     ...data,
+                    imageUrl,
                     genres,
                     authors,
-                    imageUrl
                 };
             }));
             return NextResponse.json({ books }, { status: 200 });

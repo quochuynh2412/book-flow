@@ -15,7 +15,6 @@ export default function Page({ params }: { params: { id: string } }) {
         async function fetchBook(id: string) {
             const response = await fetch(`/api/book?id=${id}`, { cache: 'no-store' })
             const bookJson: Book = await response.json();
-            console.log(bookJson)
             setBook(bookJson);
         }
         fetchBook(params.id);
