@@ -1,9 +1,14 @@
+"use client";
 import Link from "next/link";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 
 import { Sheet2, SheetContent2, SheetTrigger2 } from "@/components/ui/sheet2";
 
 import TextUnderline from "./TextUnderline";
+import { useAuth } from "@/hooks/useAuth";
+import axios from "axios";
+import { useRouter } from "next/navigation";
+import { useToast } from "./ui/use-toast";
 
 const genres: string[] = [
   "Novel",
@@ -20,13 +25,16 @@ const genres: string[] = [
 ];
 
 export default function Header() {
+  const { loggedIn, logout } = useAuth();
+  const router = useRouter();
+  const { toast } = useToast();
   return (
     <header className="bg-white h-20 flex gap-2 border-b border-neutral-200">
       <div className="basis-2/12 text-2xl font-bold flex text-neutral-700 min-w-fit">
-        <Link href="/" className="lg:hidden my-auto mx-8 hover:text-neutral-900">
+        <Link href="" className="lg:hidden my-auto mx-8 hover:text-neutral-900">
           BF
         </Link>
-        <Link href="/" className="hidden lg:block my-auto mx-8">
+        <Link href="" className="hidden lg:block my-auto mx-8">
           Book Flow
         </Link>
       </div>
@@ -98,9 +106,29 @@ export default function Header() {
                       </Link>
                     </div>
                     <div className="mx-auto">
-                      <Link href="#">
-                        <TextUnderline content="Logout" />
-                      </Link>
+                      {loggedIn && (
+                        <div
+                          className="cursor-pointer"
+                          onClick={() => {
+                            axios
+                              .post("/api/authentication/logout")
+                              .then((response) => {
+                                logout();
+                                router.push("/");
+                                toast({
+                                  description: "Logged out successfully",
+                                });
+                              });
+                          }}
+                        >
+                          <TextUnderline content="Logout" />
+                        </div>
+                      )}
+                      {!loggedIn && (
+                        <Link href="/login">
+                          <TextUnderline content="Login" />
+                        </Link>
+                      )}
                     </div>
                   </div>
                 </div>
