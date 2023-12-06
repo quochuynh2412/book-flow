@@ -1,17 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
-import { db } from "@/lib/firebase";
-import { getStorage, ref, getDownloadURL } from "firebase/storage";
+import { db, storage } from "@/lib/firebase";
 import { where, getDocs, getDoc, collection, query, doc, limit, startAt, orderBy } from "firebase/firestore";
+import { getDownloadURL, ref } from "firebase/storage";
 export async function GET(request: NextRequest, response: NextResponse) {
     const searchParams = request.nextUrl.searchParams;
     const author = searchParams.get('author');
     const genre = searchParams.get('genre');
     const id = searchParams.get('id');
     const itemsPerPage: any = Number.parseInt(searchParams.get('itemsPerPage') || "0");
-    const page: any = Number.parseInt(searchParams.get('page') || "0");
-
+    const page: any = Number.parseInt(searchParams.get('page') || "1");
     const booksCollection = collection(db, 'book');
-    const storage = getStorage();
 
     let queryConditions: any[] = [];
     queryConditions.push(orderBy("title"));
@@ -22,14 +20,14 @@ export async function GET(request: NextRequest, response: NextResponse) {
     if (genre) {
         queryConditions.push(where('genreID', "array-contains", genre));
     }
-
+    const startAtDoc = (page - 1) * itemsPerPage;
     if (!id) {
         if (itemsPerPage != 0 && page != 0) {
-            const startAtDoc = (page - 1) * itemsPerPage;
             queryConditions.push(limit(itemsPerPage));
             queryConditions.push(startAt(startAtDoc));
         }
         const q = query(booksCollection, ...queryConditions);
+
         try {
             const snapshot = await getDocs(q);
             const books = await Promise.all(snapshot.docs.map(async (book) => {
@@ -57,16 +55,8 @@ export async function GET(request: NextRequest, response: NextResponse) {
                         }
                     })
                 );
-                let imageUrl = book.data().imageID;
-                await getDownloadURL(ref(storage, imageUrl))
-                    .then((url) => {
-                        imageUrl = url;
-                        // console.log('Image URL:', imageURL);
-                    })
-                    .catch((error) => {
-                        console.error('Error getting download URL:', error);
-                    });
 
+                const imageUrl = await getDownloadURL(ref(storage, book.data().imageID));
                 const data = book.data() as Record<string, unknown>;
                 delete data.genreID;
                 delete data.authorID;
@@ -115,15 +105,17 @@ export async function GET(request: NextRequest, response: NextResponse) {
                         }
                     })
                 );
-
+                const imageUrl = await getDownloadURL(ref(storage, book.imageID));
                 const data = docSnap.data();
                 delete data.genreID;
                 delete data.authorID;
+                delete data.imageID;
                 return NextResponse.json({
                     id: docSnap.id,
                     ...data,
                     genres,
                     authors,
+                    imageUrl
                 }, { status: 200 });
             } else {
                 console.log("No such document!");
