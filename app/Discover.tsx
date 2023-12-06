@@ -1,5 +1,6 @@
 "use client"
 
+import Link from "next/link";
 import { useEffect, useState } from "react";
 
 import Button from "@/components/Button";
@@ -110,11 +111,11 @@ export default function Discover() {
         <h2 className="text-3xl md:text-5xl text-center mb-8 md:mb-12 font-light border-b-2 border-neutral-300 pb-5">ALL GENRES</h2>
         <div className="gap-4 lg:gap-12 grid grid-cols-3 md:grid-cols-5">
           {genres?.map((genre) => (
-            <div key={genre.id} style={{backgroundImage: `url(/img/${genre.id}).jpeg`}} className="bg-cover bg-no-repeat aspect-square rounded-full bg-white shadow-md relative group" >
+            <Link href={`/genre/${genre.id}/1`} key={genre.id} style={{backgroundImage: `url(/img/${genre.id}).jpeg`}} className="bg-cover bg-no-repeat aspect-square rounded-full bg-white shadow-md relative group" >
               <div className="rounded-full absolute flex inset-0 opacity-0 group-hover:opacity-100 bg-black bg-opacity-60 text-white p-4 transition duration-300 ease-in-out">
                 <span className="m-auto text-center text-sm md:text-md lg:text-lg font-semibold line-clamp-3">{genre.name}</span>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
       </div>
