@@ -14,7 +14,6 @@ const LoadSession = () => {
       try {
         const response = await axios.get("/api/authentication/login");
         if (response.status === 200) {
-          console.log("hello");
           login(true);
         }
       } catch (error) {

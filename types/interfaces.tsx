@@ -17,3 +17,10 @@ export interface Book {
   imageUrl: string;
   title: string;
 }
+
+export interface BookList {
+  id: string;
+  books: string[];
+  bookListName: string;
+  ownerId: string;
+}
