@@ -1,7 +1,7 @@
 "use client"
-import Header from "@/components/ui/Header";
-import SubHeader from "@/components/ui/SubHeader";
-import Footer from "@/components/ui/Footer";
+import Header from "@/components/Header";
+import SubHeader from "@/components/SubHeader";
+import Footer from "@/components/Footer";
 import BookCard from "@/components/BookCard";
 import {
   Select,

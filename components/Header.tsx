@@ -8,7 +8,7 @@ import TextUnderline from "./TextUnderline";
 import { useAuth } from "@/hooks/useAuth";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import { useToast } from "./use-toast";
+import { useToast } from "./ui/use-toast";
 
 const genres: string[] = [
   "Novel",
