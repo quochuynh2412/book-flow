@@ -1,0 +1,19 @@
+# Make the envrironment
+py -m venv .venv
+
+# Activate
+cd "C:\Users\quinn\Desktop\sepm\book-flow\lib\scraper"
+venv\Scripts\activate.bat
+
+# Confirm it's installed
+python --version
+where python
+pip list
+
+# After first time activation
+py -m pip install --upgrade pip
+py -m pip --version
+pip install -r requirements.txt
+
+# Deactivate
+deactivate
