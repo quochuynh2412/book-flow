@@ -84,13 +84,13 @@ export default function Page({ params }: { params: { id: string; page: string } 
       <div>
         <div className="mx-auto px-12 py-24 lg:max-w-7xl lg:px-8">
           <div className="mb-12">
-            <h1 className="text-3xl mb-4 border-b border-neutral-200 py-2">Description</h1>
+            <h1 className="text-3xl mb-4 border-b-2 border-neutral-300 py-2">Description</h1>
             <div className="md:flex gap-8">
               <p>{genre ? genre.description : ""}</p>
             </div>
           </div>
           <div className="mb-12">
-            <h1 className="text-3xl mb-4 border-b border-neutral-200 py-2">Popular books</h1>
+            <h1 className="text-3xl mb-4 border-b-2 border-neutral-300 py-2">Popular books</h1>
             <div className="gap-4 lg:gap-12 grid grid-cols-3 md:grid-cols-6">
               {popularBooks != undefined && popularBooks.length > 0 && popularBooks.map((book: Book) => (
                 <MemoizedBookCard key={book.id} book={book}/>
@@ -98,7 +98,7 @@ export default function Page({ params }: { params: { id: string; page: string } 
             </div>
           </div>
           <div>
-            <h1 className="text-3xl mb-4 border-b border-neutral-200 py-2">All books</h1>
+            <h1 className="text-3xl mb-4 border-b-2 border-neutral-300 py-2">All books</h1>
             <div className="md:flex gap-5">
               <div className="md:w-64 lg:w-72 py-4">
                 <div className="border border-neutral-300 sticky top-10 shadow-sm">
