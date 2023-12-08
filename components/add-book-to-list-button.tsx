@@ -60,15 +60,13 @@ const AddBookToListButton = ({ bookId }: AddBookToListButtonProps) => {
   });
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    await axios.post(`/api/list/${values.listId}/book`, {
-      bookId,
-    });
+    await axios.post(`/api/list/${values.listId}/book/${bookId}`);
   };
   useEffect(() => {
     async function fetchList() {
       setLoading(true);
       const response = await axios.get("/api/list");
-      setLists(response.data.result);
+      setLists(response.data.lists);
       setLoading(false);
     }
     if (loggedIn) {

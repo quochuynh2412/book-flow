@@ -19,14 +19,15 @@ export async function GET(req: NextRequest) {
 
     const snapshot = await getDocs(q);
 
-    const result: any[] = [];
+    const lists: any[] = [];
 
     snapshot.forEach((doc) => {
-      result.push({ id: doc.id, ...doc.data() });
+      lists.push({ id: doc.id, ...doc.data() });
     });
 
-    return NextResponse.json({ result }, { status: 200 });
+    return NextResponse.json({ lists }, { status: 200 });
   } catch (error) {
+    console.error("Error getting list", error);
     return NextResponse.json(
       { message: "Internal Server Error" },
       { status: 500 }
@@ -53,7 +54,7 @@ export async function POST(req: NextRequest) {
     }
 
     const listData = {
-      bookListName,
+      name: bookListName,
       ownerId: userId,
       books: [],
     };
@@ -67,6 +68,7 @@ export async function POST(req: NextRequest) {
       { status: 200 }
     );
   } catch (error) {
+    console.error("Error creating new list:", error);
     return NextResponse.json(
       { message: "Internal Server Error" },
       { status: 500 }
