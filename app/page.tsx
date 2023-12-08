@@ -1,12 +1,11 @@
-import Hero from "@/components/ui/Hero";
-import Footer from "@/components/ui/Footer";
-import Header from "@/components/ui/Header";
-import SubHeader from "@/components/ui/SubHeader";
-import GoUp from "@/components/ui/GoUp";
-import About from "@/components/ui/About";
-import Discover from "@/components/ui/Discover";
-import Intro from "@/components/ui/Intro";
-
+import Hero from "@/app/Hero";
+import Footer from "@/components/Footer";
+import Header from "@/components/Header";
+import SubHeader from "@/components/SubHeader";
+import GoUp from "@/components/GoUp";
+import About from "@/app/About";
+import Discover from "@/app/Discover";
+import Intro from "@/app/Intro";
 
 export default function Home() {
   return (
