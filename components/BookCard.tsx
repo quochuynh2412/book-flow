@@ -3,7 +3,6 @@ import Link from 'next/link';
 import { Book } from '@/types/interfaces';
 
 export default function BookCard({book}: {book: Book}) {
-  console.log("Book URL: " + book.imageUrl);
 
   return (
     <Link href={`/book/${book.id}`} style={{backgroundImage: `url(${book.imageUrl})`}} className="bg-contain aspect-[6/9] rounded-lg bg-white shadow-md relative group" >
