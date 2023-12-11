@@ -1,6 +1,5 @@
 "use client"
 import Header from "@/components/Header";
-import SubHeader from "@/components/SubHeader";
 import Footer from "@/components/Footer";
 import BookCard from "@/components/BookCard";
 import {
@@ -77,7 +76,6 @@ export default function Page({ params }: { params: { id: string; page: string } 
   return (
     <div>
       <Header />
-      <SubHeader />
       <div className="h-72 flex shadow-inner border bg-cover bg-no-repeat bg-center bg-blend-multiply bg-neutral-500" style={{ backgroundImage: `url(${genre?.imageUrl})` }}>
         <h1 className="text-4xl md:text-6xl m-auto font-semibold text-white">{genre?.name}</h1>
       </div>
