@@ -166,7 +166,7 @@ export default function Quiz(props: { description: string }) {
 
       count++;
 
-      if (answers.length == 4 || count >= 4) {
+      if (answers.length == 4 || count >= 3) {
         break;
       }
     }
@@ -178,14 +178,6 @@ export default function Quiz(props: { description: string }) {
   })
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
-    toast({
-      title: "You submitted the following values:",
-      description: (
-        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-          <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-        </pre>
-      ),
-    })
 
     // if correct answer is selected
     if (data.type == correctAnswer) {
@@ -241,7 +233,7 @@ export default function Quiz(props: { description: string }) {
   }
 
   return (
-    <div className="mx-auto py-16 px-4 lg:max-w-7xl lg:px-8 flex justify-center border-slate-100 border-2 shadow-lg rounded-3xl bg-slate-200">
+    <div className="mx-auto py-12 px-4 lg:max-w-4xl lg:px-0 flex flex-col justify-center items-center border-slate-100 border-2 shadow-lg rounded-2xl bg-slate-200">
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="lg:w-3/4 space-y-6">
         <FormField
@@ -252,14 +244,14 @@ export default function Quiz(props: { description: string }) {
               <FormLabel>
                 <div className="flex flex-row items-center justify-center mb-10">
                   <p className="text-justify text-sm md:text-md lg:text-lg inline-block align-middle mr-1 md:mr-5 lg:mr-7">{question}</p>
-                  <span className="transition ease-in-out delay-15 hover:-translate-y-7 hover:scale-110 duration-300 text-cyan-600 text-2xl md:text-4xl lg:text-9xl">🧠</span>
+                  <span className="transition ease-in-out delay-15 hover:-translate-y-7 hover:scale-110 duration-300 text-cyan-600 text-2xl md:text-4xl lg:text-7xl">🧠</span>
                 </div>
               </FormLabel>
               <FormControl>
                 <RadioGroup
                   onValueChange={field.onChange}
                   defaultValue={field.value}
-                  className="flex flex-col space-y-1"
+                  className="space-y-1 grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4"
                 >
 
                   {
@@ -274,21 +266,6 @@ export default function Quiz(props: { description: string }) {
                       )
                     })
                   }
-
-                  {/* <FormItem className="flex items-center space-x-3 space-y-0">
-                    <FormControl>
-                      <RadioGroupItem value="mentions" />
-                    </FormControl>
-                    <FormLabel className="font-normal">
-                      Direct messages and mentions
-                    </FormLabel>
-                  </FormItem>
-                  <FormItem className="flex items-center space-x-3 space-y-0">
-                    <FormControl>
-                      <RadioGroupItem value="none" />
-                    </FormControl>
-                    <FormLabel className="font-normal">Nothing</FormLabel>
-                  </FormItem> */}
                 </RadioGroup>
               </FormControl>
               <FormMessage />
