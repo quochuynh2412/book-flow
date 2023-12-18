@@ -4,7 +4,7 @@ export default function Review() {
   return (
     <div className="md:flex gap-9">
       <div className="md:basis-5/12">
-        <form className="p-5 border border-neutral-300 mx-auto rounded-md sticky top-10">
+        <form className="mb-10 p-5 border border-neutral-300 mx-auto rounded-md sticky top-10">
           <div className="mt-3">
             <label htmlFor="rating" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Select your rating</label>
             <select id="rating" className="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
@@ -197,12 +197,52 @@ export default function Review() {
                 <h2 className="text-lg font-bold mb-2">Dang Thai Hoang</h2>
                 <p className="line-clamp-3 mb-2">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veniam consequatur commodi ea quisquam et delectus obcaecati sed perspiciatis, quae possimus eos quam inventore, temporibus ipsum magnam dolorem amet nulla saepe!</p>
               </div>
-              
+            
             </TabsContent>
-            <TabsContent value="4">Change your password here.</TabsContent>
-            <TabsContent value="3">Change your password here.</TabsContent>
-            <TabsContent value="2">Change your password here.</TabsContent>
-            <TabsContent value="1">Change your password here.</TabsContent>
+            <TabsContent value="4">
+              <div className="h-40 border rounded-lg border-neutral-300 p-5 mb-4">
+                <h2 className="text-lg font-bold mb-2">Dang Thai Hoang</h2>
+                <p className="line-clamp-3 mb-2">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veniam consequatur commodi ea quisquam et delectus obcaecati sed perspiciatis, quae possimus eos quam inventore, temporibus ipsum magnam dolorem amet nulla saepe!</p>
+              </div>
+              <div className="h-40 border rounded-lg border-neutral-300 p-5 mb-4">
+                <h2 className="text-lg font-bold mb-2">Dang Thai Hoang</h2>
+                <p className="line-clamp-3 mb-2">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veniam consequatur commodi ea quisquam et delectus obcaecati sed perspiciatis, quae possimus eos quam inventore, temporibus ipsum magnam dolorem amet nulla saepe!</p>
+              </div>
+              <div className="h-40 border rounded-lg border-neutral-300 p-5 mb-4">
+                <h2 className="text-lg font-bold mb-2">Dang Thai Hoang</h2>
+                <p className="line-clamp-3 mb-2">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veniam consequatur commodi ea quisquam et delectus obcaecati sed perspiciatis, quae possimus eos quam inventore, temporibus ipsum magnam dolorem amet nulla saepe!</p>
+              </div>
+            </TabsContent>
+            <TabsContent value="3">
+              <div className="h-40 border rounded-lg border-neutral-300 p-5 mb-4">
+                <h2 className="text-lg font-bold mb-2">Dang Thai Hoang</h2>
+                <p className="line-clamp-3 mb-2">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veniam consequatur commodi ea quisquam et delectus obcaecati sed perspiciatis, quae possimus eos quam inventore, temporibus ipsum magnam dolorem amet nulla saepe!</p>
+              </div>
+              <div className="h-40 border rounded-lg border-neutral-300 p-5 mb-4">
+                <h2 className="text-lg font-bold mb-2">Dang Thai Hoang</h2>
+                <p className="line-clamp-3 mb-2">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veniam consequatur commodi ea quisquam et delectus obcaecati sed perspiciatis, quae possimus eos quam inventore, temporibus ipsum magnam dolorem amet nulla saepe!</p>
+              </div>
+            </TabsContent>
+            <TabsContent value="2">
+              <div className="h-40 border rounded-lg border-neutral-300 p-5 mb-4">
+                <h2 className="text-lg font-bold mb-2">Dang Thai Hoang</h2>
+                <p className="line-clamp-3 mb-2">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veniam consequatur commodi ea quisquam et delectus obcaecati sed perspiciatis, quae possimus eos quam inventore, temporibus ipsum magnam dolorem amet nulla saepe!</p>
+              </div>
+              <div className="h-40 border rounded-lg border-neutral-300 p-5 mb-4">
+                <h2 className="text-lg font-bold mb-2">Dang Thai Hoang</h2>
+                <p className="line-clamp-3 mb-2">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veniam consequatur commodi ea quisquam et delectus obcaecati sed perspiciatis, quae possimus eos quam inventore, temporibus ipsum magnam dolorem amet nulla saepe!</p>
+              </div>
+            </TabsContent>
+            <TabsContent value="1">
+              <div className="h-40 border rounded-lg border-neutral-300 p-5 mb-4">
+                <h2 className="text-lg font-bold mb-2">Dang Thai Hoang</h2>
+                <p className="line-clamp-3 mb-2">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veniam consequatur commodi ea quisquam et delectus obcaecati sed perspiciatis, quae possimus eos quam inventore, temporibus ipsum magnam dolorem amet nulla saepe!</p>
+              </div>
+              <div className="h-40 border rounded-lg border-neutral-300 p-5 mb-4">
+                <h2 className="text-lg font-bold mb-2">Dang Thai Hoang</h2>
+                <p className="line-clamp-3 mb-2">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veniam consequatur commodi ea quisquam et delectus obcaecati sed perspiciatis, quae possimus eos quam inventore, temporibus ipsum magnam dolorem amet nulla saepe!</p>
+              </div>
+            </TabsContent>
           </Tabs>
         </div>
       </div>
