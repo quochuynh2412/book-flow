@@ -21,7 +21,8 @@ export async function POST(
       return NextResponse.json({ message: "No user found" }, { status: 401 });
     }
     const userId = (await auth().verifySessionCookie(session, true)).uid;
-
+    const searchParams = req.nextUrl.searchParams;
+    const note = searchParams.get("note");
     // Check if the list with the given id belongs to the authenticated user
     const listRef = doc(db, "list", params.id);
     const listSnap = await getDoc(listRef);
@@ -36,11 +37,14 @@ export async function POST(
       return NextResponse.json({ message: "Unauthorized" }, { status: 403 });
     }
 
-    // Update the list document to add the bookId to the 'books' array
-    await updateDoc(listRef, {
-      books: arrayUnion(params.bookId),
-    });
+    const bookObject = {
+      bookId: params.bookId,
+      note,
+    };
 
+    await updateDoc(listRef, {
+      books: arrayUnion(bookObject),
+    });
     return NextResponse.json(
       { message: "Book added successfully" },
       { status: 200 }

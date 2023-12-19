@@ -22,7 +22,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Input } from "@/components/ui/input";
 import { useAuth } from "@/hooks/useAuth";
 import { useEffect, useState } from "react";
 import Link from "next/link";
@@ -32,13 +31,16 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { BookList } from "@/types/interfaces";
+import { Input } from "./ui/input";
+import { useRouter } from "next/navigation";
 
 interface AddBookToListButtonProps {
   bookId: string;
 }
 
 const formSchema = z.object({
-  listId: z.string(),
+  listId: z.string().min(10, { message: "Please select a list to add to" }),
+  message: z.string().optional(),
 });
 
 const AddBookToListButton = ({ bookId }: AddBookToListButtonProps) => {
@@ -47,6 +49,7 @@ const AddBookToListButton = ({ bookId }: AddBookToListButtonProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [lists, setLists] = useState<BookList[] | null>(null);
   const { loggedIn } = useAuth();
+  const router = useRouter();
   const handleClose = () => {
     setIsOpen(false);
     form.reset();
@@ -56,24 +59,31 @@ const AddBookToListButton = ({ bookId }: AddBookToListButtonProps) => {
     resolver: zodResolver(formSchema),
     defaultValues: {
       listId: "",
+      message: "",
     },
   });
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    await axios.post(`/api/list/${values.listId}/book/${bookId}`);
+    setLoading2(true);
+    await axios.post(
+      `/api/list/${values.listId}/book/${bookId}?note=${values.message}`
+    );
+    setLoading2(false);
+    setIsOpen(false);
+    form.reset();
+    router.refresh();
   };
   useEffect(() => {
     async function fetchList() {
       setLoading(true);
-      const response = await axios.get("/api/list");
+      const response = await axios.get(`/api/list?bookId=${bookId}`);
       setLists(response.data.lists);
       setLoading(false);
     }
     if (loggedIn) {
       fetchList();
     }
-  }, [loggedIn]);
-
+  }, [loggedIn, loading2]);
   return (
     <>
       <Button onClick={() => setIsOpen(true)}>Add this book to list</Button>
@@ -116,29 +126,53 @@ const AddBookToListButton = ({ bookId }: AddBookToListButtonProps) => {
                     name="listId"
                     render={({ field }) => (
                       <FormItem>
+                        <FormLabel>List</FormLabel>
                         <Select
                           onValueChange={field.onChange}
                           defaultValue={""}
                         >
                           <FormControl>
-                            <SelectTrigger>
-                              <SelectValue placeholder="Select a list to add to" />
+                            <SelectTrigger disabled={lists?.length === 0}>
+                              <SelectValue
+                                placeholder={
+                                  lists?.length === 0
+                                    ? "No valid list to add to, try creating one"
+                                    : "Select a list to add to"
+                                }
+                              />
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
-                            {lists?.map((list) => (
-                              <SelectItem key={list.id} value={list.id}>
-                                {list.bookListName}
-                              </SelectItem>
-                            ))}
+                            {lists?.length == 0 && <></>}
+                            {lists?.length !== 0 &&
+                              lists?.map((list) => (
+                                <SelectItem key={list.id} value={list.id}>
+                                  {list.name}
+                                </SelectItem>
+                              ))}
                           </SelectContent>
                         </Select>
                         <FormMessage />
                       </FormItem>
                     )}
                   />
+                  <FormField
+                    control={form.control}
+                    name="message"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Note</FormLabel>
+                        <FormControl>
+                          <Input placeholder="Enter your note" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
                   <DialogFooter>
-                    <Button type="submit">Add</Button>
+                    <Button type="submit" className="w-24" disabled={loading2}>
+                      Add
+                    </Button>
                   </DialogFooter>
                 </form>
               </Form>

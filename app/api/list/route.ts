@@ -11,6 +11,8 @@ export async function GET(req: NextRequest) {
     if (!session) {
       return NextResponse.json({ message: "No user found" }, { status: 401 });
     }
+    const searchParams = req.nextUrl.searchParams;
+    const bookId = searchParams.get("bookId");
     const userId = (await auth().verifySessionCookie(session, true)).uid;
 
     const listsCollection = collection(db, "list");
@@ -20,9 +22,17 @@ export async function GET(req: NextRequest) {
     const snapshot = await getDocs(q);
 
     const lists: any[] = [];
-
     snapshot.forEach((doc) => {
-      lists.push({ id: doc.id, ...doc.data() });
+      if (
+        !bookId ||
+        (bookId &&
+          !doc.data().books?.some((item: any) => {
+            console.log(item);
+            return item.bookId === bookId;
+          }))
+      ) {
+        lists.push({ id: doc.id, ...doc.data() });
+      }
     });
 
     return NextResponse.json({ lists }, { status: 200 });
