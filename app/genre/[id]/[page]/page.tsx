@@ -1,7 +1,6 @@
 "use client"
-import Header from "@/components/ui/Header";
-import SubHeader from "@/components/ui/SubHeader";
-import Footer from "@/components/ui/Footer";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 import BookCard from "@/components/BookCard";
 import {
   Select,
@@ -42,6 +41,7 @@ export default function Page({ params }: { params: { id: string; page: string } 
       }).then(async (response) => {
         const data = await response.json();
         await setBooks(data.books);
+        console.log(books);
       }).catch(error => {
         console.error("Failed to fetch books:", error)
       });
@@ -76,28 +76,27 @@ export default function Page({ params }: { params: { id: string; page: string } 
   return (
     <div>
       <Header />
-      <SubHeader />
-      <div className="h-72 flex shadow-inner border bg-cover bg-no-repeat bg-center bg-blend-multiply bg-neutral-500" style={{ backgroundImage: `url(/img/${genre?.id}.jpeg)` }}>
+      <div className="h-72 flex shadow-inner border bg-cover bg-no-repeat bg-center bg-blend-multiply bg-neutral-500" style={{ backgroundImage: `url(${genre?.imageUrl})` }}>
         <h1 className="text-4xl md:text-6xl m-auto font-semibold text-white">{genre?.name}</h1>
       </div>
       <div>
         <div className="mx-auto px-12 py-24 lg:max-w-7xl lg:px-8">
           <div className="mb-12">
-            <h1 className="text-3xl mb-4 border-b border-neutral-200 py-2">Description</h1>
+            <h1 className="text-3xl mb-4 border-b-2 border-neutral-300 py-2">Description</h1>
             <div className="md:flex gap-8">
               <p>{genre ? genre.description : ""}</p>
             </div>
           </div>
           <div className="mb-12">
-            <h1 className="text-3xl mb-4 border-b border-neutral-200 py-2">Popular books</h1>
+            <h1 className="text-3xl mb-4 border-b-2 border-neutral-300 py-2">Popular books</h1>
             <div className="gap-4 lg:gap-12 grid grid-cols-3 md:grid-cols-6">
-              {popularBooks.length > 0 && popularBooks.map((book: Book) => (
+              {popularBooks != undefined && popularBooks.length > 0 && popularBooks.map((book: Book) => (
                 <MemoizedBookCard key={book.id} book={book}/>
               ))}
             </div>
           </div>
           <div>
-            <h1 className="text-3xl mb-4 border-b border-neutral-200 py-2">All books</h1>
+            <h1 className="text-3xl mb-4 border-b-2 border-neutral-300 py-2">All books</h1>
             <div className="md:flex gap-5">
               <div className="md:w-64 lg:w-72 py-4">
                 <div className="border border-neutral-300 sticky top-10 shadow-sm">
@@ -132,7 +131,7 @@ export default function Page({ params }: { params: { id: string; page: string } 
               </div>
               <div className="flex-1">
                 <div className="py-4 grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-x-5 gap-y-12">
-                  {books.length > 0 && books.map((book: Book, index) => (
+                  {books != undefined && books.length > 0 && books.map((book: Book, index) => (
                     <MemoizedBookCard key={book.id} book={book} />
                   ))}
                 </div>

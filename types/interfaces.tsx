@@ -2,6 +2,7 @@ export interface Genre {
   id: string;
   name: string;
   description: string;
+  imageUrl: string;
 }
 export interface Author {
   id: string;

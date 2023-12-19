@@ -8,7 +8,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { badgeVariants } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-import Header from "@/components/ui/Header";
+import Header from "@/components/Header";
 import AddBookToListButton from "../../../components/add-book-to-list-button";
 export default function Page({ params }: { params: { id: string } }) {
   const [book, setBook] = useState<Book | null>(null);
