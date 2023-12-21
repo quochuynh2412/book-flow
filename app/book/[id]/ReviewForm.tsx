@@ -14,7 +14,7 @@ const ratingSystem : string[] = [
   "The 1 Star review is for books that have no place on your bookshelf. The ones that were snooze-worthy from start to finish (sadly, they are out there). If you think a book was utterly terrible and need everyone to know it, don't be afraid to use the 1 Star review.",
   "It's safe to say that you won't reread this book, and it's doubtful that it will remain on your bookshelf. However, perhaps this book wasn't complete nonsense. The 2-star review is for a book that definitely wasn't good but wasn't completely bad. If you appreciated the story or enjoyed a few snippets of text, but felt overall that the book lacked personality and storyline, then award your below-average read a 2-star review.",
   "Are you feeling neutral about your recent read? Were you a little underwhelmed? Are you plagued by the feeling of indifference? Then bring out the 3 Star review. You should award 3 Stars to books that you mostly enjoyed but didn't leave you with the \"wow, that was good\" kind of feeling.",
-  "Now the party is starting! 4 Stars are for books that you enjoyed, from beginning to end - a truly great read. It may not be top of your reread pile, but if the opportunity arose, you wouldn't say no. You should be pleased with all the components of the novel, and perhaps you were even thrilled about one element in particular (such as an engaging character or plot twist).",
+  "4 Stars are for books that you enjoyed, from beginning to end - a truly great read. It may not be top of your reread pile, but if the opportunity arose, you wouldn't say no. You should be pleased with all the components of the novel, and perhaps you were even thrilled about one element in particular (such as an engaging character or plot twist).",
   "Can't wait to reread? Top of your recommendation list? Can't stop thinking about the ending? Beginning? Chapter 13, page 4?! 5 Stars are for the creme de la creme of your bookshelf. Those books that give you the \"I'm so sad it has ended!\" kind of feeling. Of course, no book is entirely perfect, but if this book has you almost shouting from the rooftops, filled you with a joyous buzz and reminded you how wondrous it is to read, then 5 Stars are certainly on the menu."
 ];
 
@@ -64,7 +64,7 @@ export default function ReviewForm({bookId} : {bookId: string}) {
             {ratingSystem[rating - 1]}
         </div>
       </div>
-      <div className="my-5">
+      <div className="mt-10 mb-5">
         <label htmlFor="title" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Review title</label>
         <input type="text" id="title" onChange={(e) => setTitle(e.target.value)} className="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Best book I have read in..." required />
       </div>

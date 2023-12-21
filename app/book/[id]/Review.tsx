@@ -31,7 +31,7 @@ export default function Review({bookId} : {bookId: string}) {
           <ReviewBar text="2 star" percent="4%" />
           <ReviewBar text="1 star" percent="1%" />
         </div>
-        <div className="mt-10">
+        <div className="mt-14">
           <Tabs defaultValue="all">
             <TabsList>
               <TabsTrigger value="all">All</TabsTrigger>
