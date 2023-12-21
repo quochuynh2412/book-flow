@@ -38,7 +38,9 @@ export default function Quiz(props: { description: string }) {
   const [answers, setAnswers] = useState<string[]>([]);
   const [correctAnswer, setCorrectAnswer] = useState<string>("Placeholder correct answer");
   const [fact, setFact] = useState<string>("Placeholder fact");
+  const [attempt, setAttempt] = useState<number>(0);
   const [score, setScore] = useState<number>(0);
+  const [isDisabled, setDisabled] = useState(false);
 
   // If the description changes, get a new question
   useEffect(() => {
@@ -80,6 +82,7 @@ export default function Quiz(props: { description: string }) {
 
     // if the description is empty or the sentences array is null or undefined
     if (description.length == 0 || sentences === null || sentences === undefined) {
+      setDisabled(true);
       return "No description available";
     }
 
@@ -166,13 +169,15 @@ export default function Quiz(props: { description: string }) {
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
 
+    // increment the attempt (1/8)
+    setAttempt(attempt + 1);
+
     // if correct answer is selected
     if (data.type == correctAnswer) {
       toast({
         title: "Correct!",
         description: (
           <div className="flex flex-col space-y-2">
-            <p className="text-justify text-black/50 text-sm md:text-md lg:text-lg"><span className="text-green-600">The correct answer is</span> <span className="text-black font-bold">{correctAnswer}</span></p>
             <p className="text-justify text-black/50 text-sm md:text-md lg:text-lg">Did you know that <span className="text-black/50">{fact}</span></p>
           </div>
         ),
@@ -181,23 +186,24 @@ export default function Quiz(props: { description: string }) {
       // reload the form
       form.reset();
 
-      // increment the score (1/6)
-      setScore(score + 1);
-
-      // clear the answers array (1/6), THIS WILL CAUSE THE FORM TO RE-RENDER
+      // clear the answers array (2/8), THIS WILL CAUSE THE FORM TO RE-RENDER
       setAnswers([]);
 
-      // clear the correct answer (2/6)
+      // clear the correct answer (3/8)
       setCorrectAnswer("");
 
-      // clear the fact (3/6)
+      // clear the fact (4/8)
       setFact("");
 
-      // clear the question (4/6)
+      // clear the question (5/8)
       setQuestion("");
 
-      // get a new question (5/6)
+      // get a new question (6/8)
       setQuestion(getQuestion(props.description));
+
+      // increment the score (7/8)
+      setScore(score + 1);
+
     } else {
 
       // get the radio button selected and make it red
@@ -207,7 +213,6 @@ export default function Quiz(props: { description: string }) {
         title: "Wrong!",
         description: (
           <div className="flex flex-col space-y-2">
-            <p className="text-justify text-white/50 text-sm md:text-md lg:text-lg">The correct answer is <span className="text-white font-bold">{correctAnswer}</span></p>
             <p className="text-justify text-white/50 text-sm md:text-md lg:text-lg">Did you know that <span className="text-white/50">{fact}</span></p>
           </div>
         ),
@@ -217,10 +222,20 @@ export default function Quiz(props: { description: string }) {
       // since the user already read the fact, get a new fact
       getFact(props.description);
     }
+
+    // if attempt is 3, disable the submit button (8/8)
+    if (attempt >= 2) {
+      setDisabled(true);
+      setQuestion("Your score is");
+      setAnswers([]);
+      setFact("");
+      setCorrectAnswer("");
+      return;
+    }
   }
 
   return (
-    <div className="mx-auto py-5 px-4 lg:max-w-4xl lg:px-0 flex flex-col justify-center items-center border-slate-100 border-2 shadow-lg rounded-2xl bg-slate-200">
+    <div className="mx-auto py-5 px-4 lg:max-w-6xl lg:px-0 flex flex-col justify-center items-center border-slate-100 border-2 shadow-lg rounded-2xl bg-slate-200">
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="lg:w-11/12 space-y-6">
         <FormField
@@ -231,7 +246,17 @@ export default function Quiz(props: { description: string }) {
               <FormLabel>
                 <div className="flex flex-row items-center justify-center mb-10">
                   <p className="text-justify text-sm md:text-md lg:text-lg inline-block align-middle mr-1 md:mr-5 lg:mr-7">{question}</p>
-                  <span className="transition ease-in-out delay-15 hover:-translate-y-7 hover:scale-110 duration-300 text-cyan-600 text-2xl md:text-4xl lg:text-7xl">🧠</span>
+                  {
+                    isDisabled ? (
+                      score == 0 ? (
+                        <p className="text-justify text-sm md:text-md lg:text-lg inline-block align-middle mr-1 md:mr-5 lg:mr-7">{score}/3</p>
+                      ) : (
+                        <p className="text-justify text-sm md:text-md lg:text-lg inline-block align-middle mr-1 md:mr-5 lg:mr-7">{score}/3</p>
+                      )
+                    ) : (
+                      <p className="text-justify text-sm md:text-md lg:text-lg inline-block align-middle mr-1 md:mr-5 lg:mr-7">{attempt + 1}/3</p>
+                    )
+                  }
                 </div>
               </FormLabel>
               <FormControl>
@@ -260,7 +285,7 @@ export default function Quiz(props: { description: string }) {
           )}
         />
         <div className="flex justify-center">
-          <Button type="submit" className="w-40 h-auto">Submit</Button>
+          <Button type="submit" className="w-40 h-auto" disabled={isDisabled}>Submit</Button>
         </div>
       </form>
     </Form>
