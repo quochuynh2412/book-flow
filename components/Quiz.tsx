@@ -61,11 +61,18 @@ export default function Quiz(props: { description: string }) {
       const docRef = doc(db, "user", userID);
       const docSnap = await getDoc(docRef);
 
-      // for each correct submit, adds 1 to the score
-      await updateDoc(docRef, {
-        score: docSnap.data()?.score + 1,
-        timestamp: serverTimestamp(),
-      });
+      // create score field if it does not exist
+      if (docSnap.data()?.score == undefined) {
+        await updateDoc(docRef, {
+          score: 1,
+        });
+      } else {
+        // for each correct submit, adds 1 to the score
+        await updateDoc(docRef, {
+          score: docSnap.data()?.score + 1,
+        });
+      }
+
     } else {
       toast({
         description: "You have to login to play the quiz!",
