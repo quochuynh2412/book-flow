@@ -142,33 +142,20 @@ export default function Quiz(props: { description: string }) {
   }
 
   function getAnswers(description: string) {
-    // select random 1-5 words from the description
-    const regexWords = (/\p{L}+|\d+[!@#$%^&*()_+{}|:"<>?\-=\[\]\\;',.\/]?/gu);
-    const words = description.match(regexWords);
 
-    if (words === null || words === undefined) {
-      return "No answers available";
-    }
+    // used to be regex, now it splits by space
+    const words = description.split(" ");
 
-    let count = 0;
+    for (let i = 0; i < 3; i++) {
+      // random word size
+      const location = Math.floor(Math.random() * words.length);
+      let randomWord = words[location];
 
-    while (true) {
-      const min = 0;
-      const max = words.length - 1;
-      const length = getRandomArbitrary(min, max);
-      let falseAnswer = words[Math.floor(length)];
-      
-      // if falseAnswer is not yet in answers array
-      if (!answers.includes(falseAnswer)) {
-        setAnswers(oldArray => [...oldArray, falseAnswer]);
-        shuffle(answers);
+      for (let i = 1; i <= getRandomArbitrary(1, 3); i++) {
+        randomWord = randomWord.concat(" " + words[location + i]);
       }
 
-      count++;
-
-      if (answers.length == 4 || count >= 3) {
-        break;
-      }
+      setAnswers(oldArray => shuffle([...oldArray, randomWord]));
     }
   }
 
@@ -233,9 +220,9 @@ export default function Quiz(props: { description: string }) {
   }
 
   return (
-    <div className="mx-auto py-12 px-4 lg:max-w-4xl lg:px-0 flex flex-col justify-center items-center border-slate-100 border-2 shadow-lg rounded-2xl bg-slate-200">
+    <div className="mx-auto py-5 px-4 lg:max-w-4xl lg:px-0 flex flex-col justify-center items-center border-slate-100 border-2 shadow-lg rounded-2xl bg-slate-200">
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="lg:w-3/4 space-y-6">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="lg:w-11/12 space-y-6">
         <FormField
           control={form.control}
           name="type"
