@@ -1,14 +1,14 @@
 "use client"
 
-// get data
-import book from '../lib/scraper/sachvuii/json/book.json';
-import { Book, Genre, Author } from "@/types/interfaces";
+// firebase
+import { collection, doc, addDoc, updateDoc, getDoc, serverTimestamp } from "firebase/firestore";
+import { auth } from "@/lib/firebase";
+import { db } from "@/lib/firebase";
 
 // for react hooks
 import { useEffect, useState } from "react";
 
 // for shadcn
-import { Label } from "@/components/ui/label"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import * as z from "zod"
@@ -38,7 +38,7 @@ export default function Quiz(props: { description: string }) {
   const [answers, setAnswers] = useState<string[]>([]);
   const [correctAnswer, setCorrectAnswer] = useState<string>("Placeholder correct answer");
   const [fact, setFact] = useState<string>("Placeholder fact");
-  const [attempt, setAttempt] = useState<number>(0);
+  const [attempt, setAttempt] = useState<number>(1);
   const [score, setScore] = useState<number>(0);
   const [isDisabled, setDisabled] = useState(false);
 
@@ -50,6 +50,28 @@ export default function Quiz(props: { description: string }) {
   useEffect(() => {
     console.log(answers);
   }, [answers]);
+
+  async function submit() {
+    const user = auth.currentUser;
+
+    if (user) {
+      const userID : string = await user.uid;
+
+      // find the document with the same userID
+      const docRef = doc(db, "user", userID);
+      const docSnap = await getDoc(docRef);
+
+      // for each correct submit, adds 1 to the score
+      await updateDoc(docRef, {
+        score: docSnap.data()?.score + 1,
+        timestamp: serverTimestamp(),
+      });
+    } else {
+      toast({
+        description: "You have to login to play the quiz!",
+      })
+    }
+  }
 
   function getFact(description: string) {
     const regexSentence = (/\s*[\p{L}\d\w,;'"–—\-()%:\\n\\n\\nSách liên quan\s]+[.?!]*/gu);
@@ -204,6 +226,8 @@ export default function Quiz(props: { description: string }) {
       // increment the score (7/8)
       setScore(score + 1);
 
+      submit();
+
     } else {
 
       // get the radio button selected and make it red
@@ -224,7 +248,7 @@ export default function Quiz(props: { description: string }) {
     }
 
     // if attempt is 3, disable the submit button (8/8)
-    if (attempt >= 2) {
+    if (attempt >= 3) {
       setDisabled(true);
       setQuestion("Your score is");
       setAnswers([]);
@@ -254,7 +278,7 @@ export default function Quiz(props: { description: string }) {
                         <p className="text-justify text-sm md:text-md lg:text-lg inline-block align-middle mr-1 md:mr-5 lg:mr-7">{score}/3</p>
                       )
                     ) : (
-                      <p className="text-justify text-sm md:text-md lg:text-lg inline-block align-middle mr-1 md:mr-5 lg:mr-7">{attempt + 1}/3</p>
+                      <p className="text-justify text-sm md:text-md lg:text-lg inline-block align-middle mr-1 md:mr-5 lg:mr-7">{attempt}/3</p>
                     )
                   }
                 </div>
