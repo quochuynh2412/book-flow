@@ -4,11 +4,11 @@ import ReviewForm from "./ReviewForm";
 import Star from "@/components/Icons/Star";
 import ReviewBar from "@/components/ReviewBar";
 
-export default function Review() {
+export default function Review({bookId} : {bookId: string}) {
   return (
     <div className="md:flex gap-9">
       <div className="md:basis-5/12">
-        <ReviewForm />
+        <ReviewForm bookId={bookId} />
       </div>
       <div className="flex-1">
         <div>

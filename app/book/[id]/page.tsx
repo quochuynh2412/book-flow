@@ -107,7 +107,7 @@ export default function Page({ params }: { params: { id: string } }) {
                 </div>
                 <div>
                     <div className="text-3xl font-bold mt-20 mb-10 border-b-2 pb-2 border-neutral-300">Reviews</div>
-                    <Review />
+                    <Review bookId={params.id}/>
                 </div>
                 <div>
                 <div className="text-3xl font-bold mt-20 mb-10 border-b-2 pb-2 border-neutral-300">Similar Books</div>
