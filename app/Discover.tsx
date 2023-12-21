@@ -78,7 +78,7 @@ export default function Discover() {
       <div className="mx-auto py-16 mb-10 px-12 lg:max-w-7xl lg:px-8">
         <h2 className="text-3xl md:text-5xl text-center mb-8 md:mb-12 font-light border-b-2 border-neutral-300 pb-5">Best Of All Time</h2>
         <div className="gap-4 lg:gap-12 grid grid-cols-3 md:grid-cols-6">
-          {books.map((book) => (
+          {books && books.map((book) => (
             <BookCard key={book.id} book={book} />
           ))}
         </div>
@@ -87,7 +87,7 @@ export default function Discover() {
       <div className="mx-auto py-16 px-12 lg:max-w-7xl lg:px-8">
         <h2 className="text-3xl md:text-5xl text-center mb-8 md:mb-12 font-light border-b-2 border-neutral-300 pb-5">Understand The Techs</h2>
         <div className="gap-4 lg:gap-12 grid grid-cols-3 md:grid-cols-6 ">
-          {itBooks.map((book) => (
+          {itBooks && itBooks.map((book) => (
             <BookCard key={book.id} book={book} />
           ))}
         </div>
@@ -101,7 +101,7 @@ export default function Discover() {
       <div className="mx-auto py-16 px-12 lg:max-w-7xl lg:px-8">
         <h2 className="text-3xl md:text-5xl text-center mb-8 md:mb-12 font-light border-b-2 border-neutral-300 pb-5">Delicious Meals</h2>
         <div className="gap-4 lg:gap-12 grid grid-cols-3 md:grid-cols-6 ">
-          {cookingBooks.map((book) => (
+          {cookingBooks && cookingBooks.map((book) => (
             <BookCard key={book.id} book={book} />
           ))}
         </div>
@@ -115,7 +115,7 @@ export default function Discover() {
       <div className="mx-auto py-16 px-12 lg:max-w-7xl lg:px-8">
         <h2 className="text-3xl md:text-5xl text-center mb-8 md:mb-12 font-light border-b-2 border-neutral-300 pb-5">Vietnamese Cultures</h2>
         <div className="gap-4 lg:gap-12 grid grid-cols-3 md:grid-cols-6 ">
-          {cultureBooks.map((book) => (
+          {cultureBooks && cultureBooks.map((book) => (
             <BookCard key={book.id} book={book} />
           ))}
         </div>
