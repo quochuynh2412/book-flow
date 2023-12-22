@@ -25,9 +25,6 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { toast } from "@/components/ui/use-toast"
 
 const FormSchema = z.object({
-  // type: z.enum(["all", "mentions", "none"], {
-  //   required_error: "You need to select a notification type.",
-  // }),
   type: z.string().min(1)
 })
 

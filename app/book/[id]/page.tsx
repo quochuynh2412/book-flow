@@ -4,6 +4,9 @@ import Link from "next/link";
 import { Book } from "@/types/interfaces";
 import { useEffect, useState } from "react";
 
+import Quiz from "@/components/Quiz";
+import PersonalityTest from "@/components/PersonalityTest";
+
 import { Skeleton } from "@/components/ui/skeleton";
 import { badgeVariants } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -167,6 +170,16 @@ export default function Page({ params }: { params: { id: string } }) {
         <div>
           <div className="text-2xl font-bold my-10">Similar Books</div>
         </div>
+        <div>
+          <div className="text-2xl font-bold my-10">Knowledge Quiz</div>
+        </div>
+        {
+          book ? (
+            <Quiz description={book.description} />
+          ) : (
+            <Skeleton className="h-12 w-[360px] mb-1" />
+          )
+        }
       </main>
     </>
   );
