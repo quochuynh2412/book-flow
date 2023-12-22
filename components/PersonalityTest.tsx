@@ -92,6 +92,8 @@ const questionsSet = [
   },
 ]
 
+let userPersonality = "";
+
 export default function PersonalityTest() {
 
   // 1. Define your form.
@@ -99,19 +101,24 @@ export default function PersonalityTest() {
     resolver: zodResolver(formSchema),
   })
 
-  
- 
   // 2. Define a submit handler.
   function onSubmit(values: z.infer<typeof formSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
     // console.log(values)
+    for (let i = 0; i < questionsSet.length; i++) {
+      userPersonality += values["question-" + i]
+    }
+
     toast({
-      title: "You submitted the following values:",
+      title: "Your personality type is: " + userPersonality,
       description: (
-        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-          <code className="text-white">{JSON.stringify(values, null, 2)}</code>
-        </pre>
+        <>
+          {/* <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+            <code className="text-white">{JSON.stringify(values, null, 2)}</code>
+          </pre>
+          <div className="">{userPersonality}</div> */}
+        </>
       ),
     })
   }
@@ -142,7 +149,7 @@ export default function PersonalityTest() {
                                 return (
                                   <FormItem className="flex items-center space-x-3 space-y-0" key={index}>
                                     <FormControl>
-                                      <RadioGroupItem value={answer.answer} />
+                                      <RadioGroupItem value={answer.type} />
                                     </FormControl>
                                     <FormLabel className="font-normal text-xs md:text-md lg:text-lg">
                                     {answer.answer}
