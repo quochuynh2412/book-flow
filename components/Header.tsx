@@ -6,35 +6,48 @@ import { Sheet2, SheetContent2, SheetTrigger2 } from "@/components/ui/sheet2";
 
 import TextUnderline from "./TextUnderline";
 import { useAuth } from "@/hooks/useAuth";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useToast } from "./ui/use-toast";
 
-const genres: string[] = [
-  "Novel",
-  "Fiction",
-  "Non-fiction",
-  "Romance",
-  "Mystery",
-  "Horror",
-  "Humor",
-  "Adventure",
-  "Poetry",
-  "History",
-  "Science",
-];
+import { Genre } from "@/types/interfaces";
+import { signOut } from "firebase/auth";
+import { auth } from "@/lib/firebase";
 
 export default function Header() {
   const { loggedIn, logout } = useAuth();
   const router = useRouter();
   const { toast } = useToast();
+
+  const [genres, setGenres] = useState<Genre[]>([]);
+
+  useEffect(() => {
+    async function getGenre() {
+      await fetch(`/api/genre`, {
+        method: "GET",
+      })
+        .then(async (response) => {
+          const data = await response.json();
+          setGenres(data.genres);
+        })
+        .catch((error) => {
+          console.error("Failed to fetch genre description:", error);
+        });
+    }
+    getGenre();
+  }, []);
+
   return (
     <header className="bg-white h-20 flex gap-2 border-b border-neutral-200">
       <div className="basis-2/12 text-2xl font-bold flex text-neutral-700 min-w-fit">
-        <Link href="" className="lg:hidden my-auto mx-8 hover:text-neutral-900">
+        <Link
+          href="/"
+          className="lg:hidden my-auto mx-8 hover:text-neutral-900"
+        >
           BF
         </Link>
-        <Link href="" className="hidden lg:block my-auto mx-8">
+        <Link href="/" className="hidden lg:block my-auto mx-8">
           Book Flow
         </Link>
       </div>
@@ -78,7 +91,7 @@ export default function Header() {
                 </div>
               </SheetTrigger>
               <SheetContent className="w-36 lg:w-80 bg-white">
-                <div className="h-full flex text-md lg:text-2xl font-light">
+                <div className="h-full flex text-md lg:text-xl font-light">
                   <div className="w-full my-auto flex flex-col gap-24 text-center">
                     <div className="mx-auto">
                       <Sheet2>
@@ -86,12 +99,12 @@ export default function Header() {
                           <TextUnderline content="Genres" />
                         </SheetTrigger2>
                         <SheetContent2 className="w-36 lg:w-80 bg-white">
-                          <div className="h-full flex text-md lg:text-2xl font-light">
+                          <div className="h-full flex text-xs lg:text-xl font-light">
                             <div className="h-full w-full flex flex-col gap-24 text-center overflow-y-auto scrollbar py-48">
                               {genres.map((genre) => (
-                                <div className="mx-auto" key={genre}>
-                                  <Link href="#">
-                                    <TextUnderline content={genre} />
+                                <div className="mx-auto px-2" key={genre.id}>
+                                  <Link href={`/genre/${genre.id}/1`}>
+                                    <TextUnderline content={genre.name} />
                                   </Link>
                                 </div>
                               ))}
@@ -113,10 +126,12 @@ export default function Header() {
                             axios
                               .post("/api/authentication/logout")
                               .then((response) => {
-                                logout();
-                                router.push("/");
-                                toast({
-                                  description: "Logged out successfully",
+                                signOut(auth).then(() => {
+                                  logout();
+                                  router.push("/");
+                                  toast({
+                                    description: "Logged out successfully",
+                                  });
                                 });
                               });
                           }}

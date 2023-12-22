@@ -2,6 +2,7 @@ export interface Genre {
   id: string;
   name: string;
   description: string;
+  imageUrl: string;
 }
 export interface Author {
   id: string;
@@ -16,4 +17,11 @@ export interface Book {
   genres: Genre[];
   imageUrl: string;
   title: string;
+}
+
+export interface BookList {
+  id: string;
+  books: string[];
+  name: string;
+  ownerId: string;
 }

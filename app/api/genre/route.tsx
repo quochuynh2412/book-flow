@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import { db } from "@/lib/firebase";
+import { db, storage } from "@/lib/firebase";
 import { where, getDocs, getDoc, collection, query, doc } from "firebase/firestore";
+import { getDownloadURL, ref } from "firebase/storage";
 export async function GET(request: NextRequest, response: NextResponse) {
     const searchParams = request.nextUrl.searchParams;
     const id = searchParams.get('id');
@@ -9,7 +10,10 @@ export async function GET(request: NextRequest, response: NextResponse) {
         const docRef = doc(db, "genre", id);
         const docSnap = await getDoc(docRef);
         if (docSnap.exists()) {
-            const genre = { id: docSnap.id, ...docSnap.data() };
+            const data = docSnap.data();
+            const imageUrl = await getDownloadURL(ref(storage, data.imageID));
+            delete data.imageID;
+            const genre = { id: docSnap.id, ...data, imageUrl };
             return NextResponse.json({ genre }, { status: 200 });
         } else {
             console.log("No such document!");
@@ -24,7 +28,10 @@ export async function GET(request: NextRequest, response: NextResponse) {
                 const docRef = doc(db, "genre", genre.id);
                 const docSnap = await getDoc(docRef);
                 if (docSnap.exists()) {
-                    return { id: docSnap.id, ...docSnap.data() };
+                    const data = docSnap.data();
+                    const imageUrl = await getDownloadURL(ref(storage, data.imageID));
+                    delete data.imageID;
+                    return { id: docSnap.id, ...data, imageUrl };
                 } else {
                     console.log("No such document!");
                     return null; // Return null for non-existent genres
