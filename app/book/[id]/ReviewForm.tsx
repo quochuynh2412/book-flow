@@ -46,7 +46,7 @@ export default function ReviewForm({bookId} : {bookId: string}) {
   }
 
   return (
-    <form className="mb-10 p-5 py-8 border border-neutral-300 mx-auto rounded-md sticky top-10">
+    <form className="mb-10 p-5 py-8 border border-neutral-300 mx-auto rounded-md sticky top-1 max-h-screen overflow-y-auto">
       <div className="text-center">
         <h2 className="text-2xl font-bold">Read this book before?</h2>
         <h3 className="text-sm mt-2">Tell us what you think!</h3>
@@ -70,7 +70,7 @@ export default function ReviewForm({bookId} : {bookId: string}) {
       </div>
       <div className="mb-10">
         <label  htmlFor="message" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tell us what you think about this book</label>
-        <textarea id="message" rows={4} onChange={(e) => setContent(e.target.value)} className="block p-2.5 w-full text-sm text-gray-900 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Overall, it is a great book..." required></textarea>
+        <textarea id="message" rows={3} onChange={(e) => setContent(e.target.value)} className="block p-2.5 w-full text-sm text-gray-900 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Overall, it is a great book..." required></textarea>
       </div>
       <button onClick={submit} className="mb-3 w-full text-white bg-neutral-700 hover:bg-neutral-800 focus:ring-4 focus:outline-none focus:ring-neutral-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-neutral-600 dark:hover:bg-neutral-700 dark:focus:ring-neutral-800">Submit</button>
     </form>
