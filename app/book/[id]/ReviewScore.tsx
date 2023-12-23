@@ -31,13 +31,20 @@ export default function ReviewScore({bookId, reviews} : {bookId: string, reviews
         numFive++; break;
   }});
 
-  const score = (sum / reviews.length).toFixed(2);
+  let score = Number((sum / reviews.length).toFixed(2));
+  numOne = (reviews.length == 0) ? 0 : Math.round(numOne / reviews.length * 100);
+  numTwo = (reviews.length == 0) ? 0 : Math.round(numTwo / reviews.length * 100);
+  numThree = (reviews.length == 0) ? 0 : Math.round(numThree / reviews.length * 100);
+  numFour = (reviews.length == 0) ? 0 : Math.round(numFour / reviews.length * 100);
+  numFive = (reviews.length == 0) ? 0 : Math.round(numFive / reviews.length * 100);
+
+  if (reviews.length == 0) score = 0;
   
   return (
     <div className="sticky top-10 pb-10">
       <div>
         <div className="flex items-center mb-2">
-          <StarGenerator size={8} score={ Number(score) } />
+          <StarGenerator size={8} score={ score } />
           <p className="ms-1 font-medium text-gray-500 dark:text-gray-400 text-lg">
             {score} out of 5
           </p>
@@ -46,11 +53,11 @@ export default function ReviewScore({bookId, reviews} : {bookId: string, reviews
           {reviews.length} global ratings
         </p>
         <div className="mt-8">
-          <ReviewBar text="5 star" percent={`${Math.round(numFive / reviews.length * 100)}%`} />
-          <ReviewBar text="4 star" percent={`${Math.round(numFour / reviews.length * 100)}%`} />
-          <ReviewBar text="3 star" percent={`${Math.round(numThree / reviews.length * 100)}%`} />
-          <ReviewBar text="2 star" percent={`${Math.round(numTwo / reviews.length * 100)}%`} />
-          <ReviewBar text="1 star" percent={`${Math.round(numOne / reviews.length * 100)}%`} />
+          <ReviewBar text="5 star" percent={`${numFive}%`} />
+          <ReviewBar text="4 star" percent={`${numFour}%`} />
+          <ReviewBar text="3 star" percent={`${numThree}%`} />
+          <ReviewBar text="2 star" percent={`${numTwo}%`} />
+          <ReviewBar text="1 star" percent={`${numOne}%`} />
         </div>
       </div>
       <div className="w-full flex">
