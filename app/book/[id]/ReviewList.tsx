@@ -1,11 +1,17 @@
+import { useState } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import ReviewCard from "./ReviewCard";
 
-export default function ReviewList() {
+export default function ReviewList({ reviews }: { reviews: any[] }) {
+  const [selectedTab, setSelectedTab] = useState<string>('all');
+
+  const filteredReviews = selectedTab === 'all'
+    ? reviews
+    : reviews.filter(review => review.rating.toString() === selectedTab);
 
   return (
     <div>
-      <Tabs defaultValue="all">
+      <Tabs defaultValue="all" onValueChange={value => setSelectedTab(value)}>
         <TabsList>
           <TabsTrigger value="all">All</TabsTrigger>
           <TabsTrigger value="5">5 star</TabsTrigger>
@@ -14,35 +20,14 @@ export default function ReviewList() {
           <TabsTrigger value="2">2 star</TabsTrigger>
           <TabsTrigger value="1">1 star</TabsTrigger>
         </TabsList>
-        <TabsContent value="all">
-          <ReviewCard />
-          <ReviewCard />
-          <ReviewCard />
-          <ReviewCard />
-          <ReviewCard />
-          <ReviewCard />
-          <ReviewCard />
-        </TabsContent>
-        <TabsContent value="5">
-          <ReviewCard />
-          <ReviewCard />
-          <ReviewCard />
-          <ReviewCard />
-        </TabsContent>
-        <TabsContent value="4">
-          <ReviewCard />
-          <ReviewCard />
-        </TabsContent>
-        <TabsContent value="3">
-          <ReviewCard />
-          <ReviewCard />
-        </TabsContent>
-        <TabsContent value="2">
-          <ReviewCard />
-        </TabsContent>
-        <TabsContent value="1">
-          <ReviewCard />
-        </TabsContent>
+
+        {['all', '5', '4', '3', '2', '1'].map(tabValue => (
+          <TabsContent key={tabValue} value={tabValue}>
+            {filteredReviews.map((review, index) => (
+              <ReviewCard key={index} review={review} />
+            ))}
+          </TabsContent>
+        ))}
       </Tabs>
     </div>
   );

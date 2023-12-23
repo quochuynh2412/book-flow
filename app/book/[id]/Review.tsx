@@ -29,7 +29,7 @@ export default function Review({bookID} : {bookID: string}) {
           <ReviewScore bookId={bookID} reviews={reviews} />
         </div>
         <div className="flex-1 mt-5">
-          <ReviewList />
+          <ReviewList reviews={reviews} />
         </div>
       </div>
     </div>
