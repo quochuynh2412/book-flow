@@ -9,31 +9,47 @@ import {
 
 import ReviewForm from "./ReviewForm";
 import Star from "@/components/Icons/Star";
+import { StarGenerator } from "@/components/Icons/Star";
 import ReviewBar from "@/components/ReviewBar";
 
-export default function ReviewScore({bookId} : {bookId: string}) {
+export default function ReviewScore({bookId, reviews} : {bookId: string, reviews: any[]}) {
+  let sum = 0, numOne = 0, numTwo = 0, numThree = 0, numFour = 0, numFive = 0;
+
+  reviews.forEach((review) => {
+    sum += review["rating"];
+
+    switch (review["rating"]) {
+      case 1:
+        numOne++; break;
+      case 2: 
+        numTwo++; break;
+      case 3:
+        numThree++; break;
+      case 4: 
+        numFour++; break;
+      case 5:
+        numFive++; break;
+  }});
+
+  const score = (sum / reviews.length).toFixed(2);
   
   return (
     <div className="sticky top-10 pb-10">
       <div>
         <div className="flex items-center mb-2">
-          <Star size={8} />
-          <Star size={8}/>
-          <Star size={8}/>
-          <Star size={8}/>
-          <Star size={8} color="text-gray-300" />
+          <StarGenerator size={8} score={ Number(score) } />
           <p className="ms-1 font-medium text-gray-500 dark:text-gray-400 text-lg">
-            4.95 out of 5
+            {score} out of 5
           </p>
         </div>
         <p className="text-sm font-medium text-gray-500 dark:text-gray-400">
-          1,745 global ratings
+          {reviews.length} global ratings
         </p>
-        <ReviewBar text="5 star" percent="70%" />
-        <ReviewBar text="4 star" percent="17%" />
-        <ReviewBar text="3 star" percent="8%" />
-        <ReviewBar text="2 star" percent="4%" />
-        <ReviewBar text="1 star" percent="1%" />
+        <ReviewBar text="5 star" percent={`${Math.round(numFive / reviews.length * 100)}%`} />
+        <ReviewBar text="4 star" percent={`${Math.round(numFour / reviews.length * 100)}%`} />
+        <ReviewBar text="3 star" percent={`${Math.round(numThree / reviews.length * 100)}%`} />
+        <ReviewBar text="2 star" percent={`${Math.round(numTwo / reviews.length * 100)}%`} />
+        <ReviewBar text="1 star" percent={`${Math.round(numOne / reviews.length * 100)}%`} />
       </div>
       <div className="w-full flex">
         <Dialog>

@@ -1,60 +1,35 @@
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import ReviewCard from "./ReviewCard";
+import { useEffect, useState } from "react";
 
-import Star from "@/components/Icons/Star";
 import ReviewScore from "./ReviewScore";
+import ReviewList from "./ReviewList";
 
+export default function Review({bookID} : {bookID: string}) {
+  
+  const [reviews, setReviews] = useState<any[]>([]);
 
-export default function Review({bookId} : {bookId: string}) {
+  useEffect(() => {
+    async function getReviews(bookID: string) {
+      await fetch(`/api/review?bookID=${bookID}`, {
+        method: "GET",
+      }).then(async (response) => {
+        const data = await response.json();
+        setReviews(data);
+      }).catch(error => {
+        console.error("Failed to fetch genre description:", error)
+      });
+    }
+    getReviews(bookID);
+  }, []);
+
   return (
     <div>
       <div className="text-3xl font-bold mt-20 mb-10 border-b-2 pb-2 border-neutral-300">Reviews</div>
       <div className="md:flex gap-9">
         <div className="md:basis-5/12 mt-5">
-          <ReviewScore bookId={bookId} />
+          <ReviewScore bookId={bookID} reviews={reviews} />
         </div>
         <div className="flex-1 mt-5">
-          <div>
-            <Tabs defaultValue="all">
-              <TabsList>
-                <TabsTrigger value="all">All</TabsTrigger>
-                <TabsTrigger value="5">5 star</TabsTrigger>
-                <TabsTrigger value="4">4 star</TabsTrigger>
-                <TabsTrigger value="3">3 star</TabsTrigger>
-                <TabsTrigger value="2">2 star</TabsTrigger>
-                <TabsTrigger value="1">1 star</TabsTrigger>
-              </TabsList>
-              <TabsContent value="all">
-                <ReviewCard />
-                <ReviewCard />
-                <ReviewCard />
-                <ReviewCard />
-                <ReviewCard />
-                <ReviewCard />
-                <ReviewCard />
-              </TabsContent>
-              <TabsContent value="5">
-                <ReviewCard />
-                <ReviewCard />
-                <ReviewCard />
-                <ReviewCard />
-              </TabsContent>
-              <TabsContent value="4">
-                <ReviewCard />
-                <ReviewCard />
-              </TabsContent>
-              <TabsContent value="3">
-                <ReviewCard />
-                <ReviewCard />
-              </TabsContent>
-              <TabsContent value="2">
-                <ReviewCard />
-              </TabsContent>
-              <TabsContent value="1">
-                <ReviewCard />
-              </TabsContent>
-            </Tabs>
-          </div>
+          <ReviewList />
         </div>
       </div>
     </div>
