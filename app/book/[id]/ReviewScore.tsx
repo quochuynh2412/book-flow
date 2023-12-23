@@ -45,11 +45,13 @@ export default function ReviewScore({bookId, reviews} : {bookId: string, reviews
         <p className="text-sm font-medium text-gray-500 dark:text-gray-400">
           {reviews.length} global ratings
         </p>
-        <ReviewBar text="5 star" percent={`${Math.round(numFive / reviews.length * 100)}%`} />
-        <ReviewBar text="4 star" percent={`${Math.round(numFour / reviews.length * 100)}%`} />
-        <ReviewBar text="3 star" percent={`${Math.round(numThree / reviews.length * 100)}%`} />
-        <ReviewBar text="2 star" percent={`${Math.round(numTwo / reviews.length * 100)}%`} />
-        <ReviewBar text="1 star" percent={`${Math.round(numOne / reviews.length * 100)}%`} />
+        <div className="mt-8">
+          <ReviewBar text="5 star" percent={`${Math.round(numFive / reviews.length * 100)}%`} />
+          <ReviewBar text="4 star" percent={`${Math.round(numFour / reviews.length * 100)}%`} />
+          <ReviewBar text="3 star" percent={`${Math.round(numThree / reviews.length * 100)}%`} />
+          <ReviewBar text="2 star" percent={`${Math.round(numTwo / reviews.length * 100)}%`} />
+          <ReviewBar text="1 star" percent={`${Math.round(numOne / reviews.length * 100)}%`} />
+        </div>
       </div>
       <div className="w-full flex">
         <Dialog>
