@@ -13,7 +13,6 @@ export default function Review({bookID} : {bookID: string}) {
         method: "GET",
       }).then(async (response) => {
         const data = await response.json();
-        console.log(data);
         setReviews(data);
       }).catch(error => {
         console.error("Failed to fetch genre description:", error)

@@ -27,8 +27,14 @@ export async function GET(request: NextRequest, response: NextResponse) {
 
       // Wait for all promises to resolve before sending the response
       await Promise.all(promises);
+        
+      reviews.sort((a : any, b : any) => {
+        const dateA = new Date(a.date.seconds * 1000 + Math.floor(a.date.nanoseconds / 1e6));
+        const dateB = new Date(b.date.seconds * 1000 + Math.floor(b.date.nanoseconds / 1e6));
+    
+        return dateB.getTime() - dateA.getTime();
+    });
 
-      console.log(reviews);
       return NextResponse.json(reviews, { status: 200 });
   }
 

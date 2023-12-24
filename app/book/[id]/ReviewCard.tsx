@@ -10,6 +10,8 @@ import { db } from "@/lib/firebase";
 export default function ReviewCard({review} : {review : any}) {
     const [isExpanded, setIsExpanded] = useState(false);
 
+    console.log(review);
+
     const toggleReadMore = () => {
         setIsExpanded(!isExpanded);
     };
@@ -20,7 +22,7 @@ export default function ReviewCard({review} : {review : any}) {
                 <div className="flex items-center mb-4">
                     <img className="w-10 h-10 me-4 rounded-full" src="  https://i.natgeofe.com/n/548467d8-c5f1-4551-9f58-6817a8d2c45e/NationalGeographic_2572187_3x4.jpg" alt="" />
                     <div className="font-medium dark:text-white">
-                        <p>{review["user"]["name"]} <time className="block text-sm text-gray-500 dark:text-gray-400">Reviewed on August 2014</time></p>
+                        <p>{review["user"]["name"]} <time className="block text-sm text-gray-500 dark:text-gray-400">Reviewed on { formatDateFromTimestamp(review["date"]["seconds"], review["date"]["nanoseconds"]) }</time></p>
                     </div>
                 </div>
                 <div className="flex items-center mb-4 space-x-1 rtl:space-x-reverse">
@@ -39,4 +41,22 @@ export default function ReviewCard({review} : {review : any}) {
             </article>
         </div>
     );
+}
+
+function formatDateFromTimestamp(seconds: number, nanoseconds: number): string {
+    // Convert timestamp to milliseconds
+    const timestampMilliseconds = seconds * 1000 + Math.floor(nanoseconds / 1e6);
+
+    // Create a Date object
+    const date = new Date(timestampMilliseconds);
+
+    // Get day, month, and year
+    const day = date.getDate().toString().padStart(2, '0');
+    const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Months are 0-based
+    const year = date.getFullYear();
+
+    // Format the date as dd/mm/yyyy
+    const formattedDate = `${day}/${month}/${year}`;
+
+    return formattedDate;
 }
