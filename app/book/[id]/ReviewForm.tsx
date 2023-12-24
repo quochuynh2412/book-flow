@@ -36,7 +36,8 @@ export default function ReviewForm({bookId} : {bookId: string}) {
         bookID: bookId || null,
         rating: rating || null,
         user: userID || null,
-        date: serverTimestamp()
+        date: serverTimestamp(),
+        helpful: []
       });
 
       window.location.reload();

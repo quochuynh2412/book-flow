@@ -20,6 +20,7 @@ export async function GET(request: NextRequest, response: NextResponse) {
           const promise = getDoc(docRef).then((docSnap) => {
               const result = review.data();
               result["user"] = docSnap.data();
+              result["reviewID"] = review.id;
               reviews.push(result);
           });
           promises.push(promise);
@@ -28,7 +29,16 @@ export async function GET(request: NextRequest, response: NextResponse) {
       // Wait for all promises to resolve before sending the response
       await Promise.all(promises);
         
-      reviews.sort((a : any, b : any) => {
+      reviews.sort((a: any, b: any) => {
+        // Compare by the length of helpful (descending order)
+        const helpfulComparison = b.helpful.length - a.helpful.length;
+    
+        // If lengths are different, return the result
+        if (helpfulComparison !== 0) {
+            return helpfulComparison;
+        }
+    
+        // If lengths are the same, compare by date (descending order)
         const dateA = new Date(a.date.seconds * 1000 + Math.floor(a.date.nanoseconds / 1e6));
         const dateB = new Date(b.date.seconds * 1000 + Math.floor(b.date.nanoseconds / 1e6));
     
