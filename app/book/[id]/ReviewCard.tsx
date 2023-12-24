@@ -20,7 +20,7 @@ export default function ReviewCard({review} : {review : any}) {
                 <div className="flex items-center mb-4">
                     <img className="w-10 h-10 me-4 rounded-full" src="  https://i.natgeofe.com/n/548467d8-c5f1-4551-9f58-6817a8d2c45e/NationalGeographic_2572187_3x4.jpg" alt="" />
                     <div className="font-medium dark:text-white">
-                        <p>Jese Leos <time className="block text-sm text-gray-500 dark:text-gray-400">Reviewed on August 2014</time></p>
+                        <p>{review["user"]["name"]} <time className="block text-sm text-gray-500 dark:text-gray-400">Reviewed on August 2014</time></p>
                     </div>
                 </div>
                 <div className="flex items-center mb-4 space-x-1 rtl:space-x-reverse">
