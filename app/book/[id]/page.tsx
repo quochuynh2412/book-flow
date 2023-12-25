@@ -4,9 +4,10 @@ import Link from "next/link";
 import { Book } from "@/types/interfaces";
 import { useEffect, useState } from "react";
 
-import { Skeleton } from "@/components/ui/skeleton";
-import { badgeVariants } from "@/components/ui/badge";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Skeleton } from "@/components/ui/skeleton"
+import { badgeVariants } from "@/components/ui/badge"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import Review from "./Review"
 
 import Header from "@/components/Header";
 import AddBookToListButton from "../../../components/add-book-to-list-button";
@@ -162,7 +163,7 @@ export default function Page({ params }: { params: { id: string } }) {
           </div>
         </div>
         <div>
-          <div className="text-2xl font-bold my-10">Reviews</div>
+          <Review bookID={params.id}/>
         </div>
         <div>
           <div className="text-2xl font-bold my-10">Similar Books</div>
