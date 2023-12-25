@@ -1,6 +1,6 @@
 "use client"
 
-import { collection, addDoc, serverTimestamp, setDoc, doc } from "firebase/firestore";
+import { collection, addDoc, serverTimestamp, setDoc, doc, deleteDoc } from "firebase/firestore";
 import { auth } from "@/lib/firebase";
 import { useState, useEffect } from "react";
 import { db } from "@/lib/firebase";
@@ -8,6 +8,17 @@ import { db } from "@/lib/firebase";
 import Star from "@/components/Icons/Star";
 import { Slider } from "@/components/ui/slider"
 import { useToast } from "@/components/ui/use-toast"
+
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
 
 
 const ratingSystem : string[] = [
@@ -27,7 +38,6 @@ export default function ReviewForm({bookId, myReview} : {bookId: string, myRevie
   // setup display if user has reviewed before
   useEffect(() => {
     if (myReview) {
-      console.log(myReview);
       setRating(myReview["rating"]);
       setTitle(myReview["title"]);
       setContent(myReview["content"]);
@@ -62,6 +72,11 @@ export default function ReviewForm({bookId, myReview} : {bookId: string, myRevie
     }
   }
 
+  async function deleteReview() {
+    await deleteDoc(doc(db, "review", myReview["reviewID"]));
+    window.location.reload();
+  }
+
   return (
     <form className="mb-10 p-5 py-8 border-neutral-300 mx-auto rounded-md overflow-y-auto">
       <div className="text-center">
@@ -90,6 +105,28 @@ export default function ReviewForm({bookId, myReview} : {bookId: string, myRevie
         <textarea value={content} id="message" rows={3} onChange={(e) => setContent(e.target.value)} className="block p-2.5 w-full text-sm text-gray-900 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Overall, it is a great book..." required></textarea>
       </div>
       <div onClick={submit} className="w-full text-white bg-neutral-700 hover:bg-neutral-800 focus:ring-4 focus:outline-none focus:ring-neutral-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-neutral-600 dark:hover:bg-neutral-700 dark:focus:ring-neutral-800">Submit</div>
+
+      {
+        (myReview) ?
+        <Dialog>
+        <DialogTrigger asChild>
+          <div className="mt-8 w-full border border-red-600 text-red-600 bg-white hover:bg-red-500 hover:text-white focus:ring-4 focus:outline-none focus:ring-neutral-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-neutral-600 dark:hover:bg-neutral-700 dark:focus:ring-neutral-800">Delete my review</div>
+        </DialogTrigger>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Warning</DialogTitle>
+            <DialogDescription>
+              Do you want to delete your review?
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="sm:justify-start">
+            <div onClick={deleteReview} className="mt-5 w-full border border-red-600 text-red-600 bg-white hover:bg-red-500 hover:text-white focus:ring-4 focus:outline-none focus:ring-neutral-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-neutral-600 dark:hover:bg-neutral-700 dark:focus:ring-neutral-800">Delete</div>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+        : null
+      }
+      
     </form>
   );
 }
