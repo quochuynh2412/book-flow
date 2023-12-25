@@ -20,6 +20,7 @@ export async function GET(request: NextRequest, response: NextResponse) {
           const promise = getDoc(docRef).then((docSnap) => {
               const result = review.data();
               result["user"] = docSnap.data();
+              result["user"]["userID"] = review.data()["user"];
               result["reviewID"] = review.id;
               reviews.push(result);
           });

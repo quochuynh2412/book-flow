@@ -1,8 +1,8 @@
 "use client"
 
-import { collection, addDoc, serverTimestamp } from "firebase/firestore";
+import { collection, addDoc, serverTimestamp, setDoc, doc } from "firebase/firestore";
 import { auth } from "@/lib/firebase";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { db } from "@/lib/firebase";
 
 import Star from "@/components/Icons/Star";
@@ -18,11 +18,21 @@ const ratingSystem : string[] = [
   "Can't wait to reread? Top of your recommendation list? Can't stop thinking about the ending? Beginning? Chapter 13, page 4?! 5 Stars are for the creme de la creme of your bookshelf. Those books that give you the \"I'm so sad it has ended!\" kind of feeling. Of course, no book is entirely perfect, but if this book has you almost shouting from the rooftops, filled you with a joyous buzz and reminded you how wondrous it is to read, then 5 Stars are certainly on the menu."
 ];
 
-export default function ReviewForm({bookId} : {bookId: string}) {
+export default function ReviewForm({bookId, myReview} : {bookId: string, myReview: any}) {
   const [rating, setRating] = useState(3);
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
-  const { toast } = useToast()
+  const { toast } = useToast();
+
+  // setup display if user has reviewed before
+  useEffect(() => {
+    if (myReview) {
+      console.log(myReview);
+      setRating(myReview["rating"]);
+      setTitle(myReview["title"]);
+      setContent(myReview["content"]);
+    }
+  }, [myReview]);
 
   async function submit() {
     const user = auth.currentUser;
@@ -30,7 +40,7 @@ export default function ReviewForm({bookId} : {bookId: string}) {
     if (user) {
       const userID : string = await user.uid;
 
-      const docRef = await addDoc(collection(db, "review"), {
+      const review = {
         title: title || null,
         content: content || null,
         bookID: bookId || null,
@@ -38,7 +48,10 @@ export default function ReviewForm({bookId} : {bookId: string}) {
         user: userID || null,
         date: serverTimestamp(),
         helpful: []
-      });
+      };
+
+      if (myReview) await setDoc(doc(db, "review", myReview["reviewID"]), review);
+      else await addDoc(collection(db, "review"), review);
 
       window.location.reload();
       
@@ -63,18 +76,18 @@ export default function ReviewForm({bookId} : {bookId: string}) {
             ))}
           </div>     
         </div>
-        <Slider onValueChange={(value) => setRating(value[0])} id="rating" defaultValue={[3]} min={1} max={5} step={1} />
+        <Slider onValueChange={(value) => setRating(value[0])} id="rating" defaultValue={myReview ? [myReview["rating"]] : [rating]} min={1} max={5} step={1} />
         <div className="mt-10 bg-neutral-100 text-sm p-5 rounded-lg">
             {ratingSystem[rating - 1]}
         </div>
       </div>
       <div className="mt-10 mb-5">
         <label htmlFor="title" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Review title</label>
-        <input type="text" id="title" onChange={(e) => setTitle(e.target.value)} className="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Best book I have read in..." required />
+        <input value={title} type="text" id="title" onChange={(e) => setTitle(e.target.value)} className="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Best book I have read in..." required />
       </div>
       <div className="mb-10">
         <label  htmlFor="message" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tell us what you think about this book</label>
-        <textarea id="message" rows={3} onChange={(e) => setContent(e.target.value)} className="block p-2.5 w-full text-sm text-gray-900 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Overall, it is a great book..." required></textarea>
+        <textarea value={content} id="message" rows={3} onChange={(e) => setContent(e.target.value)} className="block p-2.5 w-full text-sm text-gray-900 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Overall, it is a great book..." required></textarea>
       </div>
       <div onClick={submit} className="w-full text-white bg-neutral-700 hover:bg-neutral-800 focus:ring-4 focus:outline-none focus:ring-neutral-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-neutral-600 dark:hover:bg-neutral-700 dark:focus:ring-neutral-800">Submit</div>
     </form>
