@@ -50,14 +50,14 @@ export default function PersonalityTest() {
     // action on update
     if (userGenres.length > 0) {
       toast({
-        title: "Your book genre is ...",
+        title: "We think you may like ...",
         description: (
           <>
             {
               userGenres.map((genre, index) => {
                 return (
-                  <div>
-                    <span key={index}>{genre.split("@")[0]}</span>
+                  <div key={index}>
+                    <span>{genre.split("@")[0]}</span>
                     <span> with a confidence of {parseFloat(genre.split("@")[1]).toFixed(2)}</span>
                   </div>
                 )
@@ -86,6 +86,9 @@ export default function PersonalityTest() {
     getRecommnedationGenres(values["question-1"]);
 
     updateToFirebase();
+
+    // clear text field
+    form.setValue("question-1", "");
   }
 
 
@@ -104,7 +107,8 @@ export default function PersonalityTest() {
       title: "Our AI is thinking ...",
       description: (
         <>
-          <div>{stagingQuery}</div>
+          {/* <div>{stagingQuery}</div> */}
+          <div>Check back in a few minutes</div>
         </>
       ),
     })
@@ -179,7 +183,24 @@ export default function PersonalityTest() {
   return (
     <div className="mx-auto py-5 px-4 lg:max-w-6xl lg:px-0 flex flex-col justify-center items-center border-slate-100 border-2 shadow-lg rounded-2xl bg-slate-200">
       {formDisabled ? (
-        <Skeleton className="h-[136px] w-11/12 m-auto" />
+        <div className="w-full h-[136px] flex justify-center items-center">
+          <div className="md:text-lg lg:text-2xl">Our AI is thinking&nbsp;</div>
+          <svg className="animate-spin h-5 w-5 mr-3" viewBox="0 0 24 24">
+            <circle
+              className="opacity-25"
+              cx="12"
+              cy="12"
+              r="10"
+              stroke="currentColor"
+              strokeWidth="4"
+            />
+            <path
+              className="opacity-75"
+              fill="currentColor"
+              d="M4 12a8 8 0 018-8"
+            />
+          </svg>
+        </div>
       ) : (
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="lg:w-11/12 space-y-6">
