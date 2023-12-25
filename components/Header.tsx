@@ -12,6 +12,8 @@ import { useRouter } from "next/navigation";
 import { useToast } from "./ui/use-toast";
 
 import { Genre } from "@/types/interfaces";
+import { signOut } from "firebase/auth";
+import { auth } from "@/lib/firebase";
 
 export default function Header() {
   const { loggedIn, logout } = useAuth();
@@ -24,12 +26,14 @@ export default function Header() {
     async function getGenre() {
       await fetch(`/api/genre`, {
         method: "GET",
-      }).then(async (response) => {
-        const data = await response.json();
-        setGenres(data.genres);
-      }).catch(error => {
-        console.error("Failed to fetch genre description:", error)
-      });
+      })
+        .then(async (response) => {
+          const data = await response.json();
+          setGenres(data.genres);
+        })
+        .catch((error) => {
+          console.error("Failed to fetch genre description:", error);
+        });
     }
     getGenre();
   }, []);
@@ -37,7 +41,10 @@ export default function Header() {
   return (
     <header className="bg-white h-20 flex gap-2 border-b border-neutral-200">
       <div className="basis-2/12 text-2xl font-bold flex text-neutral-700 min-w-fit">
-        <Link href="/" className="lg:hidden my-auto mx-8 hover:text-neutral-900">
+        <Link
+          href="/"
+          className="lg:hidden my-auto mx-8 hover:text-neutral-900"
+        >
           BF
         </Link>
         <Link href="/" className="hidden lg:block my-auto mx-8">
@@ -119,10 +126,12 @@ export default function Header() {
                             axios
                               .post("/api/authentication/logout")
                               .then((response) => {
-                                logout();
-                                router.push("/");
-                                toast({
-                                  description: "Logged out successfully",
+                                signOut(auth).then(() => {
+                                  logout();
+                                  router.push("/");
+                                  toast({
+                                    description: "Logged out successfully",
+                                  });
                                 });
                               });
                           }}

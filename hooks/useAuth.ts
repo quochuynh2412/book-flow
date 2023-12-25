@@ -9,11 +9,9 @@ interface AuthState {
 export const useAuth = create<AuthState>((set) => ({
   loggedIn: false,
   login() {
-    console.log("called login");
     set({ loggedIn: true });
   },
   logout() {
-    console.log("called logout");
     set({ loggedIn: false });
   },
 }));
