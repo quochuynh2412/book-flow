@@ -42,7 +42,7 @@ export default function ReviewCard({review} : {review : any}) {
     }
 
     return (
-        <div className=" border rounded-lg border-neutral-300 p-5 mb-4">
+        <div className="border rounded-lg border-neutral-300 p-5 mb-4">
             <article>
                 <div className="flex items-center mb-4">
                     <img className="w-10 h-10 me-4 rounded-full" src="  https://i.natgeofe.com/n/548467d8-c5f1-4551-9f58-6817a8d2c45e/NationalGeographic_2572187_3x4.jpg" alt="" />
