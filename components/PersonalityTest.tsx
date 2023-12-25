@@ -1,7 +1,7 @@
 "use client"
 
 // firebase
-import { collection, doc, addDoc, updateDoc, getDoc, serverTimestamp } from "firebase/firestore";
+import { collection, doc, addDoc, updateDoc, getDoc, getDocs } from "firebase/firestore";
 import { auth } from "@/lib/firebase";
 import { db } from "@/lib/firebase";
 
@@ -21,157 +21,196 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-  FormDescription,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 
-import { Label } from "@/components/ui/label"
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { toast } from "@/components/ui/use-toast"
+import { Skeleton } from "@/components/ui/skeleton";
 
 const formSchema = z.object({
-  'question-0': z.string().min(1),
-  'question-1': z.string().min(1),
-  'question-2': z.string().min(1),
-  'question-3': z.string().min(1)
+  'question-1': z.string().min(10).max(1000)
 })
 
-// question set
 const questionsSet = [
   {
-    question: "Do you prefer to focus on the outer world or your inner world?",
-    answers: [
-      {
-        answer: "Outer world",
-        type: "E",
-      },
-      {
-        answer: "Inner world",
-        type: "I",
-      },
-    ],
-  },
-  {
-    question: "Do you prefer to focus on the basic information you take in or do you prefer to interpret and add meaning?",
-    answers: [
-      {
-        answer: "Basic information",
-        type: "S",
-      },
-      {
-        answer: "Interpret and add meaning",
-        type: "N",
-      },
-    ],
-  },
-  {
-    question: "When making decisions, do you prefer to first look at logic and consistency or first look at the people and special circumstances?",
-    answers: [
-      {
-        answer: "Logic and consistency",
-        type: "T",
-      },
-      {
-        answer: "People and special circumstances",
-        type: "F",
-      },
-    ],
-  },
-  {
-    question: "In dealing with the outside world, do you prefer to get things decided or do you prefer to stay open to new information and options?",
-    answers: [
-      {
-        answer: "Get things decided",
-        type: "J",
-      },
-      {
-        answer: "Stay open to new information and options",
-        type: "P",
-      },
-    ],
-  },
+    question: "Tell our AI about anything, be it your wildest dream, or your deepest fear. The more you show, the more accurate the genres recommendation will be.",
+  }
 ]
-
-let userPersonality = "";
 
 export default function PersonalityTest() {
 
-  // 1. Define your form.
+
+  // nested state for the user genres
+  const [userGenres, setUserGenres] = useState<string[]>([]);
+  const [formDisabled, setFormDisabled] = useState<boolean>(false);
+
+
+  // useeffect to get the user personality type
+  useEffect(() => {
+    // action on update
+    if (userGenres.length > 0) {
+      toast({
+        title: "Your book genre is ...",
+        description: (
+          <>
+            {
+              userGenres.map((genre, index) => {
+                return (
+                  <div>
+                    <span key={index}>{genre.split("@")[0]}</span>
+                    <span> with a confidence of {parseFloat(genre.split("@")[1]).toFixed(2)}</span>
+                  </div>
+                )
+              })
+            }
+          </>
+        ),
+      })
+      updateToFirebase();
+    }
+}, [userGenres]);
+
+
+// 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
+    defaultValues: {
+      'question-1': "",
+    },
   })
+
 
   // 2. Define a submit handler.
   function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    // console.log(values)
-    for (let i = 0; i < questionsSet.length; i++) {
-      userPersonality += values["question-" + i]
-    }
+
+    getRecommnedationGenres(values["question-1"]);
+
+    updateToFirebase();
+  }
+
+
+  async function getRecommnedationGenres(question: string) {
+
+    // disable the form while waiting for the response
+    setFormDisabled(true);
+
+    // wait/sleep
+    // await new Promise(r => setTimeout(r, 100000));
+
+    const stagingQuery = "https://ekaterina2.pythonanywhere.com/question/" + question;
+    // const stagingQuery = "https://ekaterina2.pythonanywhere.com/"
 
     toast({
-      title: "Your personality type is: " + userPersonality,
+      title: "Our AI is thinking ...",
       description: (
         <>
-          {/* <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-            <code className="text-white">{JSON.stringify(values, null, 2)}</code>
-          </pre>
-          <div className="">{userPersonality}</div> */}
+          <div>{stagingQuery}</div>
         </>
       ),
     })
+
+    setUserGenres([]);
+
+    await fetch(stagingQuery, {
+      method: "GET",
+    }).then(async (response) => {
+      const data = await response.json();
+
+      // changed from data.length to 3
+      for (let i = 0; i < 3; i++) {
+        const genre = data[i][0] + "@" + data[i][1];
+        await setUserGenres((userGenres) => [...userGenres, genre]);
+      }
+
+    }).catch(error => {
+      console.error("Failed to fetch recommendation genres:", error)
+    });
+
+    // enable the form
+    setFormDisabled(false);
+  }
+
+
+  async function updateToFirebase() {
+    const user = auth.currentUser;
+
+    const tempGenres = userGenres.map((genre) => {
+      return genre.split("@")[0];
+    })
+
+    if (user) {
+      const userID : string = await user.uid;
+
+      // find the genre ID based on genre name
+      const genreRef = collection(db, "genre");
+      const genreQuery = await getDocs(genreRef);
+      let genreID : string[] = [];
+      genreQuery.forEach((doc) => {
+        if (tempGenres.includes(doc.data().name)) {
+          genreID.push(doc.id);
+        }
+      });
+
+
+      // find the document with the same userID
+      const docRef = doc(db, "user", userID);
+      const docSnap = await getDoc(docRef);
+
+      // create preferredGenre if it doesn't exist
+      if (docSnap.data()?.preferredGenre == undefined) {
+        await updateDoc(docRef, {
+          preferredGenre: genreID,
+        });
+      } else {
+        await updateDoc(docRef, {
+          preferredGenre: genreID,
+        });
+      }
+
+
+    } else {
+      toast({
+        description: "You have to login to save your preferred genres",
+      })
+    }
   }
 
 
   return (
     <div className="mx-auto py-5 px-4 lg:max-w-6xl lg:px-0 flex flex-col justify-center items-center border-slate-100 border-2 shadow-lg rounded-2xl bg-slate-200">
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="lg:w-11/12 space-y-6">
-          {
-            questionsSet.map((question, index) => {
-              return (
-                  <FormField
-                    key={index}
-                    control={form.control}
-                    name={`question-${index}`}
-                    render={({ field }) => (
-                      <FormItem className="space-y-3">
-                        <FormLabel className="text-sm md:text-md lg:text-lg">{question.question}</FormLabel>
-                        <FormControl>
-                          <RadioGroup
-                            onValueChange={field.onChange}
-                            defaultValue={field.value}
-                            className="flex flex-col space-y-1"
-                          >
-                            {
-                              question.answers.map((answer, index) => {
-                                return (
-                                  <FormItem className="flex items-center space-x-3 space-y-0" key={index}>
-                                    <FormControl>
-                                      <RadioGroupItem value={answer.type} />
-                                    </FormControl>
-                                    <FormLabel className="font-normal text-xs md:text-md lg:text-lg">
-                                    {answer.answer}
-                                    </FormLabel>
-                                  </FormItem>
-                                )
-                              })
-                            }
-                          </RadioGroup>
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-              )
-            })
-          }
-        <div className="flex justify-center">
-          <Button type="submit" className="w-40 h-auto">Submit</Button>
-        </div>
-        </form>
-      </Form>
+      {formDisabled ? (
+        <Skeleton className="h-[136px] w-11/12 m-auto" />
+      ) : (
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="lg:w-11/12 space-y-6">
+            <fieldset disabled={formDisabled} className="space-y-6">
+                {
+                  questionsSet.map((question, index) => {
+                    return (
+                      <FormField
+                        key={index}
+                        control={form.control}
+                        name="question-1"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel className="text-sm md:text-md lg:text-lg">{question.question}</FormLabel>
+                            <FormControl>
+                              <Input placeholder="Your answer" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    )
+                  })
+                }
+              <div className="flex justify-center">
+                <Button type="submit" className="w-40 h-auto">Submit</Button>
+              </div>
+            </fieldset>
+          </form>
+        </Form>
+      )}
     </div>
   )
 }
