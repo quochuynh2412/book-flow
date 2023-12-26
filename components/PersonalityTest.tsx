@@ -33,7 +33,7 @@ const formSchema = z.object({
 
 const questionsSet = [
   {
-    question: "Tell our AI about anything, be it your wildest dream, or your deepest fear. The more you show, the more accurate the genres recommendation will be.",
+    question: "Receive personal book recommendations based on the input, whether it be your wildest dreams or your deepest fears. The more you tell us, the better we can serve you.",
   }
 ]
 
@@ -49,23 +49,23 @@ export default function PersonalityTest() {
   useEffect(() => {
     // action on update
     if (userGenres.length > 0) {
-      toast({
-        title: "We think you may like ...",
-        description: (
-          <>
-            {
-              userGenres.map((genre, index) => {
-                return (
-                  <div key={index}>
-                    <span>{genre.split("@")[0]}</span>
-                    <span> with a confidence of {parseFloat(genre.split("@")[1]).toFixed(2)}</span>
-                  </div>
-                )
-              })
-            }
-          </>
-        ),
-      })
+      // toast({
+      //   title: "We think you may like ...",
+      //   description: (
+      //     <>
+      //       {
+      //         userGenres.map((genre, index) => {
+      //           return (
+      //             <div key={index}>
+      //               <span>{genre.split("@")[0]}</span>
+      //               <span> with a confidence of {parseFloat(genre.split("@")[1]).toFixed(2)}</span>
+      //             </div>
+      //           )
+      //         })
+      //       }
+      //     </>
+      //   ),
+      // })
       updateToFirebase();
     }
 }, [userGenres]);
@@ -100,18 +100,18 @@ export default function PersonalityTest() {
     // wait/sleep
     // await new Promise(r => setTimeout(r, 100000));
 
-    const stagingQuery = "https://ekaterina2.pythonanywhere.com/question/" + question;
-    // const stagingQuery = "https://ekaterina2.pythonanywhere.com/"
+    // const stagingQuery = "https://ekaterina2.pythonanywhere.com/question/" + question;
+    const stagingQuery = "https://ekaterina2.pythonanywhere.com/"
 
-    toast({
-      title: "Our AI is thinking ...",
-      description: (
-        <>
-          {/* <div>{stagingQuery}</div> */}
-          <div>Check back in a few minutes</div>
-        </>
-      ),
-    })
+    // toast({
+    //   title: "Our AI is thinking ...",
+    //   description: (
+    //     <>
+    //       {/* <div>{stagingQuery}</div> */}
+    //       <div>Check back in a few minutes</div>
+    //     </>
+    //   ),
+    // })
 
     setUserGenres([]);
 
@@ -131,7 +131,7 @@ export default function PersonalityTest() {
     });
 
     // enable the form
-    setFormDisabled(false);
+    // setFormDisabled(false);
   }
 
 
@@ -183,23 +183,47 @@ export default function PersonalityTest() {
   return (
     <div className="mx-auto py-5 px-4 lg:max-w-6xl lg:px-0 flex flex-col justify-center items-center border-slate-100 border-2 shadow-lg rounded-2xl bg-slate-200">
       {formDisabled ? (
-        <div className="w-full h-[136px] flex justify-center items-center">
-          <div className="md:text-lg lg:text-2xl">Our AI is thinking&nbsp;</div>
-          <svg className="animate-spin h-5 w-5 mr-3" viewBox="0 0 24 24">
-            <circle
-              className="opacity-25"
-              cx="12"
-              cy="12"
-              r="10"
-              stroke="currentColor"
-              strokeWidth="4"
-            />
-            <path
-              className="opacity-75"
-              fill="currentColor"
-              d="M4 12a8 8 0 018-8"
-            />
-          </svg>
+        <div className="w-full h-full flex justify-center items-center">
+          {userGenres.length == 0 ? (
+            <>
+              <div className="md:text-lg lg:text-2xl">Our AI is thinking&nbsp;</div>
+              <svg className="animate-spin h-5 w-5 mr-3" viewBox="0 0 24 24">
+                <circle
+                  className="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  strokeWidth="4"
+                />
+                <path
+                  className="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8"
+                />
+              </svg>
+            </>
+          ) : (
+            <div className="flex flex-col justify-center items-center space-y-6">
+              <div className="md:text-lg lg:text-2xl font-bold">We think you may like ...</div>
+              <div className="space-y-1">
+                {
+                  userGenres.map((genre, index) => {
+                    return (
+                      <div key={index}>
+                        <span>{genre.split("@")[0]}</span>
+                        <span> with a confidence of {parseFloat(genre.split("@")[1]).toFixed(2)}</span>
+                      </div>
+                    )
+                  })
+                }
+                <div className="text-green-500">Your preferences have been saved</div> 
+              </div>
+              <div>
+                <Button onClick={() => setFormDisabled(false)} className="w-40 h-auto">Retake</Button>
+              </div>
+            </div>
+          )}
         </div>
       ) : (
         <Form {...form}>
@@ -214,7 +238,7 @@ export default function PersonalityTest() {
                         name="question-1"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel className="text-sm md:text-md lg:text-lg">{question.question}</FormLabel>
+                            <FormLabel className="">{question.question}</FormLabel>
                             <FormControl>
                               <Input placeholder="Your answer" {...field} />
                             </FormControl>
