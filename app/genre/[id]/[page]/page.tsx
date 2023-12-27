@@ -14,8 +14,8 @@ import { useEffect, useState } from "react";
 import { Book, Author, Genre } from "@/types/interfaces";
 import React from "react";
 
-const itemsPerPage : number = 25;
-const numPopularItems : number = 6;
+const itemsPerPage: number = 25;
+const numPopularItems: number = 6;
 
 export default function Page({ params }: { params: { id: string; page: string } }) {
   const { id, page } = params;
@@ -91,7 +91,7 @@ export default function Page({ params }: { params: { id: string; page: string } 
             <h1 className="text-3xl mb-4 border-b-2 border-neutral-300 py-2">Popular books</h1>
             <div className="gap-4 lg:gap-12 grid grid-cols-3 md:grid-cols-6">
               {popularBooks != undefined && popularBooks.length > 0 && popularBooks.map((book: Book) => (
-                <MemoizedBookCard key={book.id} book={book}/>
+                <MemoizedBookCard key={book.id} book={book} />
               ))}
             </div>
           </div>
@@ -138,12 +138,24 @@ export default function Page({ params }: { params: { id: string; page: string } 
                 <div>
                   <div className="flex mt-8">
                     <div className="mx-auto shadow rounded-xl">
-                      <button onClick={backwardPage} className="text-neutral-600 bg-neutral-100 p-3 text-md rounded-l-xl border hover:bg-neutral-200 active:bg-neutral-300 font-semibold">
-                        <svg xmlns="http://www.w3.org/2000/svg" height="16" width="14" viewBox="0 0 448 512"><path d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.2 288 416 288c17.7 0 32-14.3 32-32s-14.3-32-32-32l-306.7 0L214.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z" /></svg>
-                      </button>
-                      <button onClick={forwardPage} className="text-neutral-600 bg-neutral-100 p-3 text-md rounded-r-xl border border-l-0 hover:bg-neutral-200 active:bg-neutral-300 font-semibold">
-                        <svg xmlns="http://www.w3.org/2000/svg" height="16" width="14" viewBox="0 0 448 512"><path d="M438.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L338.8 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l306.7 0L233.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z" /></svg>
-                      </button>
+                      {!(page === "1") ? (
+                        <button onClick={backwardPage} className="text-neutral-600 bg-neutral-100 p-3 text-md rounded-l-xl border hover:bg-neutral-200 active:bg-neutral-300 font-semibold">
+                          <svg xmlns="http://www.w3.org/2000/svg" height="16" width="14" viewBox="0 0 448 512"><path d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.2 288 416 288c17.7 0 32-14.3 32-32s-14.3-32-32-32l-306.7 0L214.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z" /></svg>
+                        </button>
+                      ) : (
+                        <button className="text-neutral-600 bg-neutral-100 p-3 text-md rounded-l-xl border font-semibold opacity-50" disabled>
+                          <svg xmlns="http://www.w3.org/2000/svg" height="16" width="14" viewBox="0 0 448 512"><path d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.2 288 416 288c17.7 0 32-14.3 32-32s-14.3-32-32-32l-306.7 0L214.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z" /></svg>
+                        </button>
+                      )}
+                      {!(books.length < itemsPerPage) ? (
+                        <button onClick={forwardPage} className="text-neutral-600 bg-neutral-100 p-3 text-md rounded-r-xl border border-l-0 hover:bg-neutral-200 active:bg-neutral-300 font-semibold">
+                          <svg xmlns="http://www.w3.org/2000/svg" height="16" width="14" viewBox="0 0 448 512"><path d="M438.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L338.8 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l306.7 0L233.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z" /></svg>
+                        </button>
+                      ) : (
+                        <button className="text-neutral-600 bg-neutral-100 p-3 text-md rounded-r-xl border border-l-0 opacity-50" disabled>
+                          <svg xmlns="http://www.w3.org/2000/svg" height="16" width="14" viewBox="0 0 448 512"><path d="M438.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L338.8 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l306.7 0L233.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z" /></svg>
+                        </button>
+                      )}
                     </div>
                   </div>
                 </div>
