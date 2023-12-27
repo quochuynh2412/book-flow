@@ -6,15 +6,32 @@ import { Sheet2, SheetContent2, SheetTrigger2 } from "@/components/ui/sheet2";
 
 import TextUnderline from "./TextUnderline";
 import { useAuth } from "@/hooks/useAuth";
-import { useEffect, useState } from "react";
+import { useEffect, useState, ChangeEvent } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useToast } from "./ui/use-toast";
 
-import { Genre } from "@/types/interfaces";
+import { Book, Genre } from "@/types/interfaces";
 import { signOut } from "firebase/auth";
 import { auth } from "@/lib/firebase";
-
+import { searchClient } from "@/lib/algolia";
+import {
+  InstantSearch,
+  SearchBox,
+  Hits,
+  Highlight,
+  RefinementList,
+  Pagination,
+  Configure,
+} from 'react-instantsearch';
+interface HitProps {
+  hit: {
+    objectID: string;
+    author: string;
+    title: string;
+    genre: string;
+  };
+}
 export default function Header() {
   const { loggedIn, logout } = useAuth();
   const router = useRouter();
@@ -38,8 +55,19 @@ export default function Header() {
     getGenre();
   }, []);
 
+  const [showHits, setShowHits] = useState(false)
+
+  const Hit: React.FC<HitProps> = ({ hit }) => {
+    return (
+      <Link href={`/book/${hit.objectID}`}>
+        <div key={hit.objectID} className="px-4 py-2 hover:bg-gray-100 hover:cursor-pointer flex flex-row items-center">
+          {hit.title} <span className="ml-2 text-xs text-gray-700">{hit.author}</span>
+        </div>
+      </Link>
+    )
+  }
   return (
-    <header className="bg-white h-20 flex gap-2 border-b border-neutral-200">
+    <header className="header bg-white h-20 flex gap-2 border-b border-neutral-200">
       <div className="basis-2/12 text-2xl font-bold flex text-neutral-700 min-w-fit">
         <Link
           href="/"
@@ -51,24 +79,25 @@ export default function Header() {
           Book Flow
         </Link>
       </div>
-      <div className="flex-1 flex">
-        <div className="w-full my-auto flex border border-neutral-300 rounded-full max-w-3xl mx-auto">
-          <input
-            type="text"
-            placeholder="Search for books.."
-            className="h-12 w-full px-5 rounded-l-full border-r border-neutral-200 outline-gray-300"
-          />
-          <button className="w-20 lg:w-28 rounded-r-full bg-neutral-100 hover:bg-neutral-200 active:bg-neutral-300">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              height="1em"
-              viewBox="0 0 512 512"
-              className="m-auto"
-            >
-              <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z" />
-            </svg>
-          </button>
-        </div>
+      <div className="flex-1 flex relative align-middle">
+        <InstantSearch searchClient={searchClient}
+          indexName="dev_BOOKFLOW"
+          insights>
+          <Configure hitsPerPage={5} />
+          <SearchBox
+            onFocus={() => setShowHits(true)} onBlur={() => setTimeout(() => setShowHits(false), 200)}
+            classNames={{
+              root: "w-full flex border rounded-full border-neutral-300 relative my-auto",
+              form: "w-full flex",
+              input: "w-full rounded-l-full h-12 px-5 bg-base-100 focus:outline-none",
+              submit: "btn w-16 lg:w-24 rounded-r-full flex items-center justify-center",
+              reset: "hidden",
+              loadingIndicator: "hidden"
+            }} />
+          {showHits && (
+            <Hits hitComponent={Hit} className="absolute inset-x-0 bottom-0 transform translate-y-full bg-white w-full border rounded-xl shadow-lg z-10 overflow-hidden touch-auto" />
+          )}
+        </InstantSearch>
       </div>
       <div className="basis-2/12 flex">
         <div className="ml-auto flex">

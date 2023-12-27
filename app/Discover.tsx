@@ -130,7 +130,7 @@ export default function Discover() {
         <h2 className="text-3xl md:text-5xl text-center mb-8 md:mb-12 font-light border-b-2 border-neutral-300 pb-5">ALL GENRES</h2>
         <div className="gap-4 lg:gap-12 grid grid-cols-4 md:grid-cols-6">
           {genres.map((genre) => (
-            <Link href={`/genre/${genre.id}/1`} key={genre.id} style={{backgroundImage: `url(${genre.imageUrl})`}} className="bg-cover bg-no-repeat aspect-square bg-white shadow-md relative group" >
+            <Link href={`/genre/${genre.id}/1`} key={genre.id} style={{ backgroundImage: `url(${genre.imageUrl})` }} className="bg-cover bg-no-repeat aspect-square bg-white shadow-md relative group" >
               <div className="absolute flex inset-0 bg-black bg-opacity-50 text-white p-4 hover:bg-opacity-70">
                 <span className="m-auto text-center text-sm md:text-md lg:text-lg font-semibold line-clamp-3">{genre.name}</span>
               </div>

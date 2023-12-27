@@ -6,7 +6,7 @@ import GoUp from "@/components/GoUp";
 import About from "@/app/About";
 import Discover from "@/app/Discover";
 import Intro from "@/app/Intro";
-
+import './styles.css'
 export default function Home() {
   return (
     <div>
