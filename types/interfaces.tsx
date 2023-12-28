@@ -25,3 +25,9 @@ export interface BookList {
   name: string;
   ownerId: string;
 }
+
+export interface User {
+  id: string;
+  name: string;
+  score: number;
+}

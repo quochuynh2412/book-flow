@@ -21,6 +21,7 @@ export default function Header() {
   const { toast } = useToast();
 
   const [genres, setGenres] = useState<Genre[]>([]);
+  const [uid, setUid] = useState("");
 
   useEffect(() => {
     async function getGenre() {
@@ -35,7 +36,16 @@ export default function Header() {
           console.error("Failed to fetch genre description:", error);
         });
     }
+    async function getUid() {
+      const user = auth.currentUser;
+      if (user != null) {
+        const id = await user?.uid;
+        setUid(id);
+      }
+    }
+
     getGenre();
+    getUid();
   }, []);
 
   return (
@@ -113,11 +123,15 @@ export default function Header() {
                         </SheetContent2>
                       </Sheet2>
                     </div>
-                    <div className="mx-auto">
-                      <Link href="#">
-                        <TextUnderline content="Profile" />
-                      </Link>
-                    </div>
+                    {
+                      loggedIn && (
+                        <div className="mx-auto">
+                          <Link href={`/profile/${uid}`}>
+                            <TextUnderline content="Profile" />
+                          </Link>
+                        </div>
+                      )
+                    }
                     <div className="mx-auto">
                       {loggedIn && (
                         <div
