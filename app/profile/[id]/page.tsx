@@ -28,14 +28,14 @@ export default function Page({ params }: { params: { id: string } }) {
   return (
     <div >
       <Header />
-      <div className="h-72 flex shadow-inner border bg-cover bg-no-repeat bg-center bg-blend-multiply bg-neutral-400" style={{ backgroundImage: `url(${bg1.src})` }}>
+      <div className="h-80 flex shadow-inner border bg-cover bg-no-repeat bg-center bg-blend-multiply bg-neutral-400" style={{ backgroundImage: `url(${bg1.src})` }}>
         <div className="m-auto">
-          <p className="text-center font-light text-white mb-3">My Profile</p>
+          <p className="text-center font-light text-white mb-2">User Profile</p>
           <h1 className="text-4xl md:text-6xl font-semibold text-white mb-3">{user && user["name"]}</h1>
         </div>
       </div>
       <div className="min-h-screen">
-        
+
       </div>
       <Footer />
     </div>
