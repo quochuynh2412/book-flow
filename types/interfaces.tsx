@@ -21,7 +21,7 @@ export interface Book {
 
 export interface BookList {
   id: string;
-  books: string[];
+  books: any[];
   name: string;
   ownerId: string;
 }

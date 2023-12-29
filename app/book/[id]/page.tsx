@@ -4,10 +4,10 @@ import Link from "next/link";
 import { Book } from "@/types/interfaces";
 import { useEffect, useState } from "react";
 
-import { Skeleton } from "@/components/ui/skeleton"
-import { badgeVariants } from "@/components/ui/badge"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import Review from "./Review"
+import { Skeleton } from "@/components/ui/skeleton";
+import { badgeVariants } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import Review from "./Review";
 
 import Header from "@/components/Header";
 import AddBookToListButton from "../../../components/add-book-to-list-button";
@@ -112,7 +112,10 @@ export default function Page({ params }: { params: { id: string } }) {
                   </span>
                 </div>
                 <div className="opacity-50 text-indigo-950 text-base font-normal flex flex-row gap-2 mb-4">
-                  <AddBookToListButton bookId={book.id} />
+                  <AddBookToListButton
+                    bookId={book.id}
+                    bookTitle={book.title}
+                  />
                 </div>
                 <Tabs defaultValue="author" className="w-full">
                   <TabsList className="mb-4">
@@ -163,7 +166,7 @@ export default function Page({ params }: { params: { id: string } }) {
           </div>
         </div>
         <div>
-          <Review bookID={params.id}/>
+          <Review bookID={params.id} />
         </div>
         <div>
           <div className="text-2xl font-bold my-10">Similar Books</div>

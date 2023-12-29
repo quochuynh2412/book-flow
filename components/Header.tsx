@@ -123,15 +123,20 @@ export default function Header() {
                         </SheetContent2>
                       </Sheet2>
                     </div>
-                    {
-                      loggedIn && (
-                        <div className="mx-auto">
-                          <Link href={`/profile/${uid}`}>
-                            <TextUnderline content="Profile" />
-                          </Link>
-                        </div>
-                      )
-                    }
+                    {loggedIn && (
+                      <div className="mx-auto">
+                        <Link href={`/profile/${uid}`}>
+                          <TextUnderline content="Profile" />
+                        </Link>
+                      </div>
+                    )}
+                    {loggedIn && (
+                      <div className="mx-auto">
+                        <Link href={`/list`}>
+                          <TextUnderline content="My Lists" />
+                        </Link>
+                      </div>
+                    )}
                     <div className="mx-auto">
                       {loggedIn && (
                         <div

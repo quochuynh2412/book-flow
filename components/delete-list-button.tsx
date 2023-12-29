@@ -20,9 +20,12 @@ const DeleteListButton = ({ listId, name }: DeleteListButtonProps) => {
   const [loading, setLoading] = useState(false);
   return (
     <>
-      <Button variant={"destructive"} onClick={() => setIsOpen(true)}>
+      <span
+        className="font-semibold text-xl cursor-pointer"
+        onClick={() => setIsOpen(true)}
+      >
         <TrashIcon />
-      </Button>
+      </span>
       <Dialog open={isOpen} onOpenChange={() => setIsOpen(false)}>
         <DialogContent>
           <DialogHeader>
@@ -40,6 +43,7 @@ const DeleteListButton = ({ listId, name }: DeleteListButtonProps) => {
                 await axios.delete(`/api/list/${listId}`);
                 setLoading(false);
                 setIsOpen(false);
+                window.location.reload();
               }}
             >
               Delete
