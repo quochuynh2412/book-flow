@@ -6,11 +6,13 @@ import DeleteListButton from "@/components/delete-list-button";
 import { useEffect, useState } from "react";
 import { BookList } from "@/types/interfaces";
 import axios from "axios";
-import { useRouter } from "next/navigation";
+import RemoveBookFromListButton from "@/components/remove-book-from-list-button";
+import Link from "next/link";
+import { auth } from "@/lib/firebase";
+import { redirect } from "next/navigation";
 const ListPage = () => {
   const [currentListIndex, setCurrentListIndex] = useState<number | null>(null);
   const [lists, setLists] = useState<BookList[] | null>(null);
-
   useEffect(() => {
     async function fetchList() {
       const response = await axios.get(`/api/list?`);
@@ -21,6 +23,9 @@ const ListPage = () => {
     }
     fetchList();
   }, []);
+  if (auth.currentUser == null) {
+    return redirect("/");
+  }
   return (
     <div>
       <Header />
@@ -76,15 +81,39 @@ const ListPage = () => {
           ) : (
             <>
               {lists != null &&
+                lists[currentListIndex].books.length > 0 &&
                 lists[currentListIndex].books.map((book, index) => (
                   <div
-                    key={book.title}
-                    className="w-full h-14 p-3 border border-gray-200 box-border flex justify-between "
+                    key={index}
+                    className="w-full h-14 p-3 border border-gray-200 box-border flex justify-between items-center"
                   >
-                    <p>{book.title}</p>
-                    <p>{book.note}</p>
+                    <Link
+                      key={book.title}
+                      href={`/book/${book.bookId}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <p>{book.title}</p>
+                    </Link>
+                    <p className="text-gray-500">{book.note}</p>
+                    <RemoveBookFromListButton
+                      key={index}
+                      listId={lists[currentListIndex].id}
+                      listName={lists[currentListIndex].name}
+                      bookId={book.bookId}
+                      bookTitle={book.title}
+                    />
                   </div>
                 ))}
+
+              {lists != null && lists[currentListIndex].books.length == 0 && (
+                <div
+                  className="w-full h-full flex border border-gray-200 rounded-b-md items-center justify-center text-xl text-gray-500
+                                   "
+                >
+                  You have not added book to this list
+                </div>
+              )}
             </>
           )}
         </div>

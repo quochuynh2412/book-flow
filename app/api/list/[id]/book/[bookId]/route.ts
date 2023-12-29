@@ -87,9 +87,10 @@ export async function DELETE(
     }
 
     await updateDoc(listRef, {
-      books: arrayRemove(params.bookId),
+      books: arrayRemove(
+        listData.books.find((book: any) => book.bookId === params.bookId)
+      ),
     });
-
     return NextResponse.json(
       { message: "Book removed successfully" },
       { status: 200 }
