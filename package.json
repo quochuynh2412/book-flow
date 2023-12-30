@@ -27,6 +27,7 @@
     "firebase": "^10.6.0",
     "firebase-admin": "^11.11.1",
     "js-cookie": "^3.0.5",
+    "lottie-react": "^2.4.0",
     "lucide-react": "^0.292.0",
     "next": "14.0.3",
     "node-firestore-import-export": "^1.1.0",
