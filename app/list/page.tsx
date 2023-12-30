@@ -17,18 +17,20 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 const ListPage = () => {
-  const [currentListIndex, setCurrentListIndex] = useState<number | null>(null);
+  const [currentListIndex, setCurrentListIndex] = useState<number | null>(0);
   const [lists, setLists] = useState<BookList[] | null>(null);
+  const [refresh, setRefresh] = useState(false);
   useEffect(() => {
     async function fetchList() {
       const response = await axios.get(`/api/list?`);
       if (lists != null && lists.length >= 1) {
-        setCurrentListIndex(0);
+        setCurrentListIndex(currentListIndex);
       }
       setLists(response.data.lists);
     }
+    console.log("alo");
     fetchList();
-  }, []);
+  }, [refresh]);
   return (
     <div>
       <Header />
@@ -36,7 +38,7 @@ const ListPage = () => {
         <div className="mx-auto w-full md:basis-1/4">
           <div className="w-full h-14 p-3 border border-gray-200 bg-[#f5f4f4] box-border rounded-t-md font-semibold flex justify-between items-center">
             <p>My List</p>
-            <CreateBookListButton />
+            <CreateBookListButton setRefresh={setRefresh} />
           </div>
           {lists?.map((list, index) => (
             <div
@@ -67,6 +69,7 @@ const ListPage = () => {
                     <DeleteListButton
                       listId={lists[currentListIndex].id}
                       name={lists[currentListIndex].name}
+                      setRefresh={setRefresh}
                     />
                   </>
                 )}
@@ -104,6 +107,7 @@ const ListPage = () => {
                             listName={lists[currentListIndex].name}
                             bookId={book.bookId}
                             bookTitle={book.title}
+                            setRefresh={setRefresh}
                           />
                         </div>
                       </TooltipTrigger>

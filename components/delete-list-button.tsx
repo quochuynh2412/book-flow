@@ -14,8 +14,13 @@ import { useState } from "react";
 interface DeleteListButtonProps {
   listId: string;
   name: string;
+  setRefresh: (state: boolean) => void;
 }
-const DeleteListButton = ({ listId, name }: DeleteListButtonProps) => {
+const DeleteListButton = ({
+  listId,
+  name,
+  setRefresh,
+}: DeleteListButtonProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   return (

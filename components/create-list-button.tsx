@@ -30,7 +30,11 @@ const formSchema = z.object({
   bookListName: z.string().min(2).max(50),
 });
 
-const CreateBookListButton = () => {
+interface CreateBookListButtonProps {
+  setRefresh: (state: boolean) => void;
+}
+
+const CreateBookListButton = ({ setRefresh }: CreateBookListButtonProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const { loggedIn } = useAuth();
@@ -53,7 +57,7 @@ const CreateBookListButton = () => {
       ...values,
     });
     setLoading(false);
-    window.location.reload();
+    setRefresh(true);
     handleClose();
   };
 

@@ -15,12 +15,14 @@ interface RemoveBookFromListButtonProps {
   bookId: string;
   listName: string;
   bookTitle: string;
+  setRefresh: (state: boolean) => void;
 }
 const RemoveBookFromListButton = ({
   listId,
   listName,
   bookId,
   bookTitle,
+  setRefresh,
 }: RemoveBookFromListButtonProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -51,7 +53,7 @@ const RemoveBookFromListButton = ({
                 await axios.delete(`/api/list/${listId}/book/${bookId}`);
                 setLoading(false);
                 setIsOpen(false);
-                window.location.reload();
+                setRefresh(true);
               }}
             >
               Delete
