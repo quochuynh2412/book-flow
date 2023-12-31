@@ -2,6 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
+@import url('https://fonts.googleapis.com/css2?family=Ramaraja&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -110,6 +113,7 @@
 html {
   --scroll-behavior: smooth !important;
   scroll-behavior: smooth !important;
+  --color-title: #545863;
 }
 
 body {
