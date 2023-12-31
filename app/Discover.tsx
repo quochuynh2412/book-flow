@@ -76,7 +76,7 @@ export default function Discover() {
   return (
     <div id="discover" className="py-32">
       <div className="mx-auto py-16 mb-10 px-12 lg:max-w-7xl lg:px-8">
-        <h2 className="text-3xl md:text-5xl text-center mb-8 md:mb-12 font-light border-b-2 border-neutral-300 pb-5">Best Of All Time</h2>
+        <h2 className="text-3xl md:text-5xl text-center mb-8 md:mb-12 font-light border-b-2 border-neutral-300 pb-5 font-serif">Best Of All Time</h2>
         <div className="gap-4 lg:gap-12 grid grid-cols-3 md:grid-cols-6">
           {books && books.map((book) => (
             <BookCard key={book.id} book={book} />

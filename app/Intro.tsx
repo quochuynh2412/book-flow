@@ -5,9 +5,9 @@ import CountUp from 'react-countup';
 import useCountUp from "react-countup";
 
 const stats = [
-  { id: 1, name: 'Books', value: 10000 },
-  { id: 2, name: 'Book reviews', value: 50000 },
-  { id: 3, name: 'New users annually', value: 5000 },
+  { id: 1, name: 'Books', value: 10000, duration: 1 },
+  { id: 2, name: 'Book reviews', value: 50000, duration: 2 },
+  { id: 3, name: 'New users annually', value: 5000, duration: 3 },
 ];
 
 export default function Intro() {
@@ -25,11 +25,12 @@ export default function Intro() {
                 <dt className="text-base leading-7 text-gray-600">{stat.name}</dt>
                 <dd className="order-first font-semibold tracking-tight text-3xl lg:text-6xl">
                   <CountUp end={stat.value} // Add ref prop to CountUp component
-                    duration={2}
+                    duration={stat.duration}
                     decimals={0}
                     decimal="."
                     suffix="+"
                     enableScrollSpy
+                    scrollSpyOnce={true}
                     scrollSpyDelay={100} />
                 </dd>
               </div>
