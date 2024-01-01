@@ -33,10 +33,10 @@ export default function Hero() {
         <div className="w-full h-full flex py-56">
           <div className="text-white m-auto text-center">
             <h1 className="text-5xl lg:text-8xl inter.className">
-              <div className="font-serif mx-auto w-fit block after:block after:content-[''] after:absolute after:h-[2px] after:bg-white after:w-full after:scale-x-0 after:hover:scale-x-100 after:transition after:duration-500 after:origin-center relative z-0">
+              <TextCrossOver color="white" className="relative z-0 font-serif" capitalized>
                 <Lottie animationData={lineAnimation} loop={true} className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -z-10 -translate-y-1/2 h-auto w-full " />
                 BOOKFLOW
-              </div>
+              </TextCrossOver>
             </h1>
             <p className="max-w-xs md:max-w-md mt-8 text-sm lg:text-xl mx-auto font-mono">THE FIRST EVER BOOKS REVIEW PLATFORM FOR VIETNAMESE PEOPLE 🇻🇳</p>
           </div>
