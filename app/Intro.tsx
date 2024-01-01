@@ -41,8 +41,8 @@ export default function Intro() {
 
       <div style={{ backgroundImage: `url(${vietnam.src})` }} className="bg-cover bg-no-repeat bg-center sticky top-0 h-screen flex flex-col items-center justify-center text-white" >
         <div className="w-full">
-          <h1 className="mx-12 mb-10 text-center text-4xl lg:text-6xl">FOCUS ON THE <span className="text-yellow-400 font-bold">VIETNAMESE</span>!</h1>
-          <p className="mx-20 text-center text-lg">Built by Vietnamese people, for Vietnamese people.</p>
+          <h1 className="mx-12 mb-10 text-center text-3xl lg:text-5xl font-thin">FOCUSES ON THE <span className="text-yellow-400 font-bold font-serif text-7xl">VIETNAMESE</span>!</h1>
+          <p className="mx-20 text-center text-lg font-mono">Built by Vietnamese people, for Vietnamese people.</p>
         </div>
       </div>
     </div>

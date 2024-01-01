@@ -99,7 +99,7 @@ export default function Discover() {
         </div>
         <div className="flex mt-12 font-serif text-title-gray">
           <Link className="mx-auto" href={`/genre/d3b701b0-1142-4c71-b94e-5f2daa7e1eaf/1`}>
-            <TextCrossOver color="amber-800">Explore More</TextCrossOver>
+            <TextCrossOver color="titleGray">Explore More</TextCrossOver>
           </Link>
         </div>
       </div>
@@ -115,7 +115,7 @@ export default function Discover() {
         </div>
         <div className="flex mt-12 font-serif text-title-gray">
           <Link className="mx-auto" href={`/genre/f3977e6c-6474-4c50-90c9-921fec4f6c49/1`}>
-            <TextCrossOver color="amber-800">Explore More</TextCrossOver>
+            <TextCrossOver color="amber">Explore More</TextCrossOver>
           </Link>
         </div>
       </div>
@@ -131,7 +131,7 @@ export default function Discover() {
         </div>
         <div className="flex mt-12 font-serif text-title-gray">
           <Link className="mx-auto" href={`/genre/e5456ed6-fded-4b44-af67-928e7c393b53/1`}>
-            <TextCrossOver color="amber-800">Explore More</TextCrossOver>
+            <TextCrossOver color="green">Explore More</TextCrossOver>
           </Link>
         </div>
       </div>
