@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
-import { Lato } from "next/font/google";
+import { Inter } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 import LoadSession from "@/components/load-session";
 import Script from "next/script";
 import Head from "next/head";
-const lato = Lato({ subsets: ["latin"], weight: ["100", "300", "400", "700", "900"] });
+const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -20,7 +20,7 @@ export default function RootLayout({
   return (
     <html lang="en">
 
-      <body className={`${lato.className} min-h-screen`}>
+      <body className={`${inter.className} min-h-screen`}>
         <Head>
           <link rel="preconnect" href="https://fonts.googleapis.com"></link>
           <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin=""></link>
