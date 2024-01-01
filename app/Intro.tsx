@@ -48,7 +48,7 @@ export default function Intro() {
           <h1 className="mx-12 mb-10 text-center text-2xl lg:text-4xl font-thin">FOCUSES ON THE
             <span className="text-yellow-400 font-bold font-serif text-7xl relative">
               VIETNAMESE
-              <Lottie animationData={arrowAnimation} loop={true} className="absolute top-0 -right-24 text-amber-800 w-auto h-full -z-10" />
+              <Lottie animationData={arrowAnimation} loop={true} className="absolute -top-[70%] -right-56 text-amber-800 w-auto h-[200%] -z-10" />
             </span>
             !</h1>
           <div className="mx-20 text-center text-lg font-mono">
