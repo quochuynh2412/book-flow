@@ -136,9 +136,11 @@ export default function Discover() {
         </div>
       </div>
 
-      <div className="mx-auto py-16 px-12 lg:max-w-7xl lg:px-8">
-        <h2 className="text-3xl md:text-5xl text-center mb-8 md:mb-12 font-light border-b-2 border-neutral-300 pb-5">ALL GENRES</h2>
-        <div className="gap-4 lg:gap-12 grid grid-cols-4 md:grid-cols-6">
+      <div className="mb-10">
+        <h2 className="text-xl md:text-3xl text-center mb-8 md:mb-12 text-white font-thin py-6 bg-rose-800 font-serif">
+          <Marquee autoFill pauseOnHover><span className="mx-4">ALL GENRES</span></Marquee>
+        </h2>
+        <div className="gap-4 lg:gap-12 grid grid-cols-3 md:grid-cols-6 lg:max-w-7xl mx-auto px-12 lg:px-8 my-24">
           {genres.map((genre) => (
             <Link href={`/genre/${genre.id}/1`} key={genre.id} style={{ backgroundImage: `url(${genre.imageUrl})` }} className="bg-cover bg-no-repeat aspect-square bg-white shadow-md relative group" >
               <div className="absolute flex inset-0 bg-black bg-opacity-50 text-white p-4 hover:bg-opacity-70">
