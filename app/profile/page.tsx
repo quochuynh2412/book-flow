@@ -11,7 +11,7 @@ import PersonalityTest from "@/components/PersonalityTest";
 
 import bg1 from "@/public/img/bg1.png";
 
-export default function Page({ params }: { params: { id: string } }) {
+export default function Page() {
   const [user, setUser] = useState(null);
   const [hasPreferredGenre, setHasPreferredGenre] = useState(false);
   const [preferredGenre1, setPreferredGenre1] = useState<Book[]>([]);
@@ -19,50 +19,50 @@ export default function Page({ params }: { params: { id: string } }) {
   const [preferredGenre3, setPreferredGenre3] = useState<Book[]>([]);
 
   useEffect(() => {
-      async function fetchUser(id: string) {
-        await fetch(`/api/user?userID=${id}`, {
-          method: "GET",
-        }).then(async (response) => {
-          const data = await response.json();
-          setUser(data);
+    async function fetchUser() {
+      await fetch(`/api/user`, {
+        method: "GET",
+      }).then(async (response) => {
+        const data = await response.json();
+        setUser(data);
 
-          // users might not have any preferred genre
-          if (data["preferredGenre"] === undefined) {
-            setHasPreferredGenre(false);
-            return;
-          } else {
-            setHasPreferredGenre(true);
-            for (let i = 0; i < data["preferredGenre"].length; i++) {
-              fetchBooks(data["preferredGenre"][i], i);
-            }
+        // users might not have any preferred genre
+        if (data["preferredGenre"] === undefined) {
+          setHasPreferredGenre(false);
+          return;
+        } else {
+          setHasPreferredGenre(true);
+          for (let i = 0; i < data["preferredGenre"].length; i++) {
+            fetchBooks(data["preferredGenre"][i], i);
           }
+        }
 
-        }).catch(error => {
-          console.error("Failed to fetch user: ", error);
-        });
-      }
+      }).catch(error => {
+        console.error("Failed to fetch user: ", error);
+      });
+    }
 
-      // 3 preferred genre x 2 books per genre = 6 books
-      async function fetchBooks(id: string, row: number) {
-        await fetch(`/api/book?genre=` + id + `&itemsPerPage=2&page=1`, {
-          method: "GET",
-        }).then(async (response) => {
-          const data = await response.json();
-          
-          if (row === 0) {
-            setPreferredGenre1(data.books);
-          } else if (row === 1) {
-            setPreferredGenre2(data.books);
-          } else if (row === 2) {
-            setPreferredGenre3(data.books);
-          }
+    // 3 preferred genre x 2 books per genre = 6 books
+    async function fetchBooks(id: string, row: number) {
+      await fetch(`/api/book?genre=` + id + `&itemsPerPage=2&page=1`, {
+        method: "GET",
+      }).then(async (response) => {
+        const data = await response.json();
 
-        }).catch(error => {
-          console.error("Failed to fetch books: ", error);
-        });
-      }
+        if (row === 0) {
+          setPreferredGenre1(data.books);
+        } else if (row === 1) {
+          setPreferredGenre2(data.books);
+        } else if (row === 2) {
+          setPreferredGenre3(data.books);
+        }
 
-      fetchUser(params.id);
+      }).catch(error => {
+        console.error("Failed to fetch books: ", error);
+      });
+    }
+
+    fetchUser();
   }, []);
 
   return (

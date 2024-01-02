@@ -50,16 +50,7 @@ export default function Header() {
           console.error("Failed to fetch genre description:", error);
         });
     }
-    async function getUid() {
-      const user = auth.currentUser;
-      if (user != null) {
-        const id = await user?.uid;
-        setUid(id);
-      }
-    }
-
     getGenre();
-    getUid();
   }, []);
 
   const [showHits, setShowHits] = useState(false)
@@ -178,7 +169,7 @@ export default function Header() {
                     </div>
                     {loggedIn && (
                       <div className="mx-auto">
-                        <Link href={`/profile/${uid}`}>
+                        <Link href={`/profile`}>
                           <TextUnderline content="Profile" />
                         </Link>
                       </div>
