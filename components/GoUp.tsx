@@ -8,7 +8,7 @@ export default function GoUp() {
   };
 
   return (
-    <div className="fixed h-30 w-30 bottom-10 right-10">
+    <div className="fixed h-30 w-30 bottom-10 right-10 z-50">
       <a onClick={() => scrollToTop()}>
         <div className="w-12 h-12 bg-neutral-700 rounded-full cursor-pointer select-none
           active:translate-y-2  active:[box-shadow:0_0px_0_0_#1b6ff8,0_0px_0_0_#1b70f841]
