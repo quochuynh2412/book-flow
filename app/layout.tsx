@@ -18,9 +18,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.className} min-h-screen`}>
+        <LoadSession />
         <main>{children}</main>
         <Toaster />
-        <LoadSession />
       </body>
     </html>
   );

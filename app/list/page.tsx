@@ -25,10 +25,11 @@ const ListPage = () => {
       const response = await axios.get(`/api/list?`);
       if (lists != null && lists.length >= 1) {
         setCurrentListIndex(currentListIndex);
+      } else {
+        setCurrentListIndex(null);
       }
       setLists(response.data.lists);
     }
-    console.log("alo");
     fetchList();
   }, [refresh]);
   return (
