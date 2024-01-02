@@ -25,9 +25,6 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { toast } from "@/components/ui/use-toast"
 
 const FormSchema = z.object({
-  // type: z.enum(["all", "mentions", "none"], {
-  //   required_error: "You need to select a notification type.",
-  // }),
   type: z.string().min(1)
 })
 
@@ -46,10 +43,6 @@ export default function Quiz(props: { description: string }) {
   useEffect(() => {
     setQuestion(getQuestion(props.description));
   }, [props.description]);
-
-  useEffect(() => {
-    console.log(answers);
-  }, [answers]);
 
   async function submit() {
     const user = auth.currentUser;
@@ -207,7 +200,7 @@ export default function Quiz(props: { description: string }) {
         title: "Correct!",
         description: (
           <div className="flex flex-col space-y-2">
-            <p className="text-justify text-black/50 text-sm md:text-md lg:text-lg">Did you know that <span className="text-black/50">{fact}</span></p>
+            <p className="text-justify text-black/50">Did you know that <span className="text-black/50">{fact}</span></p>
           </div>
         ),
       })
@@ -244,7 +237,7 @@ export default function Quiz(props: { description: string }) {
         title: "Wrong!",
         description: (
           <div className="flex flex-col space-y-2">
-            <p className="text-justify text-white/50 text-sm md:text-md lg:text-lg">Did you know that <span className="text-white/50">{fact}</span></p>
+            <p className="text-justify text-white/50">Did you know that <span className="text-white/50">{fact}</span></p>
           </div>
         ),
         variant: "destructive",
@@ -275,17 +268,17 @@ export default function Quiz(props: { description: string }) {
           render={({ field }) => (
             <FormItem className="space-y-3">
               <FormLabel>
-                <div className="flex flex-row items-center justify-center mb-10">
-                  <p className="text-justify text-sm md:text-md lg:text-lg inline-block align-middle mr-1 md:mr-5 lg:mr-7">{question}</p>
+                <div className="flex flex-row items-center justify-center mb-6">
+                  <p className="text-justify inline-block align-middle mr-1 md:mr-5 lg:mr-7 leading-relaxed">{question}</p>
                   {
                     isDisabled ? (
                       score == 0 ? (
-                        <p className="text-justify text-sm md:text-md lg:text-lg inline-block align-middle mr-1 md:mr-5 lg:mr-7">{score}/3</p>
+                        <p className="text-justify inline-block align-middle mr-1 md:mr-5 lg:mr-7">{score}/3</p>
                       ) : (
-                        <p className="text-justify text-sm md:text-md lg:text-lg inline-block align-middle mr-1 md:mr-5 lg:mr-7">{score}/3</p>
+                        <p className="text-justify inline-block align-middle mr-1 md:mr-5 lg:mr-7">{score}/3</p>
                       )
                     ) : (
-                      <p className="text-justify text-sm md:text-md lg:text-lg inline-block align-middle mr-1 md:mr-5 lg:mr-7">{attempt}/3</p>
+                      <p className="text-justify inline-block align-middle mr-1 md:mr-5 lg:mr-7">{attempt}/3</p>
                     )
                   }
                 </div>
@@ -304,7 +297,7 @@ export default function Quiz(props: { description: string }) {
                           <FormControl>
                             <RadioGroupItem value={answer} />
                           </FormControl>
-                          <FormLabel className="font-normal text-xs md:text-md lg:text-lg">{answer}</FormLabel>
+                          <FormLabel className="font-normal">{answer}</FormLabel>
                         </FormItem>
                       )
                     })

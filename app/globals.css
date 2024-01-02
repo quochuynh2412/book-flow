@@ -5,6 +5,8 @@
 * {
   box-sizing: border-box;
 }
+@import url('https://fonts.googleapis.com/css2?family=Ramaraja&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400;1,700&display=swap');
 
 @layer base {
   :root {
@@ -81,14 +83,17 @@
 }
 
 @layer utilities {
+
   /* Chrome, Safari and Opera */
   .no-scrollbar::-webkit-scrollbar {
     display: none;
   }
 
   .no-scrollbar {
-    -ms-overflow-style: none; /* IE and Edge */
-    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none;
+    /* IE and Edge */
+    scrollbar-width: none;
+    /* Firefox */
   }
 
   .scrollbar::-webkit-scrollbar {
@@ -106,4 +111,14 @@
     border-radius: 100vh;
     border: 0px solid #f6f7ed;
   }
+}
+
+html {
+  --scroll-behavior: smooth !important;
+  scroll-behavior: smooth !important;
+  --color-title: #545863;
+}
+
+body {
+  scroll-behavior: smooth;
 }
