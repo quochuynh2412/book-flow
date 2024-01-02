@@ -7,6 +7,7 @@ import { Book } from "@/types/interfaces";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import BookCard from "@/components/BookCard";
+import PersonalityTest from "@/components/PersonalityTest";
 
 import bg1 from "@/public/img/bg1.png";
 
@@ -74,6 +75,7 @@ export default function Page({ params }: { params: { id: string } }) {
         </div>
       </div>
       <div className="min-h-screen">
+        <PersonalityTest />
         {
           hasPreferredGenre ? (
             <div className="mx-auto py-16 px-12 lg:max-w-7xl lg:px-8">
