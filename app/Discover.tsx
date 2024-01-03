@@ -79,9 +79,9 @@ export default function Discover() {
     <div id="discover" className="">
       <div className="mb-10">
         <h2 className="text-xl md:text-3xl text-center mb-8 md:mb-12 text-white font-thin py-6 bg-rose-800 font-serif">
-          <Marquee autoFill pauseOnHover><span className="mx-4">BEST OF ALL TIME</span></Marquee>
+          <Marquee autoFill pauseOnHover><span className="mx-8">BEST OF ALL TIME</span> <div className="mx-8 h-2 w-2 bg-white rounded-full"></div></Marquee>
         </h2>
-        <div className="gap-4 lg:gap-12 grid grid-cols-3 md:grid-cols-6 lg:max-w-7xl mx-auto px-12 lg:px-8 my-24">
+        <div className="gap-4 lg:gap-8 grid grid-cols-3 md:grid-cols-6 lg:max-w-7xl mx-auto px-12 lg:px-8 my-24">
           {books && books.map((book) => (
             <BookCard key={book.id} book={book} />
           ))}
@@ -89,10 +89,10 @@ export default function Discover() {
       </div>
 
       <div className="mb-10">
-        <h2 className="text-base text-center mb-8 md:mb-12 text-white font-thin py-2 bg-title-gray font-serif">
-          <Marquee autoFill pauseOnHover><span className="mx-4">Understand the Tech</span></Marquee>
+        <h2 className="text-base text-center mb-8 md:mb-12 text-white font-thin py-2 bg-title-gray font-serif rotate-3">
+          <Marquee autoFill pauseOnHover direction="right"><span className="mx-8">Understand the Tech</span></Marquee>
         </h2>
-        <div className="gap-4 lg:gap-12 grid grid-cols-3 md:grid-cols-6 lg:max-w-7xl mx-auto px-12 lg:px-8 mt-24">
+        <div className="gap-4 lg:gap-8 grid grid-cols-3 md:grid-cols-6 lg:max-w-7xl mx-auto px-12 lg:px-8 mt-24">
           {itBooks && itBooks.map((book) => (
             <BookCard key={book.id} book={book} />
           ))}
@@ -105,10 +105,10 @@ export default function Discover() {
       </div>
 
       <div className="mb-10">
-        <h2 className="text-base text-center mb-8 md:mb-12 text-white font-thin py-2 bg-amber-800 font-serif">
-          <Marquee autoFill pauseOnHover><span className="mx-4">Delicious Meals</span></Marquee>
+        <h2 className="text-base text-center mb-8 md:mb-12 text-white font-thin py-2 bg-amber-800 font-serif -rotate-3">
+          <Marquee autoFill pauseOnHover><span className="mx-8">Delicious Meals</span></Marquee>
         </h2>
-        <div className="gap-4 lg:gap-12 grid grid-cols-3 md:grid-cols-6 lg:max-w-7xl mx-auto px-12 lg:px-8 mt-24">
+        <div className="gap-4 lg:gap-8 grid grid-cols-3 md:grid-cols-6 lg:max-w-7xl mx-auto px-12 lg:px-8 mt-24">
           {cookingBooks && cookingBooks.map((book) => (
             <BookCard key={book.id} book={book} />
           ))}
@@ -121,10 +121,10 @@ export default function Discover() {
       </div>
 
       <div className="mb-10">
-        <h2 className="text-base text-center mb-8 md:mb-12 text-white font-thin py-2 bg-green-800 font-serif">
-          <Marquee autoFill pauseOnHover><span className="mx-4">Vietnamese Culture</span></Marquee>
+        <h2 className="text-base text-center mb-8 md:mb-12 text-white font-thin py-2 bg-green-800 font-serif rotate-3">
+          <Marquee autoFill pauseOnHover direction="right"><span className="mx-8">Vietnamese Culture</span></Marquee>
         </h2>
-        <div className="gap-4 lg:gap-12 grid grid-cols-3 md:grid-cols-6 lg:max-w-7xl mx-auto px-12 lg:px-8 mt-24">
+        <div className="gap-4 lg:gap-8 grid grid-cols-3 md:grid-cols-6 lg:max-w-7xl mx-auto px-12 lg:px-8 mt-24">
           {cultureBooks && cultureBooks.map((book) => (
             <BookCard key={book.id} book={book} />
           ))}
@@ -138,12 +138,12 @@ export default function Discover() {
 
       <div className="mb-10">
         <h2 className="text-xl md:text-3xl text-center mb-8 md:mb-12 text-white font-thin py-6 bg-rose-800 font-serif">
-          <Marquee autoFill pauseOnHover><span className="mx-4">ALL GENRES</span></Marquee>
+          <Marquee autoFill pauseOnHover><span className="mx-8">ALL GENRES</span><div className="mx-8 h-2 w-2 bg-white rounded-full"></div></Marquee>
         </h2>
-        <div className="gap-4 lg:gap-12 grid grid-cols-3 md:grid-cols-6 lg:max-w-7xl mx-auto px-12 lg:px-8 my-24">
+        <div className="gap-4 lg:gap-8 grid grid-cols-3 md:grid-cols-6 lg:max-w-7xl mx-auto px-12 lg:px-8 my-24">
           {genres.map((genre) => (
             <Link href={`/genre/${genre.id}/1`} key={genre.id} style={{ backgroundImage: `url(${genre.imageUrl})` }} className="bg-cover bg-no-repeat aspect-square bg-white shadow-md relative group" >
-              <div className="absolute flex inset-0 bg-black bg-opacity-50 text-white p-4 hover:bg-opacity-70">
+              <div className="absolute flex inset-0 bg-black bg-opacity-50 text-white p-4 hover:bg-opacity-70 ">
                 <span className="m-auto text-center text-sm md:text-md lg:text-lg font-semibold line-clamp-3">{genre.name}</span>
               </div>
             </Link>

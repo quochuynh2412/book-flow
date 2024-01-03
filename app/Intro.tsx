@@ -8,16 +8,12 @@ import Lottie from "lottie-react";
 
 
 const stats = [
-  { id: 1, name: 'Books', value: 10000, duration: 1 },
-  { id: 2, name: 'Book reviews', value: 50000, duration: 2 },
-  { id: 3, name: 'New users annually', value: 5000, duration: 3 },
+  { id: 1, name: 'Books', value: 2000, duration: 1 },
+  { id: 2, name: 'Book reviews', value: 5000, duration: 2 },
+  { id: 3, name: 'New users annually', value: 3000, duration: 3 },
 ];
 
 export default function Intro() {
-  const countUpRef = useRef(null); // Add type annotation to countUpRef
-  // start counting when scroll to the element
-  const [countUp, setCountUp] = useState(false);
-
   return (
     <div id="intro" className="relative">
       <div className="sticky top-0 h-screen flex flex-col items-center justify-center bg-white">
@@ -26,7 +22,7 @@ export default function Intro() {
             {stats.map((stat) => (
               <div key={stat.id} className="mx-auto flex max-w-xs flex-col gap-y-4">
                 <dt className="text-base leading-7 text-gray-600">{stat.name}</dt>
-                <dd className="order-first font-semibold tracking-tight text-3xl lg:text-6xl">
+                <dd className="order-first font-semibold tracking-tight text-3xl lg:text-6xl font-serif">
                   <CountUp end={stat.value} // Add ref prop to CountUp component
                     duration={stat.duration}
                     decimals={0}

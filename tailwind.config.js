@@ -18,6 +18,9 @@ module.exports = {
       },
     },
     extend: {
+      fontFamily: {
+        serif: ["Playfair Display", "serif"],
+      },
       colors: {
         'title-gray': '#424548',
         border: "hsl(var(--border))",
