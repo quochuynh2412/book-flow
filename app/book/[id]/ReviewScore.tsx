@@ -14,7 +14,6 @@ import Star from "@/components/Icons/Star";
 import { StarGenerator } from "@/components/Icons/Star";
 import ReviewBar from "@/components/ReviewBar";
 import { useEffect, useState } from "react";
-import { roboto } from "@/app/layout";
 
 export default function ReviewScore({ bookId, reviews }: { bookId: string, reviews: any[] }) {
   const user = auth.currentUser;
