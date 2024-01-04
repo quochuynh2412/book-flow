@@ -1,5 +1,6 @@
 "use client"
 import Link from "next/link";
+import { useSearchParams } from 'next/navigation'
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import vnBooksStore from "@/public/vnbooksstore.jpeg";
 
@@ -50,8 +51,10 @@ interface HitProps {
 export default function Search() {
     const { loggedIn, logout } = useAuth();
     const router = useRouter();
-    const { toast } = useToast();
+    const searchParams = useSearchParams()
 
+    const term = searchParams.get('q')
+    const { toast } = useToast();
     const [genres, setGenres] = useState<Genre[]>([]);
 
     useEffect(() => {
@@ -81,6 +84,12 @@ export default function Search() {
             <InstantSearch searchClient={searchClient}
                 indexName="dev_BOOKFLOW"
                 future={future}
+                initialUiState={{
+                    ["dev_BOOKFLOW"]: {
+                        query: term || "",
+                        page: 1,
+                    },
+                }}
                 insights>
                 <Configure hitsPerPage={20} disjunctiveFacets={["genre"]} />
                 <header className="header bg-neutral-100 h-20 flex gap-2 border-b border-neutral-200">
@@ -124,6 +133,8 @@ export default function Search() {
                     </div>
                     <div className="flex-1 flex relative align-middle">
                         <SearchBox
+                            placeholder="Search books by title, author, genre..."
+                            defaultValue={term || ""}
                             classNames={{
                                 root: "w-full flex border rounded-full border-neutral-300 relative my-auto",
                                 form: "w-full flex",

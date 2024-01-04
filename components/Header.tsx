@@ -15,6 +15,7 @@ import { Book, Genre } from "@/types/interfaces";
 import { signOut } from "firebase/auth";
 import { auth } from "@/lib/firebase";
 import { searchClient } from "@/lib/algolia";
+import React from "react";
 import {
   InstantSearch,
   SearchBox,
@@ -63,6 +64,12 @@ export default function Header() {
       </Link>
     )
   }
+
+  function searchSubmit(event: any) {
+    event.preventDefault();
+    const query = event.target[0].value;
+    router.push(`/search?q=${encodeURIComponent(query)}`);
+  }
   return (
     <header className="header bg-neutral-100 h-20 flex gap-2 border-b border-neutral-200">
       <div className="basis-2/12 text-xl font-bold flex text-neutral-700">
@@ -109,6 +116,7 @@ export default function Header() {
           insights>
           <Configure hitsPerPage={5} />
           <SearchBox
+            onSubmit={searchSubmit}
             onFocus={() => setShowHits(true)} onBlur={() => setTimeout(() => setShowHits(false), 200)}
             classNames={{
               root: "w-full flex border rounded-full border-neutral-300 relative my-auto",
