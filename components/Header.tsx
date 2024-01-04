@@ -116,6 +116,7 @@ export default function Header() {
           insights>
           <Configure hitsPerPage={5} />
           <SearchBox
+            placeholder="Search books by title, author, genre..."
             onSubmit={searchSubmit}
             onFocus={() => setShowHits(true)} onBlur={() => setTimeout(() => setShowHits(false), 200)}
             classNames={{

@@ -89,7 +89,7 @@ export default function Discover() {
       </div>
 
       <div className="mb-10">
-        <h2 className="text-base text-center mb-8 md:mb-12 text-white font-thin py-2 bg-title-gray font-serif rotate-3">
+        <h2 className="text-base text-center mb-8 md:mb-12 text-white font-thin py-2 bg-title-gray font-serif">
           <Marquee autoFill pauseOnHover direction="right"><span className="mx-8">Understand the Tech</span></Marquee>
         </h2>
         <div className="gap-4 lg:gap-8 grid grid-cols-3 md:grid-cols-6 lg:max-w-7xl mx-auto px-12 lg:px-8 mt-24">
@@ -105,7 +105,7 @@ export default function Discover() {
       </div>
 
       <div className="mb-10">
-        <h2 className="text-base text-center mb-8 md:mb-12 text-white font-thin py-2 bg-amber-800 font-serif -rotate-3">
+        <h2 className="text-base text-center mb-8 md:mb-12 text-white font-thin py-2 bg-amber-800 font-serif">
           <Marquee autoFill pauseOnHover><span className="mx-8">Delicious Meals</span></Marquee>
         </h2>
         <div className="gap-4 lg:gap-8 grid grid-cols-3 md:grid-cols-6 lg:max-w-7xl mx-auto px-12 lg:px-8 mt-24">
@@ -121,7 +121,7 @@ export default function Discover() {
       </div>
 
       <div className="mb-10">
-        <h2 className="text-base text-center mb-8 md:mb-12 text-white font-thin py-2 bg-green-800 font-serif rotate-3">
+        <h2 className="text-base text-center mb-8 md:mb-12 text-white font-thin py-2 bg-green-800 font-serif">
           <Marquee autoFill pauseOnHover direction="right"><span className="mx-8">Vietnamese Culture</span></Marquee>
         </h2>
         <div className="gap-4 lg:gap-8 grid grid-cols-3 md:grid-cols-6 lg:max-w-7xl mx-auto px-12 lg:px-8 mt-24">
