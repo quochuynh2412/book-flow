@@ -17,16 +17,14 @@ import { Genre } from "@/types/interfaces";
 import { signOut } from "firebase/auth";
 import { auth } from "@/lib/firebase";
 import BookCard from "./BookCard";
-import books from "@/lib/scraper/sachvuii/json/output_file.json"
+import books from "@/lib/json/book.json"
 import algoliasearch from 'algoliasearch';
 import Lottie from "lottie-react";
 import lineAnimation from '@/public/svg/line.json'
+import { OriginalBook } from "@/types/interfaces";
 
 const searchClient = algoliasearch('U37R9NB6TR', '3388a18af36e43bd1ed9ef24684c05bc');
 const future = { preserveSharedStateOnUnmount: true };
-export interface OriginalBook {
-    objectID: string; genreID: string[]; imageID: string; author: string[]; genre: string[]; index: number; authorID: string[]; title: string; path: string; lastmodified: number;
-}
 
 const originalBooks: OriginalBook[] = Object.values(books);
 import {

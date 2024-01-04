@@ -70,6 +70,8 @@ export default function Header() {
     const query = event.target[0].value;
     router.push(`/search?q=${encodeURIComponent(query)}`);
   }
+
+  const future = { preserveSharedStateOnUnmount: true };
   return (
     <header className="header bg-neutral-100 h-20 flex gap-2 border-b border-neutral-200">
       <div className="basis-2/12 text-xl font-bold flex text-neutral-700">
@@ -113,6 +115,7 @@ export default function Header() {
       <div className="flex-1 flex relative align-middle">
         <InstantSearch searchClient={searchClient}
           indexName="dev_BOOKFLOW"
+          future={future}
           insights>
           <Configure hitsPerPage={5} />
           <SearchBox

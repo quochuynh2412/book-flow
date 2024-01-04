@@ -2,9 +2,9 @@
 import Link from 'next/link';
 
 import { Skeleton } from '@/components/ui/skeleton';
-import { OriginalBook } from './page';
+import { OriginalBook } from '@/types/interfaces';
 import { storage } from '@/lib/firebase';
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { getDownloadURL, ref } from '@firebase/storage';
 
 export default function BookCard({ book }: { book: OriginalBook }) {
@@ -29,10 +29,10 @@ export default function BookCard({ book }: { book: OriginalBook }) {
               <span className="mb-3 text-sm md:text-md lg:text-lg font-semibold line-clamp-2 font-serif">{book.title}</span>
               <span className="text-xs md:text-sm lg:text-md italic line-clamp-2">
                 {book.author.map((author, index) => (
-                  <>
+                  <React.Fragment key={index}>
                     {index === 0 ? "" : ", "}
                     {author}
-                  </>
+                  </React.Fragment>
                 ))}
               </span>
             </div>

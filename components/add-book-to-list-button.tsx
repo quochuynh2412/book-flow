@@ -86,7 +86,7 @@ const AddBookToListButton = ({ bookId }: AddBookToListButtonProps) => {
   }, [loggedIn, loading2]);
   return (
     <>
-      <Button onClick={() => setIsOpen(true)}>Add this book to list</Button>
+      <Button className="rounded-full hover:bg-rose-900 bg-rose-800 font-serif" onClick={() => setIsOpen(true)}>Add this book to list</Button>
       <Dialog open={isOpen} onOpenChange={handleClose}>
         <DialogContent>
           {!loggedIn && (

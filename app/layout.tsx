@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Roboto } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 import LoadSession from "@/components/load-session";
 import Script from "next/script";
 import Head from "next/head";
-const inter = Inter({ subsets: ["latin"] });
+const roboto = Roboto({ subsets: ["latin"], weight: ["100", "300", "400", "500", "700", "900"], variable: '--font-roboto', display: 'swap' });
 
 export const metadata: Metadata = {
   title: "Bookflow",
@@ -20,7 +20,7 @@ export default function RootLayout({
   return (
     <html lang="en">
 
-      <body className={`${inter.className} min-h-screen`}>
+      <body className={`${roboto.variable} font-roboto min-h-screen`}>
         <Head>
           <link rel="preconnect" href="https://fonts.googleapis.com"></link>
           <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin=""></link>

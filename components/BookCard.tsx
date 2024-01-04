@@ -2,6 +2,7 @@ import Link from 'next/link';
 
 import { Book } from '@/types/interfaces';
 import { Skeleton } from './ui/skeleton';
+import React from 'react';
 
 export default function BookCard({ book }: { book: Book }) {
 
@@ -13,10 +14,10 @@ export default function BookCard({ book }: { book: Book }) {
             <span className="mb-3 text-sm md:text-md lg:text-lg font-semibold line-clamp-2 font-serif">{book.title}</span>
             <span className="text-xs md:text-sm lg:text-md italic line-clamp-2">
               {book.authors.map((author, index) => (
-                <>
+                <React.Fragment key={index}>
                   {index === 0 ? "" : ", "}
                   {author.name}
-                </>
+                </React.Fragment>
               ))}
             </span>
           </div>

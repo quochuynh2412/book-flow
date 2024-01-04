@@ -1,9 +1,12 @@
+import exp from "constants";
+
 export interface Genre {
   id: string;
   name: string;
   description: string;
   imageUrl: string;
 }
+
 export interface Author {
   id: string;
   description: string;
@@ -24,4 +27,12 @@ export interface BookList {
   books: string[];
   name: string;
   ownerId: string;
+}
+
+export interface OriginalGenre {
+  objectID: string; imageID: string; name: string; description: string; index: number; path: string; lastmodified: number;
+}
+
+export interface OriginalBook {
+  objectID: string; genreID: string[]; imageID: string; author: string[]; genre: string[]; index: number; authorID: string[]; title: string; path: string; lastmodified: number;
 }
