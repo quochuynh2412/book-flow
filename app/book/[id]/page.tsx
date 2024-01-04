@@ -96,37 +96,43 @@ export default function Page({ params }: { params: { id: string } }) {
                       <TabsTrigger value="author" className="rounded-full py-2.5 inline-flex items-center justify-center whitespace-nowrap px-4 data-[state=active]:bg-rose-800 data-[state=active]:text-white">Authors</TabsTrigger>
                       <TabsTrigger value="description" className="rounded-full inline-flex items-center justify-center whitespace-nowrap py-2 px-4 data-[state=active]:bg-rose-800 data-[state=active]:text-white">Description</TabsTrigger>
                     </TabsList>
-                    <TabsContent
-                      value="author"
-                      className="max-h-[350px] overflow-scroll flex flex-col gap-4"
-                    >
-                      {book?.authors.map((author, index) => (
-                        <>
-                          <Link
-                            href={`/author/${author.id}`}
-                            className="text-xl font-bold font-serif text-title-gray hover:text-rose-800"
-                          >
-                            {author.name}
-                          </Link>
-                          <div className="font-base mt-2 font-light">
-                            {author.description.substring(0, 500)}...
+                    <div className="border border-neutral-300 p-4 rounded-xl">
+                      <TabsContent
+                        value="author"
+                        className="max-h-[320px] overflow-scroll flex flex-col gap-4"
+                      >
+                        {book?.authors.map((author, index) => (
+                          <>
                             <Link
                               href={`/author/${author.id}`}
-                              className="opacity-50 text-indigo-950 inline-block hover:opacity-100"
+                              className="text-xl font-bold font-serif text-title-gray hover:text-rose-800"
                             >
-                              {" "}
-                              Read more
+                              {author.name}
                             </Link>
-                          </div>
-                        </>
-                      ))}
-                    </TabsContent>
-                    <TabsContent
-                      value="description"
-                      className="max-h-[350px] overflow-scroll flex flex-col gap-4"
-                    >
-                      <div className="font-base font-light">{book?.description}</div>
-                    </TabsContent>
+                            <div className="font-base mt-2 font-light">
+                              {author.description.length > 500 ?
+                                <>
+                                  {author.description.substring(0, 500) + "..."}
+                                  <Link
+                                    href={`/author/${author.id}`}
+                                    className="opacity-50 text-indigo-950 inline-block hover:opacity-100"
+                                  >
+                                    &nbsp;
+                                    Read more
+                                  </Link>
+                                </> :
+                                author.description.length > 0 ? author.description : "No description available"}
+                            </div>
+                          </>
+                        ))}
+                      </TabsContent>
+                      <TabsContent
+                        value="description"
+                        className="max-h-[350px] overflow-scroll flex flex-col gap-4"
+                      >
+                        <div className="font-base font-light">{book?.description}</div>
+                      </TabsContent>
+                    </div>
                   </Tabs>
                 </>
               ) : (
