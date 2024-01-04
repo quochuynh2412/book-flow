@@ -38,7 +38,7 @@ export default function Page({ params }: { params: { id: string } }) {
             <div className="w-[560px] h-[800px] bg-gray-100 rounded-xl flex justify-center align-middle min-w-[400px] xl:shrink-0">
               {book ? (
                 <Image
-                  src={book.imageUrl}
+                  src={book.imageUrl || "/img/book-cover-placeholder.png"}
                   alt="Book"
                   width={400}
                   height={650}

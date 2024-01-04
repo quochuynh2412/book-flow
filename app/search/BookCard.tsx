@@ -8,7 +8,7 @@ import React, { useState, useEffect } from 'react';
 import { getDownloadURL, ref } from '@firebase/storage';
 
 export default function BookCard({ book }: { book: OriginalBook }) {
-  const [image, setImage] = useState<string | null>(null);
+  const [image, setImage] = useState<string | null>('/img/book-cover-placeholder.png');
   const storageRef = ref(storage, book.imageID);
   useEffect(() => {
     async function getImage() {

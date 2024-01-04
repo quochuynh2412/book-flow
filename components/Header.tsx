@@ -82,8 +82,8 @@ export default function Header() {
         >
           BF
         </Link>
-        <Link href="/" className="hidden my-auto ml-4 font-serif font-normal lg:flex flex-row gap-0.5 items-center">
-          <Image src={'/img/bookflowlogo.png'} alt="Book" width={50} height={50} className="h-16 w-16 mt-2"></Image>
+        <Link href="/" className="hidden my-auto ml-8 font-serif font-normal lg:flex flex-row gap-0.5 items-center">
+          <Image src={'/img/bookflowlogo.png'} alt="Book" width={50} height={50} className="h-12 w-12 mb-2"></Image>
           <div>bookflow</div>
         </Link>
       </div>
