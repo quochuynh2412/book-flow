@@ -1,0 +1,5 @@
+# ignore all python env files
+.venv
+venv
+.vscode/settings.json
+
