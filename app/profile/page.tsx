@@ -71,18 +71,40 @@ export default function Page() {
   return (
     <div >
       <Header />
-      <div className="h-80 flex shadow-inner border bg-cover bg-no-repeat bg-center bg-blend-multiply bg-neutral-600" style={{ backgroundImage: `url(${bg1.src})` }}>
-        <div className="m-auto">
-          <p className="text-center font-light text-white mb-2">User Profile</p>
-          <h1 className="text-4xl md:text-6xl m-auto text-white font-serif z-0 relative">
-            <Lottie animationData={lineAnimation} loop={true} className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -z-10 -translate-y-1/2 h-auto w-full " />
-            {user && user["name"]}
-          </h1>
-        </div>
-      </div>
+      {
+        user && user["score"] <= 3 ? (
+            <div className="h-80 flex shadow-inner bg-cover bg-no-repeat bg-center bg-blend-multiply bg-neutral-600 border-solid border-8 border-neutral-400" style={{ backgroundImage: `url(${bg1.src})` }}>
+              <div className="m-auto">
+                <p className="text-center font-light text-white mb-2">User Profile</p>
+                <h1 className="text-4xl md:text-6xl m-auto text-white font-serif z-0 relative">
+                  <Lottie animationData={lineAnimation} loop={true} className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -z-10 -translate-y-1/2 h-auto w-full " />
+                  {user && user["name"]}
+                </h1>
+                <p className="text-center font-light text-white mb-2 mt-3">Score</p>
+                <h1 className="text-xl md:text-2xl m-auto text-white font-serif z-0 relative flex justify-center">
+                  {user && user["score"]}
+                </h1>
+              </div>
+            </div>
+          ) : (
+            <div className="h-80 flex shadow-inner bg-cover bg-no-repeat bg-center bg-blend-multiply bg-neutral-600 border-solid border-8 border-yellow-300" style={{ backgroundImage: `url(${bg1.src})` }}>
+              <div className="m-auto">
+                <p className="text-center font-light text-white mb-2">User Profile</p>
+                <h1 className="text-4xl md:text-6xl m-auto text-white font-serif z-0 relative">
+                  <Lottie animationData={lineAnimation} loop={true} className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -z-10 -translate-y-1/2 h-auto w-full " />
+                  {user && user["name"]}
+                </h1>
+                <p className="text-center font-light text-white mb-2 mt-3">Score</p>
+                <h1 className="text-xl md:text-2xl m-auto text-white font-serif z-0 relative flex justify-center">
+                  {user && user["score"]}
+                </h1>
+              </div>
+            </div>
+        )
+      }
       <div className="min-h-screen">
         <div className="mx-auto py-16 px-12 lg:max-w-7xl lg:px-8">
-          <h2 className="text-2xl font-serif text-title-gray md:text-3xl text-center mb-8 md:mb-12 font-light border-b border-neutral-300 pb-5">Personality Test</h2>
+          <h2 className="text-2xl font-serif text-title-gray md:text-3xl text-center mb-8 md:mb-12 font-light border-b border-neutral-300 pb-5">Genres Recommendation</h2>
           <PersonalityTest />
         </div>
         {
