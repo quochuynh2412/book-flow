@@ -36,6 +36,15 @@ export interface OriginalGenre {
 export interface OriginalBook {
   objectID: string; genreID: string[]; imageID: string; author: string[]; genre: string[]; index: number; authorID: string[]; title: string; path: string; lastmodified: number;
 }
+
+export interface OriginalAuthor {
+  objectID: string;
+  name: string;
+  description: string;
+  index: number;
+  path: string;
+  lastmodified: number;
+}
 export interface User {
   id: string;
   name: string;
