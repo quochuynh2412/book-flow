@@ -239,7 +239,7 @@ export default function PersonalityTest() {
                         <FormItem className="space-y-6">
                           <FormLabel className="font-serif text-title-gray text-md">{question.question}</FormLabel>
                           <FormControl>
-                            <Input placeholder="Your answer" className="rounded-full py-6 px-6 text-base font-light focus-visible:ring-rose-800" {...field} />
+                            <Input placeholder="Your answer" className="rounded-full py-6 px-6 text-base font-light focus-visible:ring-rose-800 font-serif" {...field} />
                           </FormControl>
                           <FormMessage />
                         </FormItem>

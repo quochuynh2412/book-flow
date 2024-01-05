@@ -193,7 +193,7 @@ export default function Page({ params }: { params: { id: string } }) {
             // if not null
             book?.description ? (
               <div>
-                <div className="text-2xl font-bold my-10">Knowledge Quiz</div>
+                <div className="text-3xl font-bold mt-20 mb-10 border-b pb-2 border-neutral-300 font-serif text-title-gray">Knowledge Quiz</div>
                 <Quiz description={book.description} />
               </div>
             ) : (

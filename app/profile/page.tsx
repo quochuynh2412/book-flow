@@ -87,7 +87,7 @@ export default function Page() {
               </div>
             </div>
           ) : (
-            <div className="h-80 flex shadow-inner bg-cover bg-no-repeat bg-center bg-blend-multiply bg-neutral-600 border-solid border-8 border-yellow-300" style={{ backgroundImage: `url(${bg1.src})` }}>
+            <div className="h-80 flex shadow-inner bg-cover bg-no-repeat bg-center bg-blend-multiply bg-neutral-600 border-solid border-8 border-yellow-500" style={{ backgroundImage: `url(${bg1.src})` }}>
               <div className="m-auto">
                 <p className="text-center font-light text-white mb-2">User Profile</p>
                 <h1 className="text-4xl md:text-6xl m-auto text-white font-serif z-0 relative">
@@ -103,10 +103,6 @@ export default function Page() {
         )
       }
       <div className="min-h-screen">
-        <div className="mx-auto py-16 px-12 lg:max-w-7xl lg:px-8">
-          <h2 className="text-2xl font-serif text-title-gray md:text-3xl text-center mb-8 md:mb-12 font-light border-b border-neutral-300 pb-5">Genres Recommendation</h2>
-          <PersonalityTest />
-        </div>
         {
           hasPreferredGenre ? (
             <div className="mx-auto py-16 px-12 lg:max-w-7xl lg:px-8 font-serif">
@@ -129,6 +125,10 @@ export default function Page() {
             </div>
           )
         }
+        <div className="mx-auto py-16 px-12 lg:max-w-7xl lg:px-8">
+          <h2 className="text-2xl font-serif text-title-gray md:text-3xl text-center mb-8 md:mb-12 font-light border-b border-neutral-300 pb-5">Genres Recommendation</h2>
+          <PersonalityTest />
+        </div>
       </div>
       <Footer />
     </div>
