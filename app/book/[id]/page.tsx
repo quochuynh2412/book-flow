@@ -19,6 +19,8 @@ import BookCard from "@/components/BookCard";
 
 const index = searchClient.initIndex("dev_BOOKFLOW");
 
+import Quiz from "@/components/Quiz";
+
 export default function Page({ params }: { params: { id: string } }) {
   const [book, setBook] = useState<Book | null>(null);
   const [similarBooks, setSimilarBooks] = useState<Book[]>([]);
@@ -187,6 +189,17 @@ export default function Page({ params }: { params: { id: string } }) {
               ))}
             </div>
           </div>
+          {
+            // if not null
+            book?.description ? (
+              <div>
+                <div className="text-2xl font-bold my-10">Knowledge Quiz</div>
+                <Quiz description={book.description} />
+              </div>
+            ) : (
+              <></>
+            )
+          }
         </div>
       </main>
       <Footer />
