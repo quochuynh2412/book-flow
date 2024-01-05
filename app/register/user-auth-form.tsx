@@ -94,13 +94,15 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
     return (
         <div className={cn("grid gap-6", className)} {...props}>
             <form onSubmit={submitSignUpForm}>
-                <div className="grid gap-2">
+                <div className="grid gap-4">
                     <div className="grid gap-1">
                         <Label className="sr-only" htmlFor="name">
                             Fullname
                         </Label>
                         <Input
                             id="name"
+                            className="font-light rounded-full p-6"
+
                             placeholder="John Doe"
                             type="text"
                             autoCapitalize="none"
@@ -115,6 +117,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
                         </Label>
                         <Input
                             id="email"
+                            className="font-light rounded-full p-6"
                             placeholder="name@example.com"
                             type="email"
                             autoCapitalize="none"
@@ -129,6 +132,8 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
                         </Label>
                         <Input
                             id="password"
+                            className="font-light rounded-full p-6"
+
                             placeholder="Password"
                             type="password"
                             autoCapitalize="none"
@@ -137,7 +142,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
                             disabled={isLoading}
                         />
                     </div>
-                    <Button disabled={isLoading} type="submit">
+                    <Button disabled={isLoading} type="submit" className="rounded-full p-6 hover:bg-rose-800 font-serif">
                         {isLoading && (
                             <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
                         )}
@@ -155,7 +160,8 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
                     </span>
                 </div>
             </div>
-            <Button variant="outline" type="button" disabled={isLoading} onClick={signIn}>
+            <Button variant="outline" type="button" disabled={isLoading} onClick={signIn}
+                className="font-serif rounded-full p-6">
                 {isLoading ? (
                     <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
                 ) : (
