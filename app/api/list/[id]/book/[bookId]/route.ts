@@ -1,5 +1,6 @@
 import { db } from "@/lib/firebase";
 import { auth } from "firebase-admin";
+import { customInitApp } from "@/lib/firebase-admin-config";
 import {
   doc,
   getDoc,
@@ -10,6 +11,7 @@ import {
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 
+customInitApp();
 export async function POST(
   req: NextRequest,
   { params }: { params: { id: string; bookId: string } }

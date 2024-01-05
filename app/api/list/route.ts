@@ -1,9 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "firebase-admin";
+import { customInitApp } from "@/lib/firebase-admin-config";
 import { cookies } from "next/headers";
 import { db } from "@/lib/firebase";
 import { addDoc, collection, getDocs, query, where } from "firebase/firestore";
 
+customInitApp();
 export async function GET(req: NextRequest) {
   try {
     // Check session to get userId
