@@ -23,17 +23,17 @@ export default function ReviewList({ reviews }: { reviews: any[] }) {
         setSelectedTab(value);
         setVisibleReviews(3); // Reset visible reviews when changing tabs
       }}>
-        <TabsList>
-          <TabsTrigger value="all">All</TabsTrigger>
-          <TabsTrigger value="5">5 star</TabsTrigger>
-          <TabsTrigger value="4">4 star</TabsTrigger>
-          <TabsTrigger value="3">3 star</TabsTrigger>
-          <TabsTrigger value="2">2 star</TabsTrigger>
-          <TabsTrigger value="1">1 star</TabsTrigger>
+        <TabsList className="mb-4 font-serif bg-neutral-100 rounded-full p-1 h-auto">
+          <TabsTrigger value="all" className="rounded-full py-2.5 inline-flex items-center justify-center whitespace-nowrap px-4 data-[state=active]:bg-rose-800 data-[state=active]:text-white">All</TabsTrigger>
+          <TabsTrigger value="5" className="rounded-full py-2.5 inline-flex items-center justify-center whitespace-nowrap px-4 data-[state=active]:bg-rose-800 data-[state=active]:text-white">5 star</TabsTrigger>
+          <TabsTrigger value="4" className="rounded-full py-2.5 inline-flex items-center justify-center whitespace-nowrap px-4 data-[state=active]:bg-rose-800 data-[state=active]:text-white">4 star</TabsTrigger>
+          <TabsTrigger value="3" className="rounded-full py-2.5 inline-flex items-center justify-center whitespace-nowrap px-4 data-[state=active]:bg-rose-800 data-[state=active]:text-white">3 star</TabsTrigger>
+          <TabsTrigger value="2" className="rounded-full py-2.5 inline-flex items-center justify-center whitespace-nowrap px-4 data-[state=active]:bg-rose-800 data-[state=active]:text-white">2 star</TabsTrigger>
+          <TabsTrigger value="1" className="rounded-full py-2.5 inline-flex items-center justify-center whitespace-nowrap px-4 data-[state=active]:bg-rose-800 data-[state=active]:text-white">1 star</TabsTrigger>
         </TabsList>
 
         {['all', '5', '4', '3', '2', '1'].map(tabValue => (
-          <TabsContent key={tabValue} value={tabValue}>
+          <TabsContent key={tabValue} value={tabValue} className='font-light'>
             {filteredReviews.length === 0 ? (
               noReviewsMessage
             ) : (

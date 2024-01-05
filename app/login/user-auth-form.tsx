@@ -20,7 +20,15 @@ import { useRouter } from "next/navigation";
 import { getURL } from "next/dist/shared/lib/utils";
 import { signOut } from "firebase/auth";
 import { useAuth } from "@/hooks/useAuth";
-interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
+import { db } from "@/lib/firebase";
+import {
+  addDoc,
+  collection,
+  doc,
+  getDoc,
+  setDoc,
+} from "firebase/firestore";
+interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> { }
 
 export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
@@ -91,6 +99,34 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
           return;
         }
 
+        // Check if the user document exists in Firestore
+        const docRef = doc(db, "user", userCred.user.uid);
+        await getDoc(docRef).then(async (doc) => {
+          if (!doc.exists()) {
+            // If the user document doesn't exist, create it
+            const user = {
+              email: userCred.user.email,
+              name: userCred.user.displayName,
+            };
+            await setDoc(docRef, user);
+
+            // Create two lists in the "list" collection
+            const list1 = {
+              name: "Read",
+              ownerId: userCred.user.uid,
+              books: [],
+            };
+            const list2 = {
+              name: "Want to read",
+              ownerId: userCred.user.uid,
+              books: [],
+            };
+            await addDoc(collection(db, "list"), list1);
+            await addDoc(collection(db, "list"), list2);
+          }
+        });
+
+        // Authenticate with your server by sending a POST request
         await fetch(`/api/authentication/login`, {
           method: "POST",
           headers: {
@@ -98,6 +134,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
           },
         }).then((response) => {
           if (response.status === 200) {
+            // If authentication with the server is successful, redirect to "/" and set login state
             router.push("/");
             login(true);
             toast({
@@ -107,12 +144,14 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
         });
       })
       .catch((error) => {
+        // Handle errors, such as displaying an error toast
         toast({
           title: "Error",
           description: error.message,
         });
       });
   }, []);
+
 
   async function signInWithGoogle() {
     setIsLoading(true);

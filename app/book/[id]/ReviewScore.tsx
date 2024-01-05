@@ -15,7 +15,7 @@ import { StarGenerator } from "@/components/Icons/Star";
 import ReviewBar from "@/components/ReviewBar";
 import { useEffect, useState } from "react";
 
-export default function ReviewScore({bookId, reviews} : {bookId: string, reviews: any[]}) {
+export default function ReviewScore({ bookId, reviews }: { bookId: string, reviews: any[] }) {
   const user = auth.currentUser;
   const [myReview, setMyReview] = useState(null);
   const [hasReviewed, setHasReviewed] = useState(false);
@@ -28,15 +28,16 @@ export default function ReviewScore({bookId, reviews} : {bookId: string, reviews
     switch (review["rating"]) {
       case 1:
         numOne++; break;
-      case 2: 
+      case 2:
         numTwo++; break;
       case 3:
         numThree++; break;
-      case 4: 
+      case 4:
         numFour++; break;
       case 5:
         numFive++; break;
-  }});
+    }
+  });
 
   // setup percentage for each score
   let score = Number((sum / reviews.length).toFixed(2));
@@ -62,15 +63,12 @@ export default function ReviewScore({bookId, reviews} : {bookId: string, reviews
     <div className="sticky top-10 pb-10">
       <div>
         <div className="flex items-center mb-2">
-          <StarGenerator size={8} score={ score } />
-          <p className="ms-1 font-medium text-gray-500 dark:text-gray-400 text-lg">
-            {score} out of 5
+          <StarGenerator size={8} score={score} />
+          <p className="ms-1 font-medium text-neutral-500 dark:text-neutral-400 text-lg font-serif">
+            {score} out of 5 &nbsp;<span className={`font-roboto font-light text-sm`}>({reviews.length} global ratings)</span>
           </p>
         </div>
-        <p className="text-sm font-medium text-gray-500 dark:text-gray-400">
-          {reviews.length} global ratings
-        </p>
-        <div className="mt-8">
+        <div className="mt-8 font-serif">
           <ReviewBar text="5 star" percent={`${numFive}%`} />
           <ReviewBar text="4 star" percent={`${numFour}%`} />
           <ReviewBar text="3 star" percent={`${numThree}%`} />
@@ -83,8 +81,8 @@ export default function ReviewScore({bookId, reviews} : {bookId: string, reviews
           <DialogTrigger className="mx-auto mt-10">
             {
               (hasReviewed)
-                ? <div className="w-full px-10 text-white bg-neutral-700 hover:bg-neutral-800 focus:ring-4 focus:outline-none focus:ring-neutral-300 font-medium rounded-lg text-sm py-2.5 text-center dark:bg-neutral-600 dark:hover:bg-neutral-700 dark:focus:ring-neutral-800">Edit your review</div>
-                : <div className="w-full px-10 text-white bg-neutral-700 hover:bg-neutral-800 focus:ring-4 focus:outline-none focus:ring-neutral-300 font-medium rounded-lg text-sm py-2.5 text-center dark:bg-neutral-600 dark:hover:bg-neutral-700 dark:focus:ring-neutral-800">Write A Review</div>
+                ? <div className="w-full px-10 text-white bg-neutral-500 hover:bg-rose-800 focus:ring-4 focus:outline-none focus:ring-neutral-300 font-medium rounded-full text-sm py-2.5 text-center transition-all">Edit your review</div>
+                : <div className="w-full px-10 text-white bg-neutral-500 hover:bg-rose-800 focus:ring-4 focus:outline-none focus:ring-neutral-300 font-medium rounded-full text-sm py-2.5 text-center transition-all">Write A Review</div>
             }
           </DialogTrigger>
           <DialogContent>

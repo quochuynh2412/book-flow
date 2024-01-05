@@ -68,10 +68,10 @@ export default function PersonalityTest() {
       // })
       updateToFirebase();
     }
-}, [userGenres]);
+  }, [userGenres]);
 
 
-// 1. Define your form.
+  // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -100,8 +100,8 @@ export default function PersonalityTest() {
     // wait/sleep
     // await new Promise(r => setTimeout(r, 100000));
 
-    // const stagingQuery = "https://ekaterina2.pythonanywhere.com/question/" + question;
-    const stagingQuery = "https://ekaterina2.pythonanywhere.com/"
+    const stagingQuery = "https://ekaterina2.pythonanywhere.com/question/" + question;
+    // const stagingQuery = "https://ekaterina2.pythonanywhere.com/"
 
     // toast({
     //   title: "Our AI is thinking ...",
@@ -143,12 +143,12 @@ export default function PersonalityTest() {
     })
 
     if (user) {
-      const userID : string = await user.uid;
+      const userID: string = await user.uid;
 
       // find the genre ID based on genre name
       const genreRef = collection(db, "genre");
       const genreQuery = await getDocs(genreRef);
-      let genreID : string[] = [];
+      let genreID: string[] = [];
       genreQuery.forEach((doc) => {
         if (tempGenres.includes(doc.data().name)) {
           genreID.push(doc.id);
@@ -181,12 +181,12 @@ export default function PersonalityTest() {
 
 
   return (
-    <div className="mx-auto py-5 px-4 lg:max-w-6xl lg:px-0 flex flex-col justify-center items-center border-slate-100 border-2 shadow-lg rounded-2xl bg-slate-200">
+    <div className="mx-auto py-5 px-4 lg:max-w-6xl lg:px-0 flex flex-col justify-center items-center shadow-lg rounded-2xl bg-rose-800/10">
       {formDisabled ? (
         <div className="w-full h-full flex justify-center items-center">
           {userGenres.length == 0 ? (
             <>
-              <div className="md:text-lg lg:text-2xl">Our AI is thinking&nbsp;</div>
+              <div className="md:text-lg lg:text-xl font-serif">Our AI is thinking&nbsp;</div>
               <svg className="animate-spin h-5 w-5 mr-3" viewBox="0 0 24 24">
                 <circle
                   className="opacity-25"
@@ -217,7 +217,7 @@ export default function PersonalityTest() {
                     )
                   })
                 }
-                <div className="text-green-500">Your preferences have been saved</div> 
+                <div className="text-green-500">Your preferences have been saved</div>
               </div>
               <div>
                 <Button onClick={() => setFormDisabled(false)} className="w-40 h-auto">Retake</Button>
@@ -229,28 +229,28 @@ export default function PersonalityTest() {
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="lg:w-11/12 space-y-6">
             <fieldset disabled={formDisabled} className="space-y-6">
-                {
-                  questionsSet.map((question, index) => {
-                    return (
-                      <FormField
-                        key={index}
-                        control={form.control}
-                        name="question-1"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel className="">{question.question}</FormLabel>
-                            <FormControl>
-                              <Input placeholder="Your answer" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                    )
-                  })
-                }
+              {
+                questionsSet.map((question, index) => {
+                  return (
+                    <FormField
+                      key={index}
+                      control={form.control}
+                      name="question-1"
+                      render={({ field }) => (
+                        <FormItem className="space-y-6">
+                          <FormLabel className="font-serif text-title-gray text-md">{question.question}</FormLabel>
+                          <FormControl>
+                            <Input placeholder="Your answer" className="rounded-full py-6 px-6 text-base font-light focus-visible:ring-rose-800" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  )
+                })
+              }
               <div className="flex justify-center">
-                <Button type="submit" className="w-40 h-auto">Submit</Button>
+                <Button type="submit" className="rounded-full hover:bg-rose-900 bg-rose-800 font-serif px-12 text-md">Submit</Button>
               </div>
             </fieldset>
           </form>

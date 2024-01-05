@@ -36,6 +36,7 @@ import { useRouter } from "next/navigation";
 
 interface AddBookToListButtonProps {
   bookId: string;
+  bookTitle: string;
 }
 
 const formSchema = z.object({
@@ -43,7 +44,10 @@ const formSchema = z.object({
   message: z.string().optional(),
 });
 
-const AddBookToListButton = ({ bookId }: AddBookToListButtonProps) => {
+const AddBookToListButton = ({
+  bookId,
+  bookTitle,
+}: AddBookToListButtonProps) => {
   const [loading, setLoading] = useState(false);
   const [loading2, setLoading2] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
@@ -66,12 +70,12 @@ const AddBookToListButton = ({ bookId }: AddBookToListButtonProps) => {
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     setLoading2(true);
     await axios.post(
-      `/api/list/${values.listId}/book/${bookId}?note=${values.message}`
+      `/api/list/${values.listId}/book/${bookId}?note=${values.message}&title=${bookTitle}`
     );
     setLoading2(false);
     setIsOpen(false);
     form.reset();
-    router.refresh();
+    window.location.reload();
   };
   useEffect(() => {
     async function fetchList() {
@@ -86,7 +90,7 @@ const AddBookToListButton = ({ bookId }: AddBookToListButtonProps) => {
   }, [loggedIn, loading2]);
   return (
     <>
-      <Button onClick={() => setIsOpen(true)}>Add this book to list</Button>
+      <Button className="rounded-full hover:bg-rose-900 bg-rose-800 font-serif" onClick={() => setIsOpen(true)}>Add this book to list</Button>
       <Dialog open={isOpen} onOpenChange={handleClose}>
         <DialogContent>
           {!loggedIn && (

@@ -18,6 +18,10 @@ module.exports = {
       },
     },
     extend: {
+      fontFamily: {
+        serif: ["Playfair Display", "serif"],
+        roboto: ['var(--font-roboto)', 'sans-serif'],
+      },
       colors: {
         'title-gray': '#424548',
         border: "hsl(var(--border))",
