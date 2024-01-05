@@ -95,6 +95,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
   useEffect(() => {
     getRedirectResult(auth)
       .then(async (userCred) => {
+        setIsLoading(true);
         if (!userCred) {
           return;
         }
@@ -133,10 +134,10 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
             Authorization: `Bearer ${await userCred.user.getIdToken()}`,
           },
         }).then((response) => {
-          setIsLoading(false);
           if (response.status === 200) {
             // If authentication with the server is successful, redirect to "/" and set login state
             router.push("/");
+            setIsLoading(false);
             login(true);
             toast({
               description: "Logged in successfully",
