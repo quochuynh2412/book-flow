@@ -1,8 +1,7 @@
 import { initializeApp, getApps, cert } from 'firebase-admin/app';
-import path from 'path';
-
+import key from "@/lib/bookflow-e7dbd-firebase-adminsdk-vhk4z-eedc8960f3.json"
 const firebaseAdminConfig = {
-    credential: cert(path.resolve(process.env.FIREBASE_SECRET_KEY || '')),
+    credential: cert(JSON.parse(JSON.stringify(key))),
 }
 
 export function customInitApp() {
