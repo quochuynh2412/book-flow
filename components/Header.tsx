@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import Image from "next/image";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetOverlay, SheetTrigger } from "@/components/ui/sheet";
 
 import { Sheet2, SheetContent2, SheetTrigger2 } from "@/components/ui/sheet2";
 
@@ -23,6 +23,7 @@ import {
   Hits,
   Configure,
 } from 'react-instantsearch';
+import TextCrossOver from "./TextCrossOver";
 interface HitProps {
   hit: {
     objectID: string;
@@ -134,21 +135,24 @@ export default function Header() {
                   </svg>
                 </div>
               </SheetTrigger>
-              <SheetContent className="w-36 lg:w-80 bg-white">
+              <SheetContent className="w-36 lg:w-80 bg-rose-800 text-white font-serif border-none">
                 <div className="h-full flex text-md lg:text-xl font-light">
                   <div className="w-full my-auto flex flex-col gap-24 text-center">
                     <div className="mx-auto">
+                      <Image src={'/img/bookflowlogo.png'} alt="Book" width={50} height={50} className="h-20 w-20 mb-2 bg-white p-4 rounded-2xl"></Image>
+                    </div>
+                    <div className="mx-auto">
                       <Sheet2>
                         <SheetTrigger2>
-                          <TextUnderline content="Genres" />
+                          <TextCrossOver color="white">Genres</TextCrossOver>
                         </SheetTrigger2>
-                        <SheetContent2 className="w-36 lg:w-80 bg-white">
+                        <SheetContent2 className="w-36 lg:w-80 bg-rose-900 font-serif text-white border-none">
                           <div className="h-full flex text-xs lg:text-xl font-light">
                             <div className="h-full w-full flex flex-col gap-24 text-center overflow-y-auto scrollbar py-48">
                               {genres.map((genre) => (
                                 <div className="mx-auto px-2" key={genre.id}>
-                                  <Link href={`/genre/${genre.id}/1`}>
-                                    <TextUnderline content={genre.name} />
+                                  <Link href={`/genre/${genre.id}`}>
+                                    <TextCrossOver color="white">{genre.name}</TextCrossOver>
                                   </Link>
                                 </div>
                               ))}
@@ -159,7 +163,7 @@ export default function Header() {
                     </div>
                     <div className="mx-auto">
                       <Link href="#">
-                        <TextUnderline content="Profile" />
+                        <TextCrossOver color="white">Profile</TextCrossOver>
                       </Link>
                     </div>
                     <div className="mx-auto">
@@ -180,12 +184,12 @@ export default function Header() {
                               });
                           }}
                         >
-                          <TextUnderline content="Logout" />
+                          <TextCrossOver color="white">Logout</TextCrossOver>
                         </div>
                       )}
                       {!loggedIn && (
                         <Link href="/login">
-                          <TextUnderline content="Login" />
+                          <TextCrossOver color="white">Login</TextCrossOver>
                         </Link>
                       )}
                     </div>
@@ -196,6 +200,6 @@ export default function Header() {
           </div>
         </div>
       </div>
-    </header>
+    </header >
   );
 }
