@@ -133,6 +133,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
             Authorization: `Bearer ${await userCred.user.getIdToken()}`,
           },
         }).then((response) => {
+          setIsLoading(false);
           if (response.status === 200) {
             // If authentication with the server is successful, redirect to "/" and set login state
             router.push("/");
@@ -140,10 +141,17 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
             toast({
               description: "Logged in successfully",
             });
+          } else {
+            // If authentication with the server fails, display an error toast
+            toast({
+              title: "Error",
+              description: "Failed to log in",
+            });
           }
         });
       })
       .catch((error) => {
+        setIsLoading(false);
         // Handle errors, such as displaying an error toast
         toast({
           title: "Error",
@@ -156,7 +164,6 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
   async function signInWithGoogle() {
     setIsLoading(true);
     await signInWithRedirect(auth, provider);
-    setIsLoading(false);
   }
 
   return (
