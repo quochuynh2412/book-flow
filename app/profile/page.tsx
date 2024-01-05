@@ -80,9 +80,7 @@ export default function Page() {
                   // if user does not contain score field
                   !user || !user["score"] ? (
                     <>
-                      <p className="text-center font-light text-white mb-2">Score</p>
-                      <p className="text-center font-light text-white mb-2">-1</p>
-                      </>
+                    </>
                   ) : (
                     <>
                       <p className="text-center font-light text-white mb-2">Score</p>
@@ -103,9 +101,7 @@ export default function Page() {
                   // if user does not contain score field
                   !user || !user["score"] ? (
                     <>
-                      <p className="text-center font-light text-white mb-2">Score</p>
-                      <p className="text-center font-light text-white mb-2">-1</p>
-                      </>
+                    </>
                   ) : (
                     <>
                       <p className="text-center font-light text-white mb-2">Score</p>
