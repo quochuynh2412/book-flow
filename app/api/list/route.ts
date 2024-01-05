@@ -27,7 +27,6 @@ export async function GET(req: NextRequest) {
         !bookId ||
         (bookId &&
           !doc.data().books?.some((item: any) => {
-            console.log(item);
             return item.bookId === bookId;
           }))
       ) {

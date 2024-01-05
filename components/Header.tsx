@@ -38,6 +38,7 @@ export default function Header() {
   const { toast } = useToast();
 
   const [genres, setGenres] = useState<Genre[]>([]);
+  const [uid, setUid] = useState("");
 
   useEffect(() => {
     async function getGenre() {
@@ -161,11 +162,20 @@ export default function Header() {
                         </SheetContent2>
                       </Sheet2>
                     </div>
-                    <div className="mx-auto">
-                      <Link href="#">
-                        <TextCrossOver color="white">Profile</TextCrossOver>
-                      </Link>
-                    </div>
+                    {loggedIn && (
+                      <div className="mx-auto">
+                        <Link href={`/profile`}>
+                          <TextCrossOver color="white">Profile</TextCrossOver>
+                        </Link>
+                      </div>
+                    )}
+                    {loggedIn && (
+                      <div className="mx-auto">
+                        <Link href={`/list`}>
+                          <TextCrossOver color="white">My Lists</TextCrossOver>
+                        </Link>
+                      </div>
+                    )}
                     <div className="mx-auto">
                       {loggedIn && (
                         <div

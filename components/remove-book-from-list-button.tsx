@@ -14,26 +14,34 @@ interface RemoveBookFromListButtonProps {
   listId: string;
   bookId: string;
   listName: string;
-  bookName: string;
+  bookTitle: string;
+  setRefresh: (state: boolean) => void;
 }
 const RemoveBookFromListButton = ({
   listId,
   listName,
   bookId,
-  bookName,
+  bookTitle,
+  setRefresh,
 }: RemoveBookFromListButtonProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   return (
     <>
-      <Button variant={"destructive"} onClick={() => setIsOpen(true)}>
+      <Button
+        variant={"destructive"}
+        onClick={(e) => {
+          e.stopPropagation();
+          setIsOpen(true);
+        }}
+      >
         Remove
       </Button>
       <Dialog open={isOpen} onOpenChange={() => setIsOpen(false)}>
         <DialogContent>
           <DialogHeader>
             <DialogTitle className="text-center text-xl">
-              Are you sure to remove {bookName} from {listName} ?
+              Are you sure to remove {bookTitle} from {listName} ?
             </DialogTitle>
           </DialogHeader>
           <DialogFooter>
@@ -45,6 +53,7 @@ const RemoveBookFromListButton = ({
                 await axios.delete(`/api/list/${listId}/book/${bookId}`);
                 setLoading(false);
                 setIsOpen(false);
+                setRefresh(true);
               }}
             >
               Delete

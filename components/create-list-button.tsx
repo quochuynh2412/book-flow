@@ -20,18 +20,25 @@ import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useAuth } from "@/hooks/useAuth";
+import { Plus } from "lucide-react";
 import * as z from "zod";
 import axios from "axios";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
   bookListName: z.string().min(2).max(50),
 });
 
-const CreateBookListButton = () => {
+interface CreateBookListButtonProps {
+  setRefresh: (state: boolean) => void;
+}
+
+const CreateBookListButton = ({ setRefresh }: CreateBookListButtonProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const { loggedIn } = useAuth();
+  const router = useRouter();
   const handleClose = () => {
     setIsOpen(false);
     form.reset();
@@ -50,12 +57,18 @@ const CreateBookListButton = () => {
       ...values,
     });
     setLoading(false);
+    setRefresh(true);
     handleClose();
   };
 
   return (
     <>
-      <Button onClick={() => setIsOpen(true)}>Create a book list</Button>
+      <span
+        onClick={() => setIsOpen(true)}
+        className="font-semibold text-xl cursor-pointer"
+      >
+        <Plus />
+      </span>
       <Dialog open={isOpen} onOpenChange={handleClose}>
         <DialogContent>
           {!loggedIn && (

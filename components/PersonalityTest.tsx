@@ -100,8 +100,8 @@ export default function PersonalityTest() {
     // wait/sleep
     // await new Promise(r => setTimeout(r, 100000));
 
-    // const stagingQuery = "https://ekaterina2.pythonanywhere.com/question/" + question;
-    const stagingQuery = "https://ekaterina2.pythonanywhere.com/"
+    const stagingQuery = "https://ekaterina2.pythonanywhere.com/question/" + question;
+    // const stagingQuery = "https://ekaterina2.pythonanywhere.com/"
 
     // toast({
     //   title: "Our AI is thinking ...",

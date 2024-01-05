@@ -20,7 +20,8 @@ export default function RootLayout({
   return (
     <html lang="en">
 
-      <body className={`${roboto.variable} font-roboto min-h-screen`}>
+      <body className={`${roboto.className} min-h-screen`}>
+        <LoadSession />
         <Head>
           <link rel="preconnect" href="https://fonts.googleapis.com"></link>
           <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin=""></link>
@@ -29,7 +30,6 @@ export default function RootLayout({
         <main>
           {children}</main>
         <Toaster />
-        <LoadSession />
       </body>
       <Script src="https://polyfill.io/v3/polyfill.min.js?features=default%2CArray.prototype.find%2CArray.prototype.includes%2CPromise%2CObject.assign%2CObject.entries"></Script>
     </html>

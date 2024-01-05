@@ -23,6 +23,7 @@ export async function POST(
     const userId = (await auth().verifySessionCookie(session, true)).uid;
     const searchParams = req.nextUrl.searchParams;
     const note = searchParams.get("note");
+    const title = searchParams.get("title");
     // Check if the list with the given id belongs to the authenticated user
     const listRef = doc(db, "list", params.id);
     const listSnap = await getDoc(listRef);
@@ -40,6 +41,7 @@ export async function POST(
     const bookObject = {
       bookId: params.bookId,
       note,
+      title,
     };
 
     await updateDoc(listRef, {
@@ -85,9 +87,10 @@ export async function DELETE(
     }
 
     await updateDoc(listRef, {
-      books: arrayRemove(params.bookId),
+      books: arrayRemove(
+        listData.books.find((book: any) => book.bookId === params.bookId)
+      ),
     });
-
     return NextResponse.json(
       { message: "Book removed successfully" },
       { status: 200 }

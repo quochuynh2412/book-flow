@@ -118,9 +118,9 @@ export default function Page({ params }: { params: { id: string } }) {
                       <Image src={'/svg/star.svg'} alt="Star" width={20} height={20} className="rounded h-fit my-auto"></Image>
                       <span className="text-base font-semibold">{rating}</span>
                     </div>
-                  </div >
+                  </div>
                   <div className="text-indigo-950 text-base font-normal flex flex-row gap-2 mb-16">
-                    <AddBookToListButton bookId={book.id} />
+                    <AddBookToListButton bookId={book.id} bookTitle={book.title} />
                   </div>
                   <Tabs defaultValue="author" className="w-full">
                     <TabsList className="mb-4 font-serif bg-neutral-100 rounded-full p-1 h-auto">
