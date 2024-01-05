@@ -9,6 +9,9 @@ import Footer from "@/components/Footer";
 import BookCard from "@/components/BookCard";
 import PersonalityTest from "@/components/PersonalityTest";
 
+import Lottie from "lottie-react";
+import lineAnimation from '@/public/svg/line.json'
+
 import bg1 from "@/public/img/bg1.png";
 
 export default function Page() {
@@ -68,18 +71,24 @@ export default function Page() {
   return (
     <div >
       <Header />
-      <div className="h-80 flex shadow-inner border bg-cover bg-no-repeat bg-center bg-blend-multiply bg-neutral-400" style={{ backgroundImage: `url(${bg1.src})` }}>
+      <div className="h-80 flex shadow-inner border bg-cover bg-no-repeat bg-center bg-blend-multiply bg-neutral-600" style={{ backgroundImage: `url(${bg1.src})` }}>
         <div className="m-auto">
           <p className="text-center font-light text-white mb-2">User Profile</p>
-          <h1 className="text-4xl md:text-6xl font-semibold text-white mb-3">{user && user["name"]}</h1>
+          <h1 className="text-4xl md:text-6xl m-auto text-white font-serif z-0 relative">
+            <Lottie animationData={lineAnimation} loop={true} className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -z-10 -translate-y-1/2 h-auto w-full " />
+            {user && user["name"]}
+          </h1>
         </div>
       </div>
       <div className="min-h-screen">
-        <PersonalityTest />
+        <div className="mx-auto py-16 px-12 lg:max-w-7xl lg:px-8">
+          <h2 className="text-2xl font-serif text-title-gray md:text-3xl text-center mb-8 md:mb-12 font-light border-b border-neutral-300 pb-5">Personality Test</h2>
+          <PersonalityTest />
+        </div>
         {
           hasPreferredGenre ? (
-            <div className="mx-auto py-16 px-12 lg:max-w-7xl lg:px-8">
-              <h2 className="text-3xl md:text-5xl text-center mb-8 md:mb-12 font-light border-b-2 border-neutral-300 pb-5">You may also like</h2>
+            <div className="mx-auto py-16 px-12 lg:max-w-7xl lg:px-8 font-serif">
+              <h2 className="text-2xl font-serif text-title-gray md:text-3xl text-center mb-8 md:mb-12 font-light border-b border-neutral-300 pb-5">You may also like</h2>
               <div className="gap-4 lg:gap-12 grid grid-cols-3 md:grid-cols-6">
                 {preferredGenre1 && preferredGenre1.map((book) => (
                   <BookCard key={book.id} book={book} />
@@ -93,8 +102,8 @@ export default function Page() {
               </div>
             </div>
           ) : (
-            <div className="mx-auto py-16 px-12 lg:max-w-7xl lg:px-8">
-              <h2 className="text-3xl md:text-5xl text-center mb-8 md:mb-12 font-light border-b-2 border-neutral-300 pb-5">You have no preferred genre</h2>
+            <div className="mx-auto py-16 px-12 lg:max-w-7xl lg:px-8 font-serif">
+              <h2 className="text-2xl font-serif text-title-gray md:text-3xl text-center mb-8 md:mb-12 font-light border-b border-neutral-300 pb-5">You have no preferred genre</h2>
             </div>
           )
         }
