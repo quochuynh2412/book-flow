@@ -16,7 +16,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { Genre } from "@/types/interfaces";
 import { signOut } from "firebase/auth";
 import { auth } from "@/lib/firebase";
-import BookCard from "./BookCard";
+import BookCardForAlgolia from "./BookCardForAlgolia";
 import books from "@/lib/json/book.json"
 import algoliasearch from 'algoliasearch';
 import Lottie from "lottie-react";
@@ -74,7 +74,7 @@ export default function Search() {
     const Hit: React.FC<HitProps> = ({ hit }) => {
         const book = originalBooks.find((book) => book.objectID === hit.objectID) as OriginalBook;
         return (
-            <BookCard book={book} />
+            <BookCardForAlgolia book={book} />
         )
     }
     return (

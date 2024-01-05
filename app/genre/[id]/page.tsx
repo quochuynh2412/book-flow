@@ -1,7 +1,7 @@
 "use client"
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import BookCard from "@/app/search/BookCard";
+import BookCardForAlgolia from "@/app/search/BookCardForAlgolia";
 import {
   InstantSearch,
   Hits,
@@ -33,7 +33,7 @@ interface HitProps {
 const Hit: React.FC<HitProps> = ({ hit }) => {
   const book = originalBooks.find((book) => book.objectID === hit.objectID) as OriginalBook;
   return (
-    <BookCard book={book} />
+    <BookCardForAlgolia book={book} />
   )
 }
 const future = { preserveSharedStateOnUnmount: true };

@@ -26,9 +26,9 @@ import {
 interface HitProps {
   hit: {
     objectID: string;
-    author: string;
+    author: string[];
     title: string;
-    genre: string;
+    genre: string[];
   };
 }
 export default function Header() {
@@ -59,8 +59,12 @@ export default function Header() {
   const Hit: React.FC<HitProps> = ({ hit }) => {
     return (
       <Link href={`/book/${hit.objectID}`}>
-        <div key={hit.objectID} className="px-4 py-2 hover:bg-gray-100 hover:cursor-pointer flex flex-row items-center">
-          {hit.title} <span className="ml-2 text-xs text-gray-700">{hit.author}</span>
+        <div key={hit.objectID} className="px-4 py-2 hover:bg-gray-100 hover:cursor-pointer flex flex-row items-center font-light">
+          {hit.title} <span className="ml-2 text-xs text-gray-700">{hit.author.map((a, index) =>
+            <React.Fragment key={index}>
+              {index === 0 ? "" : ", "}
+              {a}
+            </React.Fragment>)}</span>
         </div>
       </Link>
     )

@@ -10,14 +10,45 @@ import Review from "./Review"
 import TextCrossOver from "@/components/TextCrossOver";
 
 import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 import AddBookToListButton from "../../../components/add-book-to-list-button";
+import { searchClient } from "@/lib/algolia";
+import books from "@/lib/json/book.json";
+
+import BookCard from "@/components/BookCard";
+
+const index = searchClient.initIndex("dev_BOOKFLOW");
+
 export default function Page({ params }: { params: { id: string } }) {
   const [book, setBook] = useState<Book | null>(null);
+  const [similarBooks, setSimilarBooks] = useState<Book[]>([]);
   useEffect(() => {
     async function fetchBook(id: string) {
       const response = await fetch(`/api/book?id=${id}`, { cache: "no-store" });
       const bookJson: Book = await response.json();
       setBook(bookJson);
+      fetchSimilarBooks(id);
+    }
+    async function fetchSimilarBooks(id: string) {
+      const book = books.find((book) => book.objectID === id);
+      const queryTerm = book?.genre.map((genre) => genre).join(" ") + " " + book?.author.map((author) => author).join(" ");
+      console.log(queryTerm);
+      index.search('', {
+        similarQuery: queryTerm,
+        filters: `NOT objectID:${id}`,
+        removeWordsIfNoResults: 'allOptional',
+      }).then(({ hits }) => {
+        console.log(hits);
+        hits.slice(0, 6).map(async (hit) => {
+          const response = await fetch(`/api/book?id=${hit.objectID}`, {
+            method: "GET",
+            cache: "no-store",
+          });
+          const bookJson: Book = await response.json();
+          setSimilarBooks((similarBooks) => [...similarBooks, bookJson]);
+        }
+        );
+      });
     }
     fetchBook(params.id);
   }, []);
@@ -99,7 +130,7 @@ export default function Page({ params }: { params: { id: string } }) {
                     <div className="border border-neutral-300 p-4 rounded-xl">
                       <TabsContent
                         value="author"
-                        className="max-h-[320px] overflow-scroll flex flex-col gap-4"
+                        className="max-h-[320px] overflow-scroll flex flex-col gap-4 data-[state=inactive]:hidden"
                       >
                         {book?.authors.map((author, index) => (
                           <>
@@ -128,7 +159,7 @@ export default function Page({ params }: { params: { id: string } }) {
                       </TabsContent>
                       <TabsContent
                         value="description"
-                        className="max-h-[350px] overflow-scroll flex flex-col gap-4"
+                        className="max-h-[350px] overflow-scroll flex flex-col gap-4 data-[state=inactive]:hidden"
                       >
                         <div className="font-base font-light">{book?.description}</div>
                       </TabsContent>
@@ -149,10 +180,16 @@ export default function Page({ params }: { params: { id: string } }) {
             <Review bookID={params.id} />
           </div>
           <div>
-            <div className="text-2xl font-bold my-10">Similar Books</div>
+            <div className="text-3xl font-bold mt-20 mb-10 border-b pb-2 border-neutral-300 font-serif text-title-gray">Similar Books</div>
+            <div className="gap-4 lg:gap-8 grid grid-cols-3 md:grid-cols-6 lg:max-w-7xl mx-auto px-12 lg:px-8">
+              {similarBooks.slice(0, 6).map((book, index) => (
+                <BookCard key={index} book={book} />
+              ))}
+            </div>
           </div>
         </div>
       </main>
+      <Footer />
     </>
   );
 }
