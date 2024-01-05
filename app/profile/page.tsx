@@ -68,14 +68,60 @@ export default function Page() {
   return (
     <div >
       <Header />
-      <div className="h-80 flex shadow-inner border bg-cover bg-no-repeat bg-center bg-blend-multiply bg-neutral-400" style={{ backgroundImage: `url(${bg1.src})` }}>
-        <div className="m-auto">
-          <p className="text-center font-light text-white mb-2">User Profile</p>
-          <h1 className="text-4xl md:text-6xl font-semibold text-white mb-3">{user && user["name"]}</h1>
-        </div>
-      </div>
+      {
+        // display diffrent border color based on score value
+        user && user["score"] <= 2 ? (
+          <>
+            <div className="h-80 flex shadow-inner bg-cover bg-no-repeat bg-center bg-blend-multiply bg-neutral-400 border-solid border-8 border-neutral-400" style={{ backgroundImage: `url(${bg1.src})` }}>
+              <div className="m-auto">
+                <p className="text-center font-light text-white mb-2">User Profile</p>
+                <h1 className="text-4xl md:text-6xl font-semibold text-white mb-3">{user && user["name"]}</h1>
+                {
+                  // if user does not contain score field
+                  !user || !user["score"] ? (
+                    <>
+                      <p className="text-center font-light text-white mb-2">Score</p>
+                      <p className="text-center font-light text-white mb-2">-1</p>
+                      </>
+                  ) : (
+                    <>
+                      <p className="text-center font-light text-white mb-2">Score</p>
+                      <p className="text-center font-light text-white mb-2">{user["score"]}</p>
+                    </>
+                  )
+                }
+              </div>
+            </div>
+          </>
+        ) : (
+          <>
+            <div className="h-80 flex shadow-inner bg-cover bg-no-repeat bg-center bg-blend-multiply bg-neutral-400 border-solid border-8 border-yellow-300" style={{ backgroundImage: `url(${bg1.src})` }}>
+              <div className="m-auto">
+                <p className="text-center font-light text-white mb-2">User Profile</p>
+                <h1 className="text-4xl md:text-6xl font-semibold text-white mb-3">{user && user["name"]}</h1>
+                {
+                  // if user does not contain score field
+                  !user || !user["score"] ? (
+                    <>
+                      <p className="text-center font-light text-white mb-2">Score</p>
+                      <p className="text-center font-light text-white mb-2">-1</p>
+                      </>
+                  ) : (
+                    <>
+                      <p className="text-center font-light text-white mb-2">Score</p>
+                      <p className="text-center font-light text-white mb-2">{user["score"]}</p>
+                    </>
+                  )
+                }
+              </div>
+            </div>
+          </>
+        )
+      }
       <div className="min-h-screen">
-        <PersonalityTest />
+        <div className="mx-auto py-16 px-12 lg:max-w-7xl lg:px-8">
+          <PersonalityTest />
+        </div>
         {
           hasPreferredGenre ? (
             <div className="mx-auto py-16 px-12 lg:max-w-7xl lg:px-8">

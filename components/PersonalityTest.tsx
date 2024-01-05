@@ -25,7 +25,6 @@ import {
 import { Input } from "@/components/ui/input"
 
 import { toast } from "@/components/ui/use-toast"
-import { Skeleton } from "@/components/ui/skeleton";
 
 const formSchema = z.object({
   'question-1': z.string().min(10).max(1000)
@@ -100,8 +99,8 @@ export default function PersonalityTest() {
     // wait/sleep
     // await new Promise(r => setTimeout(r, 100000));
 
-    const stagingQuery = "https://ekaterina2.pythonanywhere.com/question/" + question;
-    // const stagingQuery = "https://ekaterina2.pythonanywhere.com/"
+    // const stagingQuery = "https://ekaterina2.pythonanywhere.com/question/" + question;
+    const stagingQuery = "https://ekaterina2.pythonanywhere.com/"
 
     // toast({
     //   title: "Our AI is thinking ...",

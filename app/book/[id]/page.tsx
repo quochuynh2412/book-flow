@@ -12,6 +12,7 @@ import TextCrossOver from "@/components/TextCrossOver";
 
 import Header from "@/components/Header";
 import AddBookToListButton from "../../../components/add-book-to-list-button";
+import Quiz from "@/components/Quiz";
 export default function Page({ params }: { params: { id: string } }) {
   const [book, setBook] = useState<Book | null>(null);
   useEffect(() => {
@@ -139,9 +140,17 @@ export default function Page({ params }: { params: { id: string } }) {
           <div>
             <Review bookID={params.id} />
           </div>
-          <div>
-            <div className="text-2xl font-bold my-10">Similar Books</div>
-          </div>
+          {
+            // if not null
+            book?.description ? (
+              <div>
+                <div className="text-2xl font-bold my-10">Knowledge Quiz</div>
+                <Quiz description={book.description} />
+              </div>
+            ) : (
+              <></>
+            )
+          }
         </div>
       </main>
     </>
