@@ -8,15 +8,19 @@ import { Book } from "@/types/interfaces";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import BookCard from "@/components/BookCard";
+import ReviewCard from "../book/[id]/ReviewCard";
 import PersonalityTest from "@/components/PersonalityTest";
 
 import Lottie from "lottie-react";
-import lineAnimation from '@/public/svg/line.json'
+import lineAnimation from '@/public/svg/line.json';
 
 import bg1 from "@/public/img/bg1.png";
 
 export default function Page() {
   const [user, setUser] = useState(null);
+  const [userId, setUserId] = useState(null);
+  const [reviews, setReviews] = useState<any[]>([]);
+  const [visibleReviews, setVisibleReviews] = useState<number>(2);
   const [hasPreferredGenre, setHasPreferredGenre] = useState(false);
   const [preferredGenre1, setPreferredGenre1] = useState<Book[]>([]);
   const [preferredGenre2, setPreferredGenre2] = useState<Book[]>([]);
@@ -29,7 +33,6 @@ export default function Page() {
       }).then(async (response) => {
         const data = await response.json();
         setUser(data);
-        console.log(await auth.currentUser?.uid);
 
         // users might not have any preferred genre
         if (data["preferredGenre"] === undefined) {
@@ -67,8 +70,41 @@ export default function Page() {
       });
     }
 
+    async function fetchReviews() {
+      const user = await new Promise((resolve) => {
+        const unsubscribe = auth.onAuthStateChanged((user) => {
+          unsubscribe();
+          resolve(user);
+        });
+      });
+    
+      if (!user) {
+        console.error("User not authenticated");
+        return;
+      }
+    
+      const userId = (user as any).uid;
+
+      await fetch(`/api/review?userID=${userId}`, {
+        method: "GET",
+      }).then(async (response) => {
+        const data = await response.json();
+        setReviews(data);
+      }).catch(error => {
+        console.error("Failed to fetch genre description:", error)
+      });
+    }
+
     fetchUser();
+    fetchReviews();
   }, []);
+
+  const noReviewsMessage = <div className="border rounded-lg text-gray-500 border-neutral-300 flex-1 py-[121px] text-center">You don&apos;t have any reviews</div>
+
+  const showMoreReviews = () => {
+    // Increase the number of visible reviews by 3, up to the total number of reviews
+    setVisibleReviews(prev => Math.min(prev + 2, reviews.length));
+  };
 
   return (
     <div >
@@ -104,7 +140,30 @@ export default function Page() {
             </div>
         )
       }
-      <div className="min-h-screen">
+      <div >
+        <div className="mx-auto py-16 px-12 lg:max-w-7xl lg:px-8 font-serif">
+          <h2 className="text-2xl font-serif text-title-gray md:text-3xl text-center mb-8 md:mb-12 font-light border-b border-neutral-300 pb-5">Reviewed books</h2>
+          <div className="gap-4 lg:gap-12 md:flex">
+            <div className="w-72 mb-10">
+              <div className="border border-neutral-300 p-4 rounded-md sticky top-10">
+
+              </div>
+            </div>
+            {
+              reviews && reviews.length === 0 ? noReviewsMessage :
+              <div className="flex-1">
+                {reviews.slice(0, visibleReviews).map((review, index) => (
+                  <ReviewCard key={index} review={review} />
+                ))}
+                {visibleReviews < reviews.length && (
+                  <div className="flex">
+                    <button onClick={showMoreReviews} className="mx-auto px-10 text-white bg-neutral-700 hover:bg-neutral-800 focus:ring-4 focus:outline-none focus:ring-neutral-300 font-medium rounded-lg text-sm py-2.5 text-center dark:bg-neutral-600 dark:hover:bg-neutral-700 dark:focus:ring-neutral-800">Show More</button>
+                  </div>
+                )}
+              </div>
+            }
+          </div>
+        </div>
         {
           hasPreferredGenre ? (
             <div className="mx-auto py-16 px-12 lg:max-w-7xl lg:px-8 font-serif">
