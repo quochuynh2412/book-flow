@@ -1,7 +1,7 @@
 "use client"
 
 // firebase
-import { collection, doc, addDoc, updateDoc, getDoc, getDocs } from "firebase/firestore";
+import { collection, doc, updateDoc, getDoc, getDocs } from "firebase/firestore";
 import { auth } from "@/lib/firebase";
 import { db } from "@/lib/firebase";
 
@@ -204,22 +204,22 @@ export default function PersonalityTest() {
             </>
           ) : (
             <div className="flex flex-col justify-center items-center space-y-6">
-              <div className="md:text-lg lg:text-2xl font-bold">We think you may like ...</div>
+              <div className="md:text-lg lg:text-2xl font-bold font-serif">We think you may like ...</div>
               <div className="space-y-1">
                 {
                   userGenres.map((genre, index) => {
                     return (
                       <div key={index}>
-                        <span>{genre.split("@")[0]}</span>
-                        <span> with a confidence of {parseFloat(genre.split("@")[1]).toFixed(2)}</span>
+                        <span className="font-serif">{genre.split("@")[0]}</span>
+                        <span className="font-serif"> with a confidence of {parseFloat(genre.split("@")[1]).toFixed(2)}</span>
                       </div>
                     )
                   })
                 }
-                <div className="text-green-500">Your preferences have been saved</div>
+                {/* <div className="text-green-500">Your preferences have been saved</div> */}
               </div>
               <div>
-                <Button onClick={() => setFormDisabled(false)} className="w-40 h-auto">Retake</Button>
+                <Button onClick={() => setFormDisabled(false)} className="rounded-full hover:bg-rose-900 bg-rose-800 font-serif px-12 text-md">Retake</Button>
               </div>
             </div>
           )}
@@ -239,7 +239,7 @@ export default function PersonalityTest() {
                         <FormItem className="space-y-6">
                           <FormLabel className="font-serif text-title-gray text-md">{question.question}</FormLabel>
                           <FormControl>
-                            <Input placeholder="Your answer" className="rounded-full py-6 px-6 text-base font-light focus-visible:ring-rose-800" {...field} />
+                            <Input placeholder="Your answer" className="rounded-full py-6 px-6 text-base font-light focus-visible:ring-rose-800 font-serif" {...field} />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
