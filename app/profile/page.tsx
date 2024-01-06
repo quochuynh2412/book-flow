@@ -20,9 +20,7 @@ import bg1 from "@/public/img/bg1.png";
 
 export default function Page() {
   const [user, setUser] = useState(null);
-  const [userId, setUserId] = useState(null);
   const [reviews, setReviews] = useState<any[]>([]);
-  const [visibleReviews, setVisibleReviews] = useState<number>(2);
   const [showScore, setShowScore] = useState([true, true, true, true, true]);
   const [sortBy, setSortBy] = useState('mostRecent');
   const [hasPreferredGenre, setHasPreferredGenre] = useState(false);
@@ -119,10 +117,6 @@ export default function Page() {
     });
   };
 
-  const showMoreReviews = () => {
-    // Increase the number of visible reviews by 2
-    setVisibleReviews(prev => prev + 2);
-  };
   return (
     <div >
       <Header />
