@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { auth } from "@/lib/firebase";
+import Link from "next/link";
 
 import { Book } from "@/types/interfaces";
 
@@ -13,6 +14,7 @@ import PersonalityTest from "@/components/PersonalityTest";
 
 import Lottie from "lottie-react";
 import lineAnimation from '@/public/svg/line.json';
+import { StarGenerator } from "@/components/Icons/Star";
 
 import bg1 from "@/public/img/bg1.png";
 
@@ -21,6 +23,7 @@ export default function Page() {
   const [userId, setUserId] = useState(null);
   const [reviews, setReviews] = useState<any[]>([]);
   const [visibleReviews, setVisibleReviews] = useState<number>(2);
+  const [showScore, setShowScore] = useState([true, true, true, true, true]);
   const [hasPreferredGenre, setHasPreferredGenre] = useState(false);
   const [preferredGenre1, setPreferredGenre1] = useState<Book[]>([]);
   const [preferredGenre2, setPreferredGenre2] = useState<Book[]>([]);
@@ -101,6 +104,14 @@ export default function Page() {
 
   const noReviewsMessage = <div className="border rounded-lg text-gray-500 border-neutral-300 flex-1 py-[121px] text-center">You don&apos;t have any reviews</div>
 
+  const handleCheckboxChange = (index: number) => {
+    setShowScore((prevShowScore) => {
+      const newShowScore = [...prevShowScore];
+      newShowScore[index] = !newShowScore[index];
+      return newShowScore;
+    });
+  };
+
   const showMoreReviews = () => {
     // Increase the number of visible reviews by 3, up to the total number of reviews
     setVisibleReviews(prev => Math.min(prev + 2, reviews.length));
@@ -142,24 +153,42 @@ export default function Page() {
       }
       <div >
         <div className="mx-auto py-16 px-12 lg:max-w-7xl lg:px-8 font-serif">
-          <h2 className="text-2xl font-serif text-title-gray md:text-3xl text-center mb-8 md:mb-12 font-light border-b border-neutral-300 pb-5">Reviewed books</h2>
-          <div className="gap-4 lg:gap-12 md:flex">
-            <div className="w-72 mb-10">
-              <div className="border border-neutral-300 p-4 rounded-md sticky top-10">
-
+          <h2 className="text-2xl font-serif text-title-gray md:text-3xl text-center mb-8 md:mb-12 font-light border-b border-neutral-300 pb-5">My Reviews</h2>
+          <div className="gap-4 lg:gap-8 md:flex">
+            <div className="w-full md:w-72 mb-14">
+              <div className="border border-neutral-300 rounded-md sticky top-10">
+                <div className="p-4 border-b border-neutral-300 bg-neutral-100">
+                  <h2 className="text-lg">Filter Reviews</h2>
+                </div>
+                <div className="p-4">
+                {[5, 4, 3, 2, 1].map((score, index) => (
+                  <label key={score} htmlFor={`${score}star`} className="flex gap-4 mb-4 mt-2">
+                    <input
+                      id={`${score}star`}
+                      type="checkbox"
+                      checked={showScore[4 - index]}
+                      onChange={() => handleCheckboxChange(4 - index)}
+                    />
+                    <StarGenerator size={5} score={score} />
+                    <span className="ais-RefinementList-count text-xs text-neutral-500 bg-neutral-200 px-2 py-1 rounded-full">22</span>
+                  </label>
+                ))}
+                </div>
               </div>
             </div>
             {
               reviews && reviews.length === 0 ? noReviewsMessage :
               <div className="flex-1">
-                {reviews.slice(0, visibleReviews).map((review, index) => (
-                  <ReviewCard key={index} review={review} />
-                ))}
-                {visibleReviews < reviews.length && (
-                  <div className="flex">
-                    <button onClick={showMoreReviews} className="mx-auto px-10 text-white bg-neutral-700 hover:bg-neutral-800 focus:ring-4 focus:outline-none focus:ring-neutral-300 font-medium rounded-lg text-sm py-2.5 text-center dark:bg-neutral-600 dark:hover:bg-neutral-700 dark:focus:ring-neutral-800">Show More</button>
-                  </div>
-                )}
+                {reviews.map((review, index) => {
+                  if (showScore[review.rating - 1]) { // Check if the score checkbox is checked
+                    return (
+                      <Link key={index} href={`/book/${review.bookID}`}>
+                        <ReviewCard review={review} />
+                      </Link>
+                    );
+                  }
+                  return null; // Skip reviews with unchecked score
+                })}
               </div>
             }
           </div>

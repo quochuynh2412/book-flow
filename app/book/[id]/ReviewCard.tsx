@@ -57,7 +57,7 @@ export default function ReviewCard({review} : {review : any}) {
                     <h3 className="ms-2 text-sm font-semibold text-gray-900 dark:text-white">{review["title"]}</h3>
                 </div>
                 <p className={`mb-2 text-gray-500 dark:text-gray-400 ${isExpanded ? "" : "line-clamp-2"}`}>{review["content"]}</p>
-                <p onClick={toggleReadMore} className="block mb-5 text-sm font-medium text-blue-600 hover:underline dark:text-blue-500">{isExpanded ? "Hide" : "Read more"}</p>
+                <p onClick={toggleReadMore} className="block mb-5 text-sm font-medium text-blue-600 hover:underline dark:text-blue-500">{isExpanded ? "Show less" : "Show more"}</p>
                 <aside>
                     {user && review["helpful"].includes(user.uid) ? (
                         <div>
@@ -73,12 +73,6 @@ export default function ReviewCard({review} : {review : any}) {
                         >
                             {user && review["helpful"].includes(user.uid) ? "Unhelpful" : "Helpful"}
                         </button>
-                        <a
-                            href="#"
-                            className="ps-4 text-sm font-medium text-blue-600 hover:underline dark:text-blue-500 border-gray-200 ms-4 border-s md:mb-0 dark:border-gray-600"
-                        >
-                            Report abuse
-                        </a>
                     </div>
                 </aside>
             </article>
