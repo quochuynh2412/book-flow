@@ -35,7 +35,7 @@ export default function Page() {
         setUser(data);
 
         // users might not have any preferred genre
-        if (data["preferredGenre"] === undefined) {
+        if (data["preferredGenre"] === undefined || data["preferredGenre"].length === 0) {
           setHasPreferredGenre(false);
           return;
         } else {

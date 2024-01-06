@@ -26,6 +26,8 @@ import { Input } from "@/components/ui/input"
 
 import { toast } from "@/components/ui/use-toast"
 
+import genres from "@/lib/json/genre.json";
+
 const formSchema = z.object({
   'question-1': z.string().min(10).max(1000)
 })
@@ -97,40 +99,85 @@ export default function PersonalityTest() {
     setFormDisabled(true);
 
     // wait/sleep
-    // await new Promise(r => setTimeout(r, 100000));
+    await new Promise(r => setTimeout(r, 1000));
 
     // const stagingQuery = "https://ekaterina2.pythonanywhere.com/question/" + question;
-    const stagingQuery = "https://ekaterina2.pythonanywhere.com/"
-
-    // toast({
-    //   title: "Our AI is thinking ...",
-    //   description: (
-    //     <>
-    //       {/* <div>{stagingQuery}</div> */}
-    //       <div>Check back in a few minutes</div>
-    //     </>
-    //   ),
-    // })
+    // const stagingQuery = "https://ekaterina2.pythonanywhere.com/"
 
     setUserGenres([]);
 
-    await fetch(stagingQuery, {
-      method: "GET",
-    }).then(async (response) => {
-      const data = await response.json();
+    // await fetch(stagingQuery, {
+    //   method: "GET",
+    // }).then(async (response) => {
+    //   const data = await response.json();
 
-      // changed from data.length to 3
-      for (let i = 0; i < 3; i++) {
-        const genre = data[i][0] + "@" + data[i][1];
-        await setUserGenres((userGenres) => [...userGenres, genre]);
-      }
+    //   // changed from data.length to 3
+    //   for (let i = 0; i < 3; i++) {
+    //     const genre = data[i][0] + "@" + data[i][1];
+    //     await setUserGenres((userGenres) => [...userGenres, genre]);
+    //   }
 
-    }).catch(error => {
-      console.error("Failed to fetch recommendation genres:", error)
-    });
+    // }).catch(error => {
+    //   console.error("Failed to fetch recommendation genres:", error)
+    // });
 
     // enable the form
     // setFormDisabled(false);
+
+    // comapre the similarity between genres and question using Levenshtein distance
+    let similarityArray: string[] = [];
+    for (let i = 0; i < genres.length; i++) {
+      similarityArray.push(genres[i].name + "@" + similarity(question, genres[i].name));
+    }
+
+    // sort the array
+    similarityArray.sort((a, b) => {
+      return parseFloat(b.split("@")[1]) - parseFloat(a.split("@")[1]);
+    });
+
+    await setUserGenres((userGenres) => [...userGenres, similarityArray[0], similarityArray[1], similarityArray[2]]);
+  }
+
+  function similarity(s1: string, s2: string) {
+    var longer = s1;
+    var shorter = s2;
+    if (s1.length < s2.length) {
+      longer = s2;
+      shorter = s1;
+    }
+    var longerLength = longer.length;
+    if (longerLength == 0) {
+      return 1.0;
+    }
+    return (longerLength - editDistance(longer, shorter)) / parseFloat(longerLength);
+  }
+
+
+  function editDistance(s1: string, s2: string) {
+    s1 = s1.toLowerCase();
+    s2 = s2.toLowerCase();
+  
+    var costs = new Array();
+    for (var i = 0; i <= s1.length; i++) {
+      var lastValue = i;
+      for (var j = 0; j <= s2.length; j++) {
+        if (i == 0)
+          costs[j] = j;
+        else {
+          if (j > 0) {
+            var newValue = costs[j - 1];
+            if (s1.charAt(i - 1) != s2.charAt(j - 1))
+              newValue = Math.min(Math.min(newValue, lastValue),
+                costs[j]) + 1;
+            costs[j - 1] = lastValue;
+            lastValue = newValue;
+          }
+        }
+      }
+      if (i > 0)
+        costs[s2.length] = lastValue;
+    }
+    return costs[s2.length];
   }
 
 
@@ -211,7 +258,7 @@ export default function PersonalityTest() {
                     return (
                       <div key={index}>
                         <span className="font-serif">{genre.split("@")[0]}</span>
-                        <span className="font-serif"> with a confidence of {parseFloat(genre.split("@")[1]).toFixed(2)}</span>
+                        {/* <span className="font-serif"> with a confidence of {parseFloat(genre.split("@")[1]).toFixed(2)}</span> */}
                       </div>
                     )
                   })
