@@ -24,10 +24,17 @@ export default function Page() {
   const [reviews, setReviews] = useState<any[]>([]);
   const [visibleReviews, setVisibleReviews] = useState<number>(2);
   const [showScore, setShowScore] = useState([true, true, true, true, true]);
+  const [sortBy, setSortBy] = useState('mostRecent');
   const [hasPreferredGenre, setHasPreferredGenre] = useState(false);
   const [preferredGenre1, setPreferredGenre1] = useState<Book[]>([]);
   const [preferredGenre2, setPreferredGenre2] = useState<Book[]>([]);
   const [preferredGenre3, setPreferredGenre3] = useState<Book[]>([]);
+
+  const sortOptions = [
+    { value: 'mostRecent', label: 'Most Recent' },
+    { value: 'mostHelpful', label: 'Most Helpful' },
+    { value: 'highestRating', label: 'Highest Rating' },
+  ];
 
   useEffect(() => {
     async function fetchUser() {
@@ -113,10 +120,9 @@ export default function Page() {
   };
 
   const showMoreReviews = () => {
-    // Increase the number of visible reviews by 3, up to the total number of reviews
-    setVisibleReviews(prev => Math.min(prev + 2, reviews.length));
+    // Increase the number of visible reviews by 2
+    setVisibleReviews(prev => prev + 2);
   };
-
   return (
     <div >
       <Header />
@@ -155,31 +161,64 @@ export default function Page() {
         <div className="mx-auto py-16 px-12 lg:max-w-7xl lg:px-8 font-serif">
           <h2 className="text-2xl font-serif text-title-gray md:text-3xl text-center mb-8 md:mb-12 font-light border-b border-neutral-300 pb-5">My Reviews</h2>
           <div className="gap-4 lg:gap-8 md:flex">
-            <div className="w-full md:w-72 mb-14">
+            <div className="w-full md:w-72 mb-4">
               <div className="border border-neutral-300 rounded-md sticky top-10">
                 <div className="p-4 border-b border-neutral-300 bg-neutral-100">
                   <h2 className="text-lg">Filter Reviews</h2>
                 </div>
                 <div className="p-4">
-                {[5, 4, 3, 2, 1].map((score, index) => (
-                  <label key={score} htmlFor={`${score}star`} className="flex gap-4 mb-4 mt-2">
-                    <input
-                      id={`${score}star`}
-                      type="checkbox"
-                      checked={showScore[4 - index]}
-                      onChange={() => handleCheckboxChange(4 - index)}
-                    />
-                    <StarGenerator size={5} score={score} />
-                    <span className="ais-RefinementList-count text-xs text-neutral-500 bg-neutral-200 px-2 py-1 rounded-full">22</span>
+                  <label htmlFor="sortBy" className="block text-sm font-medium text-gray-700">
+                    Sort By
                   </label>
-                ))}
+                  <select
+                    id="sortBy"
+                    name="sortBy"
+                    onChange={(e) => setSortBy(e.target.value)}
+                    value={sortBy}
+                    className="w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:border-blue-300 sm:text-sm"
+                  >
+                    {sortOptions.map((option) => (
+                      <option key={option.value} value={option.value}>
+                        {option.label}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div className="p-4">
+                  <p className="block text-sm font-medium text-gray-700">Review score</p>
+                  {[5, 4, 3, 2, 1].map((score, index) => (
+                    <label key={score} htmlFor={`${score}star`} className="flex gap-4 mb-4 mt-2">
+                      <input
+                        id={`${score}star`}
+                        type="checkbox"
+                        checked={showScore[4 - index]}
+                        onChange={() => handleCheckboxChange(4 - index)}
+                      />
+                      <StarGenerator size={5} score={score} />
+                      <span className="ais-RefinementList-count text-xs text-neutral-500 bg-neutral-200 px-2 py-1 rounded-full">
+                        {reviews.filter(review => review.rating === score).length}
+                      </span>
+                    </label>
+                  ))}
                 </div>
               </div>
             </div>
             {
               reviews && reviews.length === 0 ? noReviewsMessage :
-              <div className="flex-1">
-                {reviews.map((review, index) => {
+              <div className="flex-1 max-h-[600px] overflow-y-auto">
+                {reviews.sort((a, b) => {
+                  if (sortBy === 'mostRecent') {
+                    return (
+                      new Date(b.date.seconds * 1000 + Math.floor(b.date.nanoseconds / 1e6)).getTime() -
+                      new Date(a.date.seconds * 1000 + Math.floor(a.date.nanoseconds / 1e6)).getTime()
+                    );
+                  } else if (sortBy === 'mostHelpful') {
+                    return b.helpful.length - a.helpful.length;
+                  } else if (sortBy === 'highestRating') {
+                    return b.rating - a.rating;
+                  }
+                  return 0;
+                }).map((review, index) => {
                   if (showScore[review.rating - 1]) { // Check if the score checkbox is checked
                     return (
                       <Link key={index} href={`/book/${review.bookID}`}>
