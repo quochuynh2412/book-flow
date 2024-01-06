@@ -1,10 +1,12 @@
 "use client"
 
 import { doc, updateDoc } from "firebase/firestore";
+import Image from "next/image";
 import { auth } from "@/lib/firebase";
 import { useState } from "react"
-import Star from "@/components/Icons/Star";
 import { StarGenerator } from "@/components/Icons/Star";
+
+import defaultProfileImage from "@/public/img/defaultProfileImage.png";
 
 
 import { db } from "@/lib/firebase";
@@ -45,7 +47,7 @@ export default function ReviewCard({review} : {review : any}) {
         <div className="border rounded-lg border-neutral-300 p-5 mb-4">
             <article>
                 <div className="flex items-center mb-4">
-                    <img className="w-10 h-10 me-4 rounded-full" src="  https://i.natgeofe.com/n/548467d8-c5f1-4551-9f58-6817a8d2c45e/NationalGeographic_2572187_3x4.jpg" alt="" />
+                    <Image width={40} height={40} className="w-10 h-10 me-4 rounded-full" src={defaultProfileImage.src} alt="" />
                     <div className="font-medium dark:text-white">
                         <p>{review["user"]["name"]} <time className="block text-sm text-gray-500 dark:text-gray-400">Reviewed on { formatDateFromTimestamp(review["date"]["seconds"], review["date"]["nanoseconds"]) }</time></p>
                     </div>

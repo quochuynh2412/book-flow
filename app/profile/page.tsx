@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react";
+import { auth } from "@/lib/firebase";
 
 import { Book } from "@/types/interfaces";
 
@@ -28,6 +29,7 @@ export default function Page() {
       }).then(async (response) => {
         const data = await response.json();
         setUser(data);
+        console.log(await auth.currentUser?.uid);
 
         // users might not have any preferred genre
         if (data["preferredGenre"] === undefined) {
