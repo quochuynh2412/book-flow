@@ -156,7 +156,7 @@ export default function Page() {
               </div>
             </div>
           ) : (
-            <div className="h-80 flex shadow-inner bg-cover bg-no-repeat bg-center bg-blend-multiply bg-neutral-600 border-solid border-yellow-500" style={{ backgroundImage: `url(${bg3.src})` }}>
+            <div className="h-80 flex shadow-inner bg-cover bg-no-repeat bg-center bg-blend-multiply bg-neutral-600 border-solid border-8 border-yellow-500" style={{ backgroundImage: `url(${bg3.src})` }}>
               <div className="m-auto">
                 <p className="text-center font-light text-white mb-2">User Profile</p>
                 <h1 className="text-4xl md:text-6xl m-auto text-white font-serif z-0 relative">
