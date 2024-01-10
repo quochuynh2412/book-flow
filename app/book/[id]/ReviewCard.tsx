@@ -44,7 +44,7 @@ export default function ReviewCard({review} : {review : any}) {
     }
 
     return (
-        <div className="border rounded-lg border-neutral-300 p-5 mb-4">
+        <div className="border bg-white rounded-lg border-neutral-300 p-5 mb-4">
             <article>
                 <div className="flex items-center mb-4">
                     <Image width={40} height={40} className="w-10 h-10 me-4 rounded-full" src={defaultProfileImage.src} alt="" />

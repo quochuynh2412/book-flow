@@ -16,11 +16,12 @@ import Lottie from "lottie-react";
 import lineAnimation from '@/public/svg/line.json';
 import { StarGenerator } from "@/components/Icons/Star";
 
-import bg1 from "@/public/img/bg1.png";
+import bg3 from "@/public/img/bg3.jpeg";
 
 export default function Page() {
   const [user, setUser] = useState(null);
   const [reviews, setReviews] = useState<any[]>([]);
+  const [reviewedBooks, setReviewedBooks] = useState<Book[]>([]);
   const [showScore, setShowScore] = useState([true, true, true, true, true]);
   const [sortBy, setSortBy] = useState('mostRecent');
   const [hasPreferredGenre, setHasPreferredGenre] = useState(false);
@@ -98,8 +99,26 @@ export default function Page() {
       }).then(async (response) => {
         const data = await response.json();
         setReviews(data);
+
+        // Extract the book IDs from the reviews and fetch the book details
+        const reviewedBookIds = data.map((review: any) => review.bookID);
+
+        // Fetch book details for each reviewed book
+        const promises = reviewedBookIds.map(async (bookId : string) => {
+          const bookResponse = await fetch(`/api/book?id=${bookId}`, {
+            method: "GET",
+          });
+          const bookData = await bookResponse.json();
+          return bookData;
+        });
+
+        // Wait for all promises to resolve
+        const reviewedBooksData = await Promise.all(promises);
+
+        // Set the state with the details of the reviewed books
+        setReviewedBooks(reviewedBooksData);
       }).catch(error => {
-        console.error("Failed to fetch genre description:", error)
+        console.error("Failed to fetch genre description:", error);
       });
     }
 
@@ -107,7 +126,8 @@ export default function Page() {
     fetchReviews();
   }, []);
 
-  const noReviewsMessage = <div className="border rounded-lg text-gray-500 border-neutral-300 flex-1 py-[121px] text-center">You don&apos;t have any reviews</div>
+  const noReviewsMessage = <div className="border h-full rounded-lg text-gray-500 border-neutral-300 flex-1 py-[121px] text-center">You don&apos;t have any reviews</div>
+  const noBookssMessage = <div className="border h-full rounded-lg text-gray-500 border-neutral-300 flex-1 py-[121px] text-center">You haven&apos;t reviewed any books</div>
 
   const handleCheckboxChange = (index: number) => {
     setShowScore((prevShowScore) => {
@@ -122,7 +142,7 @@ export default function Page() {
       <Header />
       {
         user && user["score"] <= 3 ? (
-            <div className="h-80 flex shadow-inner bg-cover bg-no-repeat bg-center bg-blend-multiply bg-neutral-600 border-solid border-8 border-neutral-400" style={{ backgroundImage: `url(${bg1.src})` }}>
+            <div className="h-80 flex shadow-inner bg-cover bg-no-repeat bg-center bg-blend-multiply bg-neutral-600 border-solid border-8 border-neutral-400" style={{ backgroundImage: `url(${bg3.src})` }}>
               <div className="m-auto">
                 <p className="text-center font-light text-white mb-2">User Profile</p>
                 <h1 className="text-4xl md:text-6xl m-auto text-white font-serif z-0 relative">
@@ -136,7 +156,7 @@ export default function Page() {
               </div>
             </div>
           ) : (
-            <div className="h-80 flex shadow-inner bg-cover bg-no-repeat bg-center bg-blend-multiply bg-neutral-600 border-solid border-8 border-yellow-500" style={{ backgroundImage: `url(${bg1.src})` }}>
+            <div className="h-80 flex shadow-inner bg-cover bg-no-repeat bg-center bg-blend-multiply bg-neutral-600 border-solid border-yellow-500" style={{ backgroundImage: `url(${bg3.src})` }}>
               <div className="m-auto">
                 <p className="text-center font-light text-white mb-2">User Profile</p>
                 <h1 className="text-4xl md:text-6xl m-auto text-white font-serif z-0 relative">
@@ -152,12 +172,23 @@ export default function Page() {
         )
       }
       <div >
+        <div className="mx-auto pt-16 pb-8 px-12 lg:max-w-7xl lg:px-8 font-serif">
+          <h2 className="text-2xl font-serif text-title-gray md:text-3xl text-center mb-8 md:mb-12 font-light border-b border-neutral-300 pb-5">Read Books</h2>
+          <div className="flex h-48 md:h-64 overflow-x-auto gap-4 md:gap-6 no-scrollbar">
+            {
+              reviewedBooks && reviewedBooks.length === 0 ? noBookssMessage :
+              reviewedBooks.map((reviewedBook, index) => 
+                <BookCard key={index} book={reviewedBook} />
+              )
+            }
+          </div>
+        </div>
         <div className="mx-auto py-16 px-12 lg:max-w-7xl lg:px-8 font-serif">
           <h2 className="text-2xl font-serif text-title-gray md:text-3xl text-center mb-8 md:mb-12 font-light border-b border-neutral-300 pb-5">My Reviews</h2>
           <div className="gap-4 lg:gap-8 md:flex">
-            <div className="w-full md:w-72 mb-4">
+            <div className="w-full md:w-72">
               <div className="border border-neutral-300 rounded-md sticky top-10">
-                <div className="p-4 border-b border-neutral-300 bg-neutral-100">
+                <div className="p-4 border-b rounded-t-md border-neutral-300 bg-neutral-100">
                   <h2 className="text-lg">Filter Reviews</h2>
                 </div>
                 <div className="p-4">
@@ -199,7 +230,7 @@ export default function Page() {
             </div>
             {
               reviews && reviews.length === 0 ? noReviewsMessage :
-              <div className="flex-1 max-h-[600px] overflow-y-auto">
+              <div className="flex-1 max-h-[700px] border p-4 rounded-lg border-neutral-300 overflow-y-auto">
                 {reviews.sort((a, b) => {
                   if (sortBy === 'mostRecent') {
                     return (
