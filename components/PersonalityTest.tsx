@@ -146,17 +146,17 @@ export default function PersonalityTest() {
       shorter = s1;
     }
     var longerLength = longer.length;
-    if (longerLength == 0) {
+    if (longerLength === 0) {
       return 1.0;
     }
-    return (longerLength - editDistance(longer, shorter)) / parseFloat(longerLength);
+    return (longerLength - editDistance(longer, shorter)) / parseFloat(longerLength.toString());
   }
 
 
   function editDistance(s1: string, s2: string) {
     s1 = s1.toLowerCase();
     s2 = s2.toLowerCase();
-  
+
     var costs = new Array();
     for (var i = 0; i <= s1.length; i++) {
       var lastValue = i;
