@@ -81,12 +81,12 @@ export default function Header() {
   const future = { preserveSharedStateOnUnmount: true };
   return (
     <header className="header bg-neutral-100 h-20 flex gap-2 border-b border-neutral-200">
-      <div className="basis-2/12 text-xl font-bold flex text-neutral-700">
+      <div className="basis-2/12 text-xl font-bold flex text-neutral-700 min-w-fit">
         <Link
           href="/"
-          className="lg:hidden my-auto mx-8 hover:text-neutral-900"
+          className="lg:hidden my-auto ml-6 hover:text-neutral-900"
         >
-          BF
+          <Image src={'/img/bookflowlogo.png'} alt="Book" width={50} height={50} className="h-12 w-12 mb-2"></Image>
         </Link>
         <Link href="/" className="hidden my-auto ml-8 font-serif font-normal lg:flex flex-row gap-0.5 items-center">
           <Image src={'/img/bookflowlogo.png'} alt="Book" width={50} height={50} className="h-12 w-12 mb-2"></Image>
