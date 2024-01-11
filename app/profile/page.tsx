@@ -1,25 +1,39 @@
 "use client"
 
 import { useState, useEffect } from "react";
+import { auth } from "@/lib/firebase";
+import Link from "next/link";
 
 import { Book } from "@/types/interfaces";
 
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import BookCard from "@/components/BookCard";
+import ReviewCard from "../book/[id]/ReviewCard";
 import PersonalityTest from "@/components/PersonalityTest";
 
 import Lottie from "lottie-react";
-import lineAnimation from '@/public/svg/line.json'
+import lineAnimation from '@/public/svg/line.json';
+import { StarGenerator } from "@/components/Icons/Star";
 
-import bg1 from "@/public/img/bg1.png";
+import bg3 from "@/public/img/bg3.jpeg";
 
 export default function Page() {
   const [user, setUser] = useState(null);
+  const [reviews, setReviews] = useState<any[]>([]);
+  const [reviewedBooks, setReviewedBooks] = useState<Book[]>([]);
+  const [showScore, setShowScore] = useState([true, true, true, true, true]);
+  const [sortBy, setSortBy] = useState('mostRecent');
   const [hasPreferredGenre, setHasPreferredGenre] = useState(false);
   const [preferredGenre1, setPreferredGenre1] = useState<Book[]>([]);
   const [preferredGenre2, setPreferredGenre2] = useState<Book[]>([]);
   const [preferredGenre3, setPreferredGenre3] = useState<Book[]>([]);
+
+  const sortOptions = [
+    { value: 'mostRecent', label: 'Most Recent' },
+    { value: 'mostHelpful', label: 'Most Helpful' },
+    { value: 'highestRating', label: 'Highest Rating' },
+  ];
 
   useEffect(() => {
     async function fetchUser() {
@@ -30,7 +44,7 @@ export default function Page() {
         setUser(data);
 
         // users might not have any preferred genre
-        if (data["preferredGenre"] === undefined) {
+        if (data["preferredGenre"] === undefined || data["preferredGenre"].length === 0) {
           setHasPreferredGenre(false);
           return;
         } else {
@@ -65,25 +79,183 @@ export default function Page() {
       });
     }
 
+    async function fetchReviews() {
+      const user = await new Promise((resolve) => {
+        const unsubscribe = auth.onAuthStateChanged((user) => {
+          unsubscribe();
+          resolve(user);
+        });
+      });
+    
+      if (!user) {
+        console.error("User not authenticated");
+        return;
+      }
+    
+      const userId = (user as any).uid;
+
+      await fetch(`/api/review?userID=${userId}`, {
+        method: "GET",
+      }).then(async (response) => {
+        const data = await response.json();
+        setReviews(data);
+
+        // Extract the book IDs from the reviews and fetch the book details
+        const reviewedBookIds = data.map((review: any) => review.bookID);
+
+        // Fetch book details for each reviewed book
+        const promises = reviewedBookIds.map(async (bookId : string) => {
+          const bookResponse = await fetch(`/api/book?id=${bookId}`, {
+            method: "GET",
+          });
+          const bookData = await bookResponse.json();
+          return bookData;
+        });
+
+        // Wait for all promises to resolve
+        const reviewedBooksData = await Promise.all(promises);
+
+        // Set the state with the details of the reviewed books
+        setReviewedBooks(reviewedBooksData);
+      }).catch(error => {
+        console.error("Failed to fetch genre description:", error);
+      });
+    }
+
     fetchUser();
+    fetchReviews();
   }, []);
+
+  const noReviewsMessage = <div className="border h-full rounded-lg text-gray-500 border-neutral-300 flex-1 py-[121px] text-center">You don&apos;t have any reviews</div>
+  const noBookssMessage = <div className="border h-full rounded-lg text-gray-500 border-neutral-300 flex-1 py-[121px] text-center">You haven&apos;t reviewed any books</div>
+
+  const handleCheckboxChange = (index: number) => {
+    setShowScore((prevShowScore) => {
+      const newShowScore = [...prevShowScore];
+      newShowScore[index] = !newShowScore[index];
+      return newShowScore;
+    });
+  };
 
   return (
     <div >
       <Header />
-      <div className="h-80 flex shadow-inner border bg-cover bg-no-repeat bg-center bg-blend-multiply bg-neutral-600" style={{ backgroundImage: `url(${bg1.src})` }}>
-        <div className="m-auto">
-          <p className="text-center font-light text-white mb-2">User Profile</p>
-          <h1 className="text-4xl md:text-6xl m-auto text-white font-serif z-0 relative">
-            <Lottie animationData={lineAnimation} loop={true} className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -z-10 -translate-y-1/2 h-auto w-full " />
-            {user && user["name"]}
-          </h1>
+      {
+        user && user["score"] <= 3 ? (
+            <div className="h-80 flex shadow-inner bg-cover bg-no-repeat bg-center bg-blend-multiply bg-neutral-600 border-solid border-8 border-neutral-400" style={{ backgroundImage: `url(${bg3.src})` }}>
+              <div className="m-auto">
+                <p className="text-center font-light text-white mb-2">User Profile</p>
+                <h1 className="text-4xl md:text-6xl m-auto text-white font-serif z-0 relative">
+                  <Lottie animationData={lineAnimation} loop={true} className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -z-10 -translate-y-1/2 h-auto w-full " />
+                  {user && user["name"]}
+                </h1>
+                <p className="text-center font-light text-white mb-2 mt-3">Score</p>
+                <h1 className="text-xl md:text-2xl m-auto text-white font-serif z-0 relative flex justify-center">
+                  {user && user["score"]}
+                </h1>
+              </div>
+            </div>
+          ) : (
+            <div className="h-80 flex shadow-inner bg-cover bg-no-repeat bg-center bg-blend-multiply bg-neutral-600 border-solid border-8 border-yellow-500" style={{ backgroundImage: `url(${bg3.src})` }}>
+              <div className="m-auto">
+                <p className="text-center font-light text-white mb-2">User Profile</p>
+                <h1 className="text-4xl md:text-6xl m-auto text-white font-serif z-0 relative">
+                  <Lottie animationData={lineAnimation} loop={true} className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -z-10 -translate-y-1/2 h-auto w-full " />
+                  {user && user["name"]}
+                </h1>
+                <p className="text-center font-light text-white mb-2 mt-3">Score</p>
+                <h1 className="text-xl md:text-2xl m-auto text-white font-serif z-0 relative flex justify-center">
+                  {user && user["score"]}
+                </h1>
+              </div>
+            </div>
+        )
+      }
+      <div >
+        <div className="mx-auto pt-16 pb-8 px-12 lg:max-w-7xl lg:px-8 font-serif">
+          <h2 className="text-2xl font-serif text-title-gray md:text-3xl text-center mb-8 md:mb-12 font-light border-b border-neutral-300 pb-5">Read Books</h2>
+          <div className="flex h-48 md:h-64 overflow-x-auto gap-4 md:gap-6 no-scrollbar">
+            {
+              reviewedBooks && reviewedBooks.length === 0 ? noBookssMessage :
+              reviewedBooks.map((reviewedBook, index) => 
+                <BookCard key={index} book={reviewedBook} />
+              )
+            }
+          </div>
         </div>
-      </div>
-      <div className="min-h-screen">
-        <div className="mx-auto py-16 px-12 lg:max-w-7xl lg:px-8">
-          <h2 className="text-2xl font-serif text-title-gray md:text-3xl text-center mb-8 md:mb-12 font-light border-b border-neutral-300 pb-5">Personality Test</h2>
-          <PersonalityTest />
+        <div className="mx-auto py-16 px-12 lg:max-w-7xl lg:px-8 font-serif">
+          <h2 className="text-2xl font-serif text-title-gray md:text-3xl text-center mb-8 md:mb-12 font-light border-b border-neutral-300 pb-5">My Reviews</h2>
+          <div className="gap-4 lg:gap-8 md:flex">
+            <div className="w-full md:w-72">
+              <div className="border border-neutral-300 rounded-md sticky top-10">
+                <div className="p-4 border-b rounded-t-md border-neutral-300 bg-neutral-100">
+                  <h2 className="text-lg">Filter Reviews</h2>
+                </div>
+                <div className="p-4">
+                  <label htmlFor="sortBy" className="block text-sm font-medium text-gray-700">
+                    Sort By
+                  </label>
+                  <select
+                    id="sortBy"
+                    name="sortBy"
+                    onChange={(e) => setSortBy(e.target.value)}
+                    value={sortBy}
+                    className="w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:border-blue-300 sm:text-sm"
+                  >
+                    {sortOptions.map((option) => (
+                      <option key={option.value} value={option.value}>
+                        {option.label}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div className="p-4">
+                  <p className="block text-sm font-medium text-gray-700">Review score</p>
+                  {[5, 4, 3, 2, 1].map((score, index) => (
+                    <label key={score} htmlFor={`${score}star`} className="flex gap-4 mb-4 mt-2">
+                      <input
+                        id={`${score}star`}
+                        type="checkbox"
+                        checked={showScore[4 - index]}
+                        onChange={() => handleCheckboxChange(4 - index)}
+                      />
+                      <StarGenerator size={5} score={score} />
+                      <span className="ais-RefinementList-count text-xs text-neutral-500 bg-neutral-200 px-2 py-1 rounded-full">
+                        {reviews.filter(review => review.rating === score).length}
+                      </span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+            </div>
+            {
+              reviews && reviews.length === 0 ? noReviewsMessage :
+              <div className="flex-1 max-h-[700px] border p-4 rounded-lg border-neutral-300 overflow-y-auto">
+                {reviews.sort((a, b) => {
+                  if (sortBy === 'mostRecent') {
+                    return (
+                      new Date(b.date.seconds * 1000 + Math.floor(b.date.nanoseconds / 1e6)).getTime() -
+                      new Date(a.date.seconds * 1000 + Math.floor(a.date.nanoseconds / 1e6)).getTime()
+                    );
+                  } else if (sortBy === 'mostHelpful') {
+                    return b.helpful.length - a.helpful.length;
+                  } else if (sortBy === 'highestRating') {
+                    return b.rating - a.rating;
+                  }
+                  return 0;
+                }).map((review, index) => {
+                  if (showScore[review.rating - 1]) { // Check if the score checkbox is checked
+                    return (
+                      <Link key={index} href={`/book/${review.bookID}`}>
+                        <ReviewCard review={review} />
+                      </Link>
+                    );
+                  }
+                  return null; // Skip reviews with unchecked score
+                })}
+              </div>
+            }
+          </div>
         </div>
         {
           hasPreferredGenre ? (
@@ -107,6 +279,10 @@ export default function Page() {
             </div>
           )
         }
+        <div className="mx-auto py-16 px-12 lg:max-w-7xl lg:px-8">
+          <h2 className="text-2xl font-serif text-title-gray md:text-3xl text-center mb-8 md:mb-12 font-light border-b border-neutral-300 pb-5">Genres Recommendation</h2>
+          <PersonalityTest />
+        </div>
       </div>
       <Footer />
     </div>

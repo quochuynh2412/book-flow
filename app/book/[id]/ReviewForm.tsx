@@ -35,6 +35,8 @@ export default function ReviewForm({bookId, myReview} : {bookId: string, myRevie
   const [content, setContent] = useState("");
   const { toast } = useToast();
 
+  let clickCount = 0;
+
   // setup display if user has reviewed before
   useEffect(() => {
     if (myReview) {
@@ -45,6 +47,8 @@ export default function ReviewForm({bookId, myReview} : {bookId: string, myRevie
   }, [myReview]);
 
   async function submit() {
+    clickCount += 1; if (clickCount > 1) return;
+
     const user = auth.currentUser;
 
     if (user) {

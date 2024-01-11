@@ -11,7 +11,7 @@ export default function Hero() {
   return (
     <>
       <div style={{ backgroundImage: `url(${vnBooksStore.src})` }} className="bg-cover bg-no-repeat bg-center bg-blend-multiply bg-fixed bg-neutral-400 h-[95vh]">
-        <div className="h-14 flex top-0 shadow bg-transparent">
+        <div className="h-14 flex top-0 bg-transparent">
           <div className="m-auto h-full flex gap-8 md:gap-24 lg:gap-48 font-serif text-white">
             <Link href="#intro" className="flex p-3">
               <div className="text-lg md:text-xl my-auto">

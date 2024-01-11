@@ -200,7 +200,7 @@ export default function Quiz(props: { description: string }) {
         title: "Correct!",
         description: (
           <div className="flex flex-col space-y-2">
-            <p className="text-justify text-black/50">Did you know that <span className="text-black/50">{fact}</span></p>
+            <p className="text-justify text-black/50 font-serif">Did you know that <span className="text-black/50">{fact}</span></p>
           </div>
         ),
       })
@@ -237,7 +237,7 @@ export default function Quiz(props: { description: string }) {
         title: "Wrong!",
         description: (
           <div className="flex flex-col space-y-2">
-            <p className="text-justify text-white/50">Did you know that <span className="text-white/50">{fact}</span></p>
+            <p className="text-justify text-white/50 font-serif">Did you know that <span className="text-white/50">{fact}</span></p>
           </div>
         ),
         variant: "destructive",
@@ -269,16 +269,16 @@ export default function Quiz(props: { description: string }) {
             <FormItem className="space-y-3">
               <FormLabel>
                 <div className="flex flex-row items-center justify-center mb-6">
-                  <p className="text-justify inline-block align-middle mr-1 md:mr-5 lg:mr-7 leading-relaxed">{question}</p>
+                  <p className="text-justify inline-block align-middle mr-1 md:mr-5 lg:mr-7 leading-relaxed font-serif">{question}</p>
                   {
                     isDisabled ? (
                       score == 0 ? (
-                        <p className="text-justify inline-block align-middle mr-1 md:mr-5 lg:mr-7">{score}/3</p>
+                        <p className="text-justify inline-block align-middle mr-1 md:mr-5 lg:mr-7 font-serif">{score}/3</p>
                       ) : (
-                        <p className="text-justify inline-block align-middle mr-1 md:mr-5 lg:mr-7">{score}/3</p>
+                        <p className="text-justify inline-block align-middle mr-1 md:mr-5 lg:mr-7 font-serif">{score}/3</p>
                       )
                     ) : (
-                      <p className="text-justify inline-block align-middle mr-1 md:mr-5 lg:mr-7">{attempt}/3</p>
+                      <p className="text-justify inline-block align-middle mr-1 md:mr-5 lg:mr-7 font-serif">{attempt}/3</p>
                     )
                   }
                 </div>
@@ -297,7 +297,7 @@ export default function Quiz(props: { description: string }) {
                           <FormControl>
                             <RadioGroupItem value={answer} />
                           </FormControl>
-                          <FormLabel className="font-normal">{answer}</FormLabel>
+                          <FormLabel className="font-normal font-serif">{answer}</FormLabel>
                         </FormItem>
                       )
                     })
@@ -309,7 +309,7 @@ export default function Quiz(props: { description: string }) {
           )}
         />
         <div className="flex justify-center">
-          <Button type="submit" className="w-40 h-auto" disabled={isDisabled}>Submit</Button>
+          <Button type="submit" className="rounded-full hover:bg-rose-900 bg-rose-800 font-serif px-12 text-md" disabled={isDisabled}>Submit</Button>
         </div>
       </form>
     </Form>
