@@ -21,14 +21,8 @@ import { getURL } from "next/dist/shared/lib/utils";
 import { signOut } from "firebase/auth";
 import { useAuth } from "@/hooks/useAuth";
 import { db } from "@/lib/firebase";
-import {
-  addDoc,
-  collection,
-  doc,
-  getDoc,
-  setDoc,
-} from "firebase/firestore";
-interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> { }
+import { addDoc, collection, doc, getDoc, setDoc } from "firebase/firestore";
+interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
@@ -151,7 +145,6 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
         });
       });
   }, []);
-
 
   async function signInWithGoogle() {
     setIsLoading(true);

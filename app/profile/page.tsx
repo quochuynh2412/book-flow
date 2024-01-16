@@ -141,7 +141,7 @@ export default function Page() {
     <div >
       <Header />
       {
-        user && user["score"] <= 3 ? (
+        user && parseInt(user["score"] || "0") <= 3 ? (
             <div className="h-80 flex shadow-inner bg-cover bg-no-repeat bg-center bg-blend-multiply bg-neutral-600 border-solid border-8 border-neutral-400" style={{ backgroundImage: `url(${bg3.src})` }}>
               <div className="m-auto">
                 <p className="text-center font-light text-white mb-2">User Profile</p>
