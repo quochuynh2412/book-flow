@@ -5,6 +5,7 @@ import { Toaster } from "@/components/ui/toaster";
 import LoadSession from "@/components/load-session";
 import Script from "next/script";
 import Head from "next/head";
+import Link from "next/link";
 const roboto = Roboto({ subsets: ["latin"], weight: ["100", "300", "400", "500", "700", "900"], variable: '--font-roboto', display: 'swap' });
 
 export const metadata: Metadata = {
@@ -19,7 +20,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-
+      <Head>
+        <Link rel="preconnect" href="https://fonts.googleapis.com"></Link>
+        <Link rel="preconnect" href="https://fonts.gstatic.com"></Link>
+        <Link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet"></Link>
+      </Head>
       <body className={`${roboto.className} min-h-screen`}>
         <LoadSession />
         <Head>
@@ -32,6 +37,6 @@ export default function RootLayout({
         <Toaster />
       </body>
       <Script src="https://polyfill.io/v3/polyfill.min.js?features=default%2CArray.prototype.find%2CArray.prototype.includes%2CPromise%2CObject.assign%2CObject.entries"></Script>
-    </html>
+    </html >
   );
 }
