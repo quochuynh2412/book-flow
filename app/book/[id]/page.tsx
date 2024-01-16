@@ -54,7 +54,6 @@ export default function Page({ params }: { params: { id: string } }) {
     }
     fetchBook(params.id);
   }, []);
-  const rating = 4.5;
   const reviews = 230;
   return (
     <>
@@ -115,11 +114,6 @@ export default function Page({ params }: { params: { id: string } }) {
                         </>
                       );
                     })}
-                    <hr className="border-l border-title-gray h-3/4 self-center w-[1px] mx-4"></hr>
-                    <div className="flex flex-row gap-2 text-title-gray align-middle">
-                      <Image src={'/svg/star.svg'} alt="Star" width={20} height={20} className="rounded h-fit my-auto"></Image>
-                      <span className="text-base font-semibold">{rating}</span>
-                    </div>
                   </div>
                   <div className="text-indigo-950 text-base font-normal flex flex-row gap-2 mb-16">
                     <AddBookToListButton bookId={book.id} bookTitle={book.title} />
