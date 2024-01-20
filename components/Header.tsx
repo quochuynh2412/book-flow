@@ -33,14 +33,27 @@ interface HitProps {
   };
 }
 export default function Header() {
-  const { loggedIn, logout } = useAuth();
+  const { logout } = useAuth();
   const router = useRouter();
   const { toast } = useToast();
 
   const [genres, setGenres] = useState<Genre[]>([]);
   const [uid, setUid] = useState("");
+  const [loggedIn, setLoggedIn] = useState(false);
 
   useEffect(() => {
+    async function getLoggedInState() {
+      await fetch(`/api/authentication/login`, {
+        method: "GET",
+      })
+        .then(async (response) => {
+          const data = await response.json();
+          setLoggedIn(data.isLogged);
+        })
+        .catch((error) => {
+          console.error("Failed to fetch authentication state", error);
+        });
+    }
     async function getGenre() {
       await fetch(`/api/genre`, {
         method: "GET",
@@ -53,6 +66,7 @@ export default function Header() {
           console.error("Failed to fetch genre description:", error);
         });
     }
+    getLoggedInState()
     getGenre();
   }, []);
 
